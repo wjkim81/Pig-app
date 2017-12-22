@@ -1,0 +1,3 @@
+node_modules/**
+pig_data/**
+.vscode/settings.json
