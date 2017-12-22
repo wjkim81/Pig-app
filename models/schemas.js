@@ -11,9 +11,13 @@ butcheryInfo = {
 	  "butcheryPlaceAddr": null,
 	  "butcheryPlaceNm": null,
 	  "butcheryYmd": null,
+		"firstGradeNm": null,
 	  "gradeNm": null,
 	  "inspectPassYn": null,
+		"inspectMethod": null,
+		"butcheryShape": null,
 	  "butcheryWeight": null,
+		"backFatThickness": null,
 	  "abattCode": null,
 	  "processPlaceNm": null,
 }
@@ -41,6 +45,8 @@ pig = {
 	  "birthYmd": null,
 	  "lsTypeCd": null,
 	  "lsTypeNm": null,
+		"sexCd": null,
+	  "sexNm": null,
     
 	  "farmInfo": farmInfo,
 	  "butcheryInfo": butcheryInfo,

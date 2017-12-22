@@ -21,16 +21,7 @@ app.use('/static', express.static(__dirname + '/public'));
 
 var csvFilePath = './pig_data/pig_2017-12-11.csv';
 
-var pigs = [];
-helpers.utils.csvtojson(csvFilePath, function(pigs) {
-  console.log(pigs[0]);
-  helpers.utils.convertToSchema(pigs);
-});
-//console.log(pigs)
-//schemas = models.schemas;
-//console.log(schemas);
-//var pig = models.schemas.pig;
-//console.log(pig)
+helpers.utils.updateButcheryInfoFromEkape(csvFilePath);
 
 
 // Save our port
