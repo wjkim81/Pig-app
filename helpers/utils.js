@@ -1,7 +1,7 @@
 var path          = require('path');
 var csv           = require('csvtojson');
 var models        = require('../models')
-var pigdb         = require('../models/pigs')
+var pigsdb         = require('../models/pigs')
 
 var self = module.exports = {
   /**
@@ -83,7 +83,7 @@ var self = module.exports = {
    * 3. insert into each json of pig data into couchdb
    * @param {*} csvFilePath 
    */
-  updateButcheryInfoFromEkape(csvFilePath) {
+  updateButcheryInfoFromEkape(csvFilePath, callback) {
     var pigsArr = [];
 
    // Convert csv format file into json
@@ -96,15 +96,51 @@ var self = module.exports = {
         key = pig.butcheryInfo.butcheryYmd + pig.traceNo + pig.pigNo;
         //console.log(key);
 
-        pigdb.insertPig(key, pig);
+        pigsdb.insertPig(key, pig, (body) => {
+          //console.log(body);
+          callback(body);
+        });
 
         pigsArr.push(pig)
       })
       .on('done', (error) => {
         if (error) return process.exit(1)
         console.log("Number of pigs: " + pigsArr.length);
+        callback(pigsArr.length)
       }
     )
+  },
 
+
+  /**
+   * CreateLotNo is starting point of works
+   * 
+   */
+  createLotNo() {
+    var date = new Date();
+
+    todayYY = date.getFullYear().toString().substring(2);
+    todayMM = (date.getMonth() + 1).toString();
+    todayDD = date.getDate().toString();
+    today = todayYY + todayMM + todayDD;
+
+    var corpNo = '12345';
+    var seriesNo = 000;
+
+    //console.log(date);
+    //console.log(todayYY);
+    //console.log(todayMM);
+    //console.log(todayDD);
+
+    lotNo = 'L1' + today + corpNo + seriesNo;
+    queryString = {
+      "selector": {
+        "butcheryInfo.butcheryYmd": "20171211"
+      }
+    }
+    pigsdb.makeNewSeriesNo(lotNo, queryString);
+    //pigsdb.get()
+    //pigsdb.
   }
+  
 }

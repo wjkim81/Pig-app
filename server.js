@@ -21,8 +21,13 @@ app.use('/static', express.static(__dirname + '/public'));
 
 var csvFilePath = './pig_data/pig_2017-12-11.csv';
 
-helpers.utils.updateButcheryInfoFromEkape(csvFilePath);
+/*
+helpers.utils.updateButcheryInfoFromEkape(csvFilePath, function(numUpdated) {
+  console.log(numUpdated + ' of pigs are updated');
+});
+*/
 
+helpers.utils.createLotNo();
 
 // Save our port
 var port = process.env.PORT || 3000;
