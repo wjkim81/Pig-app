@@ -42,6 +42,7 @@ processInfo = {
 
 pig = {
 	// key (24) = pig.butcheryInfo.butcheryYmd (8) + pig.traceNo (12) + pig.pigNo (4)
+	"id": null,
   "traceNo": null,
 	"pigNo": null,
 	"birthYmd": null,
@@ -53,7 +54,7 @@ pig = {
 	"farmInfo": farmInfo,
 	"butcheryInfo": butcheryInfo,
 
-  "processed": false,
+  "processed": 0,
 	"processInfo": []
 }
 

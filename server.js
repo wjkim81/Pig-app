@@ -28,15 +28,20 @@ helpers.utils.updateButcheryInfoFromEkape(csvFilePath, function(numUpdated) {
 });
 */
 
+/*
 helpers.utils.createLotNo((lotNo) => {
-  var today = helpers.utils.getToday();
+  //var today = helpers.utils.getToday();
   //console.log(today);
   helpers.utils.getUnprocessedPigs((pigsArr) => {
+    //console.log('pigsArr: ' + pigsArr);
+    //console.log(pigsArr);
     helpers.utils.getUniqueTraceNo(pigsArr, (uniqueTraceNoArr) => {
-      console.log(uniqueTraceNoArr);
-    })
+      console.log('uniqueTraceNoArr: ' + uniqueTraceNoArr);
+    });
   });
 });
+*/
+
 
 // Save our port
 var port = process.env.PORT || 3000;

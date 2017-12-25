@@ -3,7 +3,7 @@ var nano = require('nano')('http://localhost:5984');
 var db = nano.db.use('nokdondb');
 
 module.exports = {
-  insert(key, obj, callback) {
+  insert(obj, key, callback) {
     //console.log(key);
     db.insert(obj, key, (err, body, header) => {
       if (err) {
@@ -19,7 +19,7 @@ module.exports = {
     
   },
 
-  update(key, obj, callback) {
+  update(obj, key, callback) {
     db.get(key, (error, existing) => { 
       if(!error) obj._rev = existing._rev;
       db.insert(obj, key, callback);
@@ -34,7 +34,7 @@ module.exports = {
   runQuery(queryString, callback) {
     db.list(queryString, (err, body) => {
       if (!err) {
-        //console.log(body)
+        //console.log('body: ' + body)
         callback(body);
         /*
         body.rows.forEach(function(doc) {
@@ -46,4 +46,10 @@ module.exports = {
       }
     })
   },
+
+  runView(designname, viewname, callback) {
+    db.view(designname, viewname, (err, body) => {
+        if (!err) callback(body);
+    });
+  }
 }

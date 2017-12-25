@@ -46,6 +46,7 @@ var self = module.exports = {
     var pig = models.schemas.pig;
     
     //key = 
+    
     pig.traceNo = ekapeJsonPig['이력번호'];
     pig.pigNo = ekapeJsonPig['도체번호'];
     //pig.birthYmd = ekapeJsonPig
@@ -75,6 +76,7 @@ var self = module.exports = {
     //pig.butcheryInfo.processPlaceNm = ekapeJsonPig
     //console.log(pig);
 
+    pig._id = pig.butcheryInfo.butcheryYmd + pig.traceNo + pig.pigNo;
     return pig;
   },
   /**
@@ -93,11 +95,9 @@ var self = module.exports = {
       .fromFile(csvFilePath)
       .on('json', (ekapeJsonPig) => {
         var pig = self.convertFromEkape(ekapeJsonPig);
-
-        key = pig.butcheryInfo.butcheryYmd + pig.traceNo + pig.pigNo;
         //console.log(key);
 
-        pigsdb.insert(key, pig, (body) => {
+        pigsdb.insert(pig, pig._id, (body) => {
           //console.log(body);
           callback(body);
         });
@@ -138,9 +138,6 @@ var self = module.exports = {
     var startKey = 'L1' + today + corpNo + '000';
     var endKey = 'L1' + today + corpNo + '999';
 
-    //console.log(startKey);
-    //console.log(endKey);
-
     queryString = {
       startkey: startKey,
       endkey: endKey,
@@ -152,11 +149,16 @@ var self = module.exports = {
     pigsdb.runQuery(queryString, (body) => {
       var seriesNo = body.rows.length;
       var lotNo = 'L1' + today + corpNo + pad(3, seriesNo.toString(), '0');
-      var newPigLotNo = models.schemas.pigLotNo;
 
-      pigsdb.insert(lotNo, newPigLotNo, (body) => {
+      var newPigLotNo = models.schemas.pigLotNo;
+      //console.log('seriesNo: ' + seriesNo)
+      //console.log(body);
+      
+      
+      pigsdb.insert(newPigLotNo, lotNo, (body) => {
         console.log(body);
       });
+      
       callback(lotNo);
     });
   },
@@ -176,45 +178,62 @@ var self = module.exports = {
   getUnprocessedPigs(callback) {
     // Get pig documents where processed is false
     queryString = {
-      selector: {
-        processed: false
+      "selector": {
+        "processed": {
+         "$and": [
+            {
+               "$exists": true
+            },
+            {
+               "$eq": 0
+            }
+          ]
+        }
       },
-      include_docs: true,
-      limit: 1000
+      "include_docs": true,
+      "limit": 1000
     }
 
+    /*
     pigsdb.runQuery(queryString, (body) => {
       //console.log(body.rows);
       //var uniqueTraceNo = Array.from(new Set(body.rows.doc.traceNo));
       //console.log(uniquteTraceNo);
-      //var uniqueTraceNo = [];
-      
       //console.log(body);
-      //for (var i = 0; i < body.rows.length; i++) {
-        //console.log(body.rows[i]);
-        //if (!uniqueTraceNo.includes(body.rows[i].doc.traceNo)) 
-        //  uniqueTraceNo.push(body.rows[i].doc.traceNo);
-      //}
-      //console.log(uniqueTraceNo);
       callback(body);
-      //body.rows.forEach((doc) => {
-      //  if (!uniqueTraceNo.includes(doc.doc.traceNo)) 
-      //    uniqueTraceNo.push(doc.doc.traceNo);
-
-        //console.log(doc.doc.traceNo, doc.doc.pigNo);
-        //console.log(uniqueTraceNo);
-      //})
     })
+    */
+    pigsdb.runView('processedDoc', 'non-processed-view', (body) => {
+     callback(body);
+    });
   },
 
   getUniqueTraceNo(pigsArr, callback) {
-    var uniqueTraceNo = [];
+
+    var uniqueTraceNoArr = [];
     for (var i = 0; i < pigsArr.rows.length; i++) {
       //console.log(pigsArr.rows[i]);
-      if (!uniqueTraceNo.includes(pigsArr.rows[i].doc.traceNo)) 
-        uniqueTraceNo.push(pigsArr.rows[i].doc.traceNo);
+      if (!uniqueTraceNoArr.includes(pigsArr.rows[i].value)) 
+        uniqueTraceNoArr.push(pigsArr.rows[i].value);
     }
-    callback(uniqueTraceNo);
+    callback(uniqueTraceNoArr);
+    //var uniqueTraceNo = [];
+      
+    //for (var i = 0; i < body.rows.length; i++) {
+      //console.log(body.rows[i]);
+      //if (!uniqueTraceNo.includes(body.rows[i].doc.traceNo)) 
+      //  uniqueTraceNo.push(body.rows[i].doc.traceNo);
+    //}
+    //console.log(uniqueTraceNo);
+
+    //body.rows.forEach((doc) => {
+    //  if (!uniqueTraceNo.includes(doc.doc.traceNo)) 
+    //    uniqueTraceNo.push(doc.doc.traceNo);
+
+      //console.log(doc.doc.traceNo, doc.doc.pigNo);
+      //console.log(uniqueTraceNo);
+    //})
+    
   }
 
 }
