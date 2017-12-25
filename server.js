@@ -4,6 +4,7 @@ const logger = require('morgan')
 const errorhandler = require('errorhandler')
 const bodyParser = require('body-parser')
 
+
 // Import eatformation libraries
 const helpers = require('./helpers')
 const models = require('./models')
@@ -20,9 +21,20 @@ app.use(errorhandler())
 // static file path
 app.use('/static', express.static(__dirname + '/public'));
 
-app.use(require('./controllers'))
+//app.use(require('./controllers'))
 
+const nunjucks    = require('nunjucks')
 
+nunjucks.configure('views', {
+    autoescape: true,
+    express: app
+});
+
+app.get('/', (req, res) => {
+  //console.log(views.index)
+  //res.sendFile(path.join(__dirname, '../views/pigs', 'index.html'), {test: 'test'})
+  res.render('index.html', { test: 'test' });
+})
 
 var csvFilePath = './pig_data/pig_2017-12-11.csv';
 

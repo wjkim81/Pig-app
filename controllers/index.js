@@ -1,7 +1,22 @@
 var path          = require('path');
+const nunjucks    = require('nunjucks')
+
 //var views         = require('../views')
-/*
-module.exports = function(app) {
+var express = require('express')
+let router = express.Router();
+
+module.exports = router = function(app) {
+  /*
+  nunjucks.configure('../views', {
+    autoescape: true,
+    express: app
+  });
+  */
+  //router.use('/office', require('./office'))
+
+  app.get('/', (req, res) => {
+    res.render('index.html', {test: 'test'});
+  });
 
   app.get('/office', function(req, res) {
     res.sendFile(path.join(__dirname, '../views', 'office.html'));
@@ -17,17 +32,27 @@ module.exports = function(app) {
     obj.add_cattle(req, res);
   });
 }
-*/
 
+
+/*
 var express = require('express')
-  , router = express.Router()
+let app = express();
+let router = express.Router();
+
+//nunjucks.configure('../views', { autoescape: true });
+nunjucks.configure('../views', {
+    autoescape: true,
+    express: app
+});
+
 
 router.use('/office', require('./office'))
 //router.use('/pos', require('./pos'))
 
-router.get('/', (req, res) => {
+app.get('/', (req, res) => {
   //console.log(views.index)
-  res.sendFile(path.join(__dirname, '../views/pigs', 'index.html'), {test: 'test'})
+  //res.sendFile(path.join(__dirname, '../views/pigs', 'index.html'), {test: 'test'})
+  res.render('index.html', { test: 'test' });
 })
-
-module.exports = router
+*/
+//module.exports = router
