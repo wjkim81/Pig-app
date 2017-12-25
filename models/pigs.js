@@ -22,7 +22,10 @@ module.exports = {
   update(obj, key, callback) {
     db.get(key, (error, existing) => { 
       if(!error) obj._rev = existing._rev;
-      db.insert(obj, key, callback);
+      db.insert(obj, key, (err, body) => {
+        if (!err) console.log(body);
+        callback(body);
+      });
     });
   },
 
@@ -49,6 +52,12 @@ module.exports = {
 
   runView(designname, viewname, callback) {
     db.view(designname, viewname, (err, body) => {
+        if (!err) callback(body);
+    });
+  },
+
+  runViewWithQuery(designname, viewname, queryString, callback) {
+    db.view(designname, viewname, queryString, (err, body) => {
         if (!err) callback(body);
     });
   }

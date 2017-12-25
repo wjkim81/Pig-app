@@ -23,7 +23,8 @@ butcheryInfo = {
 }
 
 processInfo = {
-  // key (20) = YYMMDD (6) + lotNo (12) + seresNo(3)
+  // key (23) = YYYYMMDD (8) + lotNo (12) + seresNo(3)
+	"type": "processInfo",
   "referenceId": [],
   "childId": null,
   "trackHistory": null,
@@ -42,7 +43,8 @@ processInfo = {
 
 pig = {
 	// key (24) = pig.butcheryInfo.butcheryYmd (8) + pig.traceNo (12) + pig.pigNo (4)
-	"id": null,
+	"_id": null,
+	"type": "pig",
   "traceNo": null,
 	"pigNo": null,
 	"birthYmd": null,
@@ -55,7 +57,9 @@ pig = {
 	"butcheryInfo": butcheryInfo,
 
   "processed": 0,
-	"processInfo": []
+	"processInfo": [],
+
+	"processHistory": []
 }
 
 pigParts = {
@@ -68,14 +72,22 @@ pigParts = {
 }
 
 pigLotNo = {
+	"type": "pigLotNo",
 	"referenceKey": [],
 	"labels": [],
 }
+
+trackHistory = {
+	"start": null,
+	"end": null
+}
+
 var schemas = {
   "pig": pig,
 	"processInfo": processInfo,
 	"pigParts": pigParts,
-	"pigLotNo": pigLotNo
+	"pigLotNo": pigLotNo,
+  "trackHistory": trackHistory
 }
 
 

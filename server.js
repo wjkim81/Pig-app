@@ -42,7 +42,35 @@ helpers.utils.createLotNo((lotNo) => {
 });
 */
 
+/*
+helpers.utils.getUnprocessedPigs((pigsArr) => {
+  //console.log('pigsArr: ' + pigsArr);
+  helpers.utils.getUniqueTraceNo(pigsArr, (uniqueTraceNoArr) => {
+    //console.log('uniqueTraceNoArr: ' + uniqueTraceNoArr);
+    helpers.utils.upateLotNo('L117122612345000', uniqueTraceNoArr);
+  });
+});
+*/
+/*
+helpers.utils.createNewProcessNo('L117122612345000', (body) => {
+  console.log(body);
+});
 
+helpers.utils.updateProcessInfoWeight('20171226L1171226123450000', 80, (body) => {
+  //console.log(body);
+});
+*/
+/*
+helpers.utils.updateProcessInfoPart('20171226L1171226123450000', '삼겹살', (body) => {
+  //console.log(body);
+});
+helpers.utils.updateProcessInfoPurchasingCost('20171226L1171226123450000', 200000, (body) => {
+  //console.log(body);
+});
+*/
+helpers.utils.updateProcessInfoSellingPrice('20171226L1171226123450000', 300000, (body) => {
+  //console.log(body);
+});
 // Save our port
 var port = process.env.PORT || 3000;
 

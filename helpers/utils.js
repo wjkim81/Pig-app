@@ -113,7 +113,7 @@ var self = module.exports = {
   },
 
   // Get today in the format YYYYMMDD
-  getToday () {
+  getToday() {
     var date = new Date();
 
     todayYY = date.getFullYear().toString().substring(2);
@@ -126,6 +126,18 @@ var self = module.exports = {
     return today;
   },
 
+  getTodayYYYYMMDD() {
+    var date = new Date();
+
+    todayYYYY = date.getFullYear();
+    todayMM = (date.getMonth() + 1).toString();
+    todayMM = pad(2, todayMM, '0');
+    todayDD = date.getDate().toString();
+    todayDD = pad(2, todayDD, '0');
+    today = todayYYYY + todayMM + todayDD;
+
+    return today;
+  },
   /**
    * CreateLotNo is starting point of works
    * 
@@ -143,7 +155,7 @@ var self = module.exports = {
       endkey: endKey,
       include_docs: true,
       limit: 1000
-    }
+    };
 
     // Retrieve all lotNo with current day and 
     pigsdb.runQuery(queryString, (body) => {
@@ -163,20 +175,136 @@ var self = module.exports = {
     });
   },
 
-  upateLotNo(pigsArr, callback) {
-    
+  upateLotNo(lotNo, pigsArr, callback) {
+    var queryString;
+
+    queryString = {
+      "key": lotNo
+    };
+    //console.log(queryString);
+    pigsdb.runViewWithQuery('pigsDoc', 'pigLotNo-view', queryString, (body) => {
+      //console.log(body);
+      var updateLotNo = models.schemas.pigLotNo;
+      updateLotNo._id = lotNo;
+      updateLotNo._rev = body.rows[0].value;
+      for (var i = 0; i < pigsArr.length; i++) {
+        updateLotNo.referenceKey.push(pigsArr[i]);
+        console.log(updateLotNo);
+        pigsdb.update(updateLotNo, lotNo, (lotNoBody) => {
+
+          console.log(pigsArr[i]);
+          queryString = {
+            "selector": {
+              "traceNo": pigsArr[i]
+            }
+          };
+          //console.log(queryString);
+          pigsdb.runViewWithQuery('pigsDoc', 'traceNo-view', queryString, (pigsBody) => {
+            //console.log(body);
+            pigsBody.rows.forEach((row) => {
+              row.value.processed = 1
+              console.log(row.value);
+              pigsdb.update(row.value, row.value._id, (body) => {
+                console.log(body);
+              });    
+            });
+          });
+        });
+      }
+    });
   },
 
-  createNewLabel(lotNo) {
-    //console.log(models.schemas.pigParts["frozenType"]);
+  createNewProcessNo(lotNo, callback) {
+    var queryString = {
+      "selector": {
+        "lotNo": lotNo
+      }
+    };
+    //console.log(queryString);
+    pigsdb.runViewWithQuery('pigsDoc', 'processInfo-view', queryString, (processBody) => {
+      //console.log(processBody);
+      var seriesNo = processBody.rows.length;
+      var today = self.getTodayYYYYMMDD();
+      var processNo = today + lotNo + seriesNo;
+
+      processInfo = models.schemas.processInfo;
+      processInfo.lotNo = lotNo;
+      processInfo.processYmd = today;
+      processInfo.corpNo = '12345';
+
+      //console.log(processInfo);
+      //console.log(processNo);
+      pigsdb.insert(processInfo, processNo, (body) => {
+        //console.log(body);
+        callback(processNo);
+      });
+    });
   },
 
-  updateLabel(traceNoArr) {
-    
+  updateProcessInfoWeight(processNo, processWeight, callback) {
+    var queryString = {
+      "key": processNo
+    };
+    pigsdb.runViewWithQuery('pigsDoc', 'processInfo-view', queryString, (processBody) => {
+      //console.log(processBody);
+      processBody.rows[0].value.processWeight = processWeight;
+      //console.log(processBody.rows[0].value);
+      
+      pigsdb.update(processBody.rows[0].value, processNo, (updateBody) => {
+        callback(updateBody);
+      });
+    });
+  },
+
+  updateProcessInfoPart(processNo, processPart, callback) {
+    var queryString = {
+      "key": processNo
+    };
+    pigsdb.runViewWithQuery('pigsDoc', 'processInfo-view', queryString, (processBody) => {
+      processBody.rows[0].value.processPart = processPart;
+      console.log(processBody.rows[0].value);
+      
+      pigsdb.update(processBody.rows[0].value, processNo, (updateBody) => {
+        callback(updateBody);
+      });
+    });
+  },
+  
+  updateProcessInfoPurchasingCost(processNo, purchasingCost, callback) {
+    var queryString = {
+      "key": processNo
+    };
+    pigsdb.runViewWithQuery('pigsDoc', 'processInfo-view', queryString, (processBody) => {
+      processBody.rows[0].value.purchasingCost = purchasingCost;
+      console.log(processBody.rows[0].value);
+      
+      pigsdb.update(processBody.rows[0].value, processNo, (updateBody) => {
+        callback(updateBody);
+      });
+    });
+  },
+
+  updateProcessInfoSellingPrice(processNo, sellingPrice, callback) {
+    var queryString = {
+      "key": processNo
+    };
+    pigsdb.runViewWithQuery('pigsDoc', 'processInfo-view', queryString, (processBody) => {
+      processBody.rows[0].value.sellingPrice = sellingPrice;
+      console.log(processBody.rows[0].value);
+      
+      pigsdb.update(processBody.rows[0].value, processNo, (updateBody) => {
+        callback(updateBody);
+      });
+    });
+  },
+
+  updateProcessTrackHistory(originNo, destinationNo, callback) {
+
   },
 
   getUnprocessedPigs(callback) {
     // Get pig documents where processed is false
+    /*
     queryString = {
       "selector": {
         "processed": {
@@ -193,8 +321,6 @@ var self = module.exports = {
       "include_docs": true,
       "limit": 1000
     }
-
-    /*
     pigsdb.runQuery(queryString, (body) => {
       //console.log(body.rows);
       //var uniqueTraceNo = Array.from(new Set(body.rows.doc.traceNo));
@@ -203,7 +329,7 @@ var self = module.exports = {
       callback(body);
     })
     */
-    pigsdb.runView('processedDoc', 'non-processed-view', (body) => {
+    pigsdb.runView('pigsDoc', 'non-processed-view', (body) => {
      callback(body);
     });
   },
@@ -213,8 +339,8 @@ var self = module.exports = {
     var uniqueTraceNoArr = [];
     for (var i = 0; i < pigsArr.rows.length; i++) {
       //console.log(pigsArr.rows[i]);
-      if (!uniqueTraceNoArr.includes(pigsArr.rows[i].value)) 
-        uniqueTraceNoArr.push(pigsArr.rows[i].value);
+      if (!uniqueTraceNoArr.includes(pigsArr.rows[i].value.traceNo)) 
+        uniqueTraceNoArr.push(pigsArr.rows[i].value.traceNo);
     }
     callback(uniqueTraceNoArr);
     //var uniqueTraceNo = [];
