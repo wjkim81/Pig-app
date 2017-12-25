@@ -20,6 +20,10 @@ app.use(errorhandler())
 // static file path
 app.use('/static', express.static(__dirname + '/public'));
 
+app.use(require('./controllers'))
+
+
+
 var csvFilePath = './pig_data/pig_2017-12-11.csv';
 
 /*
@@ -67,16 +71,16 @@ helpers.utils.updateProcessInfoPart('20171226L1171226123450000', '삼겹살', (b
 helpers.utils.updateProcessInfoPurchasingCost('20171226L1171226123450000', 200000, (body) => {
   //console.log(body);
 });
-*/
+
 helpers.utils.updateProcessInfoSellingPrice('20171226L1171226123450000', 300000, (body) => {
   //console.log(body);
 });
+*/
 // Save our port
 var port = process.env.PORT || 3000;
 
 // Start the server and listen on port
-/*
+
 app.listen(port, '0.0.0.0', function() {
   console.log("Live on port: " + port);
 });
-*/

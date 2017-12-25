@@ -19,7 +19,7 @@ butcheryInfo = {
 	"butcheryWeight": null,
 	"backFatThickness": null,
 	"abattCode": null,
-	"processPlaceNm": null,
+	//"processPlaceNm": null,
 }
 
 processInfo = {
