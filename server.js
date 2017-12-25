@@ -27,14 +27,20 @@ helpers.utils.updateButcheryInfoFromEkape(csvFilePath, function(numUpdated) {
 });
 */
 
-helpers.utils.createLotNo();
+helpers.utils.createLotNo((lotNo) => {
+  helpers.utils.getUnprocessedPigs((pigsArr) => {
+    helpers.utils.getUniqueTraceNo(pigsArr, (uniqueTraceNoArr) => {
+      console.log(uniqueTraceNoArr);
+    })
+  });
+});
 
 // Save our port
 var port = process.env.PORT || 3000;
 
 // Start the server and listen on port
 /*
-app.listen(port, '0.0.0.0', function(){
+app.listen(port, '0.0.0.0', function() {
   console.log("Live on port: " + port);
 })
 ;

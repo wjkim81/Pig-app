@@ -1,7 +1,8 @@
 var path          = require('path');
 var csv           = require('csvtojson');
 var models        = require('../models')
-var pigsdb         = require('../models/pigs')
+var pigsdb        = require('../models/pigs')
+var pad           = require('pad');
 
 var self = module.exports = {
   /**
@@ -96,7 +97,7 @@ var self = module.exports = {
         key = pig.butcheryInfo.butcheryYmd + pig.traceNo + pig.pigNo;
         //console.log(key);
 
-        pigsdb.insertPig(key, pig, (body) => {
+        pigsdb.insert(key, pig, (body) => {
           //console.log(body);
           callback(body);
         });
@@ -116,7 +117,7 @@ var self = module.exports = {
    * CreateLotNo is starting point of works
    * 
    */
-  createLotNo() {
+  createLotNo(callback) {
     var date = new Date();
 
     todayYY = date.getFullYear().toString().substring(2);
@@ -125,22 +126,79 @@ var self = module.exports = {
     today = todayYY + todayMM + todayDD;
 
     var corpNo = '12345';
-    var seriesNo = 000;
 
-    //console.log(date);
-    //console.log(todayYY);
-    //console.log(todayMM);
-    //console.log(todayDD);
+    var startKey = 'L1' + today + corpNo + '000';
+    var endKey = 'L1' + today + corpNo + '999';
 
-    lotNo = 'L1' + today + corpNo + seriesNo;
+    //console.log(startKey);
+    //console.log(endKey);
+
     queryString = {
-      "selector": {
-        "butcheryInfo.butcheryYmd": "20171211"
-      }
+      startkey: startKey,
+      endkey: endKey,
+      include_docs: true,
+      limit: 1000
     }
-    pigsdb.makeNewSeriesNo(lotNo, queryString);
-    //pigsdb.get()
-    //pigsdb.
+
+    // Retrieve all lotNo with current day and 
+    pigsdb.runQuery(queryString, (body) => {
+      var seriesNo = body.rows.length;
+      var lotNo = 'L1' + today + corpNo + pad(3, seriesNo.toString(), '0');
+      callback(lotNo);
+    });
+  },
+
+  createNewLabel(lotNo) {
+
+    //console.log(models.schemas.pigParts["frozenType"]);
+  },
+
+  updateLabel(traceNoArr) {
+    
+  },
+
+  getUnprocessedPigs(callback) {
+    // Get pig documents where processed is false
+    queryString = {
+      selector: {
+        processed: false
+      },
+      include_docs: true,
+      limit: 1000
+    }
+
+    pigsdb.runQuery(queryString, (body) => {
+      //console.log(body.rows);
+      //var uniqueTraceNo = Array.from(new Set(body.rows.doc.traceNo));
+      //console.log(uniquteTraceNo);
+      //var uniqueTraceNo = [];
+      
+      //console.log(body);
+      //for (var i = 0; i < body.rows.length; i++) {
+        //console.log(body.rows[i]);
+        //if (!uniqueTraceNo.includes(body.rows[i].doc.traceNo)) 
+        //  uniqueTraceNo.push(body.rows[i].doc.traceNo);
+      //}
+      //console.log(uniqueTraceNo);
+      callback(body);
+      //body.rows.forEach((doc) => {
+      //  if (!uniqueTraceNo.includes(doc.doc.traceNo)) 
+      //    uniqueTraceNo.push(doc.doc.traceNo);
+
+        //console.log(doc.doc.traceNo, doc.doc.pigNo);
+        //console.log(uniqueTraceNo);
+      //})
+    })
+  },
+
+  getUniqueTraceNo(pigsArr, callback) {
+    var uniqueTraceNo = [];
+    for (var i = 0; i < pigsArr.rows.length; i++) {
+      //console.log(pigsArr.rows[i]);
+      if (!uniqueTraceNo.includes(pigsArr.rows[i].doc.traceNo)) 
+        uniqueTraceNo.push(pigsArr.rows[i].doc.traceNo);
+    }
+    callback(uniqueTraceNo);
   }
-  
+
 }
