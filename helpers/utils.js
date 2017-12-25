@@ -87,8 +87,8 @@ var self = module.exports = {
   updateButcheryInfoFromEkape(csvFilePath, callback) {
     var pigsArr = [];
 
-   // Convert csv format file into json
-   // For each json object, insert into couchDB 
+    // Convert csv format file into json
+    // For each json object, insert into couchDB 
     csv()
       .fromFile(csvFilePath)
       .on('json', (ekapeJsonPig) => {
@@ -112,18 +112,26 @@ var self = module.exports = {
     )
   },
 
+  // Get today in the format YYYYMMDD
+  getToday () {
+    var date = new Date();
+
+    todayYY = date.getFullYear().toString().substring(2);
+    todayMM = (date.getMonth() + 1).toString();
+    todayMM = pad(2, todayMM, '0');
+    todayDD = date.getDate().toString();
+    todayDD = pad(2, todayDD, '0');
+    today = todayYY + todayMM + todayDD;
+
+    return today;
+  },
 
   /**
    * CreateLotNo is starting point of works
    * 
    */
   createLotNo(callback) {
-    var date = new Date();
-
-    todayYY = date.getFullYear().toString().substring(2);
-    todayMM = (date.getMonth() + 1).toString();
-    todayDD = date.getDate().toString();
-    today = todayYY + todayMM + todayDD;
+    let today = self.getToday();
 
     var corpNo = '12345';
 
@@ -144,12 +152,20 @@ var self = module.exports = {
     pigsdb.runQuery(queryString, (body) => {
       var seriesNo = body.rows.length;
       var lotNo = 'L1' + today + corpNo + pad(3, seriesNo.toString(), '0');
+      var newPigLotNo = models.schemas.pigLotNo;
+
+      pigsdb.insert(lotNo, newPigLotNo, (body) => {
+        console.log(body);
+      });
       callback(lotNo);
     });
   },
 
-  createNewLabel(lotNo) {
+  upateLotNo(pigsArr, callback) {
+    
+  },
 
+  createNewLabel(lotNo) {
     //console.log(models.schemas.pigParts["frozenType"]);
   },
 

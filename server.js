@@ -7,6 +7,7 @@ const bodyParser = require('body-parser')
 // Import eatformation libraries
 const helpers = require('./helpers')
 const models = require('./models')
+const pigsdb = require('./models/pigs')
 const fs = require('fs')
 
 
@@ -28,6 +29,8 @@ helpers.utils.updateButcheryInfoFromEkape(csvFilePath, function(numUpdated) {
 */
 
 helpers.utils.createLotNo((lotNo) => {
+  var today = helpers.utils.getToday();
+  //console.log(today);
   helpers.utils.getUnprocessedPigs((pigsArr) => {
     helpers.utils.getUniqueTraceNo(pigsArr, (uniqueTraceNoArr) => {
       console.log(uniqueTraceNoArr);
@@ -42,6 +45,5 @@ var port = process.env.PORT || 3000;
 /*
 app.listen(port, '0.0.0.0', function() {
   console.log("Live on port: " + port);
-})
-;
+});
 */

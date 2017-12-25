@@ -5,8 +5,8 @@ var farmInfo = {
 	"farmerNm": null,
 	"regType": null,
 	"regYmd": null
-
 }
+
 butcheryInfo = {
 	"butcheryPlaceAddr": null,
 	"butcheryPlaceNm": null,
@@ -23,7 +23,7 @@ butcheryInfo = {
 }
 
 processInfo = {
-  // key (20) = YYYYMMDD (8) + lotNo (12)
+  // key (20) = YYMMDD (6) + lotNo (12) + seresNo(3)
   "referenceId": [],
   "childId": null,
   "trackHistory": null,
@@ -66,10 +66,15 @@ pigParts = {
 	]
 }
 
+pigLotNo = {
+	"referenceKey": [],
+	"labels": [],
+}
 var schemas = {
   "pig": pig,
 	"processInfo": processInfo,
-	"pigParts": pigParts
+	"pigParts": pigParts,
+	"pigLotNo": pigLotNo
 }
 
 
