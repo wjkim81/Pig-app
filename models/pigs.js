@@ -37,7 +37,7 @@ module.exports = {
   runQuery(queryString, callback) {
     db.list(queryString, (err, body) => {
       if (!err) {
-        //console.log('body: ' + body)
+        console.log('body: ' + body)
         callback(body);
         /*
         body.rows.forEach(function(doc) {
@@ -52,7 +52,11 @@ module.exports = {
 
   runView(designname, viewname, callback) {
     db.view(designname, viewname, (err, body) => {
-        if (!err) callback(body);
+      //console.log(body);
+      //if (!err) {
+      //  callback(body);
+      //}
+      callback(err, body);
     });
   },
 

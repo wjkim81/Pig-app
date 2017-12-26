@@ -56,7 +56,7 @@ var self = module.exports = {
 	  pig.sexNm = ekapeJsonPig['성'];
       
     //pig.farmInfo.farmNo = ekapeJsonPig
-    pig.farmInfo.farnNm = ekapeJsonPig['출하농가'];
+    pig.farmInfo.farmNm = ekapeJsonPig['출하농가'];
     //pig.farmInfo.farmAddr = ekapeJsonPig
     //pig.farmInfo.farmerNm = ekapeJsonPig
     //pig.farmInfo.regType = ekapeJsonPig
@@ -70,7 +70,7 @@ var self = module.exports = {
     pig.butcheryInfo.firstGradeNm = ekapeJsonPig['1차등급']
     pig.butcheryInfo.gradeNm = ekapeJsonPig['최종등급']
     //pig.butcheryInfo.inspectPassYn = ekapeJsonPig
-    pig.butcheryInfo.butcheryWeight = ekapeJsonPig['도체중'];
+    pig.butcheryInfo.butcheryWeight = ekapeJsonPig['도체중(kg)'];
     pig.butcheryInfo.backFatThickness = ekapeJsonPig['등지방두꼐'];
     //pig.butcheryInfo.abattCode = ekapeJsonPig
     //pig.butcheryInfo.processPlaceNm = ekapeJsonPig
@@ -98,14 +98,14 @@ var self = module.exports = {
         //console.log(key);
 
         pigsdb.insert(pig, pig._id, (body) => {
-          //console.log(body);
-          callback(body);
+          console.log(body);
+          //callback(body);
         });
 
         pigsArr.push(pig)
       })
       .on('done', (error) => {
-        if (error) return process.exit(1)
+        if (error) console.log('updateButcheryInfoFromEkape: ' + error);
         console.log("Number of pigs: " + pigsArr.length);
         callback(pigsArr.length)
       }
@@ -329,8 +329,10 @@ var self = module.exports = {
       callback(body);
     })
     */
-    pigsdb.runView('pigsDoc', 'non-processed-view', (body) => {
-     callback(body);
+    //console.log('started');
+    pigsdb.runView('pigsDoc', 'non-processed-view', (err, body) => {
+      //console.log(err, body);
+      callback(err, body);
     });
   },
 

@@ -11,6 +11,8 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.3/angular.min.js"></script>
+    <!--<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>-->
+
     
     <!-- adding style here -->
     <style type="text/css">
@@ -50,7 +52,7 @@
           font-family: arial, sans-serif;
           border-collapse: collapse;
           width: 100%;
-		  }j
+		  }
       td, th {
           border: 1px solid #dddddd;
           text-align: left;
@@ -59,11 +61,41 @@
       tr:nth-child(even) {
           background-color: #dddddd;
       }
-	  .outer-div{
+	    .outer-div{
 	  	border: 2px solid #888888;
-		padding: 3px 1px 20px 1px;
-		margin-bottom: 50px;
-	  }
+		  padding: 3px 1px 20px 1px;
+		  margin-bottom: 50px;
+	    }
+      #csvFile {
+        display: none;
+      }
+      /*
+      #getFile {
+        background: #f9f9f9;
+        border: 1px solid #88c;
+        padding: 10px;
+        border-radius: 5px;
+        margin: 10px;
+        cursor: pointer;
+      }
+      */
+      #customfileupload {
+        display: inline;
+        background-color: #fff;
+        font-size: 14px;
+        padding: 10px 30px 10px 10px;
+        width: 250px;
+        border: 1px solid #999;
+        box-shadow: inset 1px 1px 5px #ccc;
+        -webkit-box-shadow: inset 1px 1px 5px #ccc;
+        -moz-box-shadow: inset 0px 0px 4px #ccc;
+        -ms-box-shadow: inset 0px 0px 4px #ccc;
+        -o-box-shadow: inset 0px 0px 4px #ccc;
+        z-index: 1;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
     </style>
   </head>
   <body ng-app="application" ng-controller="appController">
@@ -75,25 +107,68 @@
     <div id="body">
       <div class="outer-div">
         <div class="form-group">
-          <label>미처리 돼지</label>
-          <p><input id="queryAllUnprocessedPigs" type="submit" value="Query" class="btn btn-primary" ng-click="queryAllUnprocessedPigs()"></p>
+          <label>입고물량 입력</label>
+          <!--
+          <form ref='uploadForm' id='uploadForm' action='http://localhost:3000/upload' method='post' encType="multipart/form-data">
+            <input id="getFile" type="button" value="csv 파일 입력" class="btn btn-primary" ng-click="getFile()">
+            <input type="file" id="csvFile">
+            <div id="customfileupload">Select a file</div>
+            <input type='submit' value='Upload!' />
+          </form>
+          -->
+          <form ref='uploadForm' id='uploadForm' action='http://localhost:3000/upload' method='post' encType="multipart/form-data">
+            <input type="file" name="csvFile"/>
+            <input type='submit' value='Upload!' />
+          </form>     
         </div>
 
-        <table id="pigs" class="table" align="center">
+        <table id="importedPigs" class="table" align="center">
           <tr>
             <th>이력번호</th>
-            <th>농장주</th>
-            <th>개체식별번호</th>
-            <th>출생년월일</th>
-            <th>개체 종류</th>
+            <th>개체번호</th>
+            <th>도축일자</th>
+            <th>개체등급</th>
+            <th>도축장소</th>
           </tr>
 
-          <tr ng-repeat="pig in pigs">
-            <td>{{cattle.Key}}</td>
-            <td>{{cattle.farmInfo[0].farmerNm}}</td>
-            <td>{{cattle.cattleNo}}</td>
-            <td>{{cattle.birthYmd}}</td>
-            <td>{{cattle.lsTypeNm}}</td>
+          <% for pig1 in pigs %>
+          <!--<tr ng-repeat="pig in importedPigs">-->
+          <tr>
+            <td><$ pig1.value.traceNo $></td>
+            <td><$ pig1.value.pigNo $></td>
+            <td><$ pig1.value.butcheryYmd $></td>
+            <td><$ pig1.value.firstGradeNm $></td>
+            <td><$ pig1.value.butcheryWeight $></td>
+          </tr>
+          <% endfor %>
+        </table>
+      </div>  
+
+
+      <div class="outer-div">
+        <div class="form-group">
+          <label>현재 입고된 미처리 개체</label>
+          <p><input id="queryAllUnprocessedPigs" type="submit" value="조회" class="btn btn-primary" ng-click="queryAllUnprocessedPigs()"></p>
+        </div>
+
+        <table id="unprocessedPigs" class="table" align="center">
+          <tr>
+            <th>이력번호</th>
+            <th>개체번호</th>
+            <th>출하농장</th>
+            <th>도축일자</th>
+            <th>개체등급</th>
+            <th>도체중</th>
+          </tr>
+          
+          
+          <tr ng-repeat="pig in unprocessedPigs">
+            <td>{{ pig.value.traceNo }}</td>
+            <td>{{ pig.value.pigNo }}</td>
+            <td>{{ pig.value.farmInfo.farmNm }}</td>
+            <td>{{ pig.value.butcheryInfo.butcheryYmd }}</td>
+            <td>{{ pig.value.butcheryInfo.firstGradeNm }}</td>
+            <td>{{ pig.value.butcheryInfo.butcheryWeight }}</td>
           </tr>
         </table>
       </div>  
@@ -229,5 +304,6 @@
     </div>
   </body>
   <!-- requiring the angular page -->
-  <script type="text/javascript" src="app.js"> </script>
+  <script type="text/javascript" src="/static/js/eatformation.js"></script>
+  <script type="text/javascript" src="/static/js/app.js"></script>
 </html>

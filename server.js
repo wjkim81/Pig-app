@@ -1,28 +1,41 @@
 // Import for web server
-const express = require('express') 
-const logger = require('morgan')
-const errorhandler = require('errorhandler')
-const bodyParser = require('body-parser')
+const express = require('express'); 
+const logger = require('morgan');
+const errorhandler = require('errorhandler');
+const bodyParser = require('body-parser');
+const path          = require('path');
+const fs = require('fs');
+
 
 
 // Import eatformation libraries
-const helpers = require('./helpers')
-const models = require('./models')
-const pigsdb = require('./models/pigs')
-const fs = require('fs')
+const helpers = require('./helpers');
+const models = require('./models');
+const pigsdb = require('./models/pigs');
 
 
-let app = express()
+//let app = express()
 
-app.use(bodyParser.json())
-app.use(logger('dev'))
-app.use(errorhandler())
+/*
+const nunjucks    = require('nunjucks')
+nunjucks.configure('../views', {
+  autoescape: true,
+  express: app
+});
+*/
+let app = require('./routes');
+
+app.use(bodyParser.json());
+app.use(logger('dev'));
+app.use(errorhandler());
 
 // static file path
 app.use('/static', express.static(__dirname + '/public'));
+//app.use('/', routes);
 
 //app.use(require('./controllers'))(app)
 
+/*
 const nunjucks    = require('nunjucks')
 
 nunjucks.configure('views', {
@@ -31,17 +44,44 @@ nunjucks.configure('views', {
 });
 
 app.get('/', (req, res) => {
-  //console.log(views.index)
+  var pigsArr = []
+  res.render('index.html', { pigsArr: pigsArr.rows });
+  //console.log(req);
   //res.sendFile(path.join(__dirname, '../views/pigs', 'index.html'), {test: 'test'})
-  helpers.utils.getUnprocessedPigs((pigsArr) => {
+  //helpers.utils.getUnprocessedPigs((pigsArr) => {
+    //helpers.utils.
     //console.log('pigsArr: ' + pigsArr);
-    //console.log(pigsArr);
-    res.render('index.html', { pigsArr: pigsArr });
-  });
-  
+    //console.log(pigsArr.rows);
+    //res.render('index.html', { pigsArr: pigsArr.rows });
+  //});
 })
+*/
+/*
+app.post('/upload', function(req, res) {
+  console.log(req.files);
+  if (!req.files)
+    return res.status(400).send('No files were uploaded.');
+ 
+  // The name of the input field (i.e. "sampleFile") is used to retrieve the uploaded file
+  let csvFile = req.files.csvFile;
+ 
 
-var csvFilePath = './pig_data/pig_2017-12-11.csv';
+  
+  // Use the mv() method to place the file somewhere on your server
+  csvFilePath = path.join(__dirname, 'pigs_data', csvFile.name);
+  csvFile.mv(csvFilePath, function(err) {
+    if (err)
+      return res.status(500).send(err);
+    console.log(csvFilePath);
+    helpers.utils.updateButcheryInfoFromEkape(csvFilePath, (numUpdated) => {
+      console.log(numUpdated + ' of pigs are updated');
+      //fs.unlinkSync(csvFilePath);
+      res.status(200);
+      res.redirect('/');
+    });
+  });
+});
+*/
 
 /*
 helpers.utils.updateButcheryInfoFromEkape(csvFilePath, function(numUpdated) {
@@ -64,12 +104,15 @@ helpers.utils.createLotNo((lotNo) => {
 */
 
 /*
-helpers.utils.getUnprocessedPigs((pigsArr) => {
-  //console.log('pigsArr: ' + pigsArr);
-  helpers.utils.getUniqueTraceNo(pigsArr, (uniqueTraceNoArr) => {
+helpers.utils.getUnprocessedPigs((err, pigsArr) => {
+  if (err)
+    console.log(err);
+  else
+    console.log(pigsArr);
+  //helpers.utils.getUniqueTraceNo(pigsArr, (uniqueTraceNoArr) => {
     //console.log('uniqueTraceNoArr: ' + uniqueTraceNoArr);
-    helpers.utils.upateLotNo('L117122612345000', uniqueTraceNoArr);
-  });
+  //  helpers.utils.upateLotNo('L117122612345000', uniqueTraceNoArr);
+  //});
 });
 */
 /*
@@ -97,6 +140,7 @@ helpers.utils.updateProcessInfoSellingPrice('20171226L1171226123450000', 300000,
 var port = process.env.PORT || 3000;
 
 // Start the server and listen on port
+
 
 app.listen(port, '0.0.0.0', function() {
   console.log("Live on port: " + port);
