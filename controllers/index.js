@@ -3,20 +3,18 @@ const nunjucks    = require('nunjucks')
 
 //var views         = require('../views')
 var express = require('express')
-let router = express.Router();
+//let router = express.Router();
 
-module.exports = router = function(app) {
-  /*
+router = function(app) {
   nunjucks.configure('../views', {
     autoescape: true,
     express: app
   });
-  */
   //router.use('/office', require('./office'))
 
-  app.get('/', (req, res) => {
-    res.render('index.html', {test: 'test'});
-  });
+  //app.get('/', (req, res) => {
+  //  res.render('index.html', {test: 'test'});
+  //});
 
   app.get('/office', function(req, res) {
     res.sendFile(path.join(__dirname, '../views', 'office.html'));
@@ -32,7 +30,7 @@ module.exports = router = function(app) {
     obj.add_cattle(req, res);
   });
 }
-
+module.exports = router;
 
 /*
 var express = require('express')

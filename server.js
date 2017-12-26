@@ -21,7 +21,7 @@ app.use(errorhandler())
 // static file path
 app.use('/static', express.static(__dirname + '/public'));
 
-//app.use(require('./controllers'))
+//app.use(require('./controllers'))(app)
 
 const nunjucks    = require('nunjucks')
 
@@ -33,7 +33,12 @@ nunjucks.configure('views', {
 app.get('/', (req, res) => {
   //console.log(views.index)
   //res.sendFile(path.join(__dirname, '../views/pigs', 'index.html'), {test: 'test'})
-  res.render('index.html', { test: 'test' });
+  helpers.utils.getUnprocessedPigs((pigsArr) => {
+    //console.log('pigsArr: ' + pigsArr);
+    //console.log(pigsArr);
+    res.render('index.html', { pigsArr: pigsArr });
+  });
+  
 })
 
 var csvFilePath = './pig_data/pig_2017-12-11.csv';
