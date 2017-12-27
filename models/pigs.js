@@ -52,17 +52,15 @@ module.exports = {
 
   runView(designname, viewname, callback) {
     db.view(designname, viewname, (err, body) => {
-      //console.log(body);
-      //if (!err) {
-      //  callback(body);
-      //}
+      if (err) console.log('[error] runView');
       callback(err, body);
     });
   },
 
   runViewWithQuery(designname, viewname, queryString, callback) {
     db.view(designname, viewname, queryString, (err, body) => {
-        if (!err) callback(err, body);
+        if (err) console.log('[error] runViewWithQuery');
+        callback(err, body);
     });
   }
 }

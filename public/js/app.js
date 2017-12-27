@@ -7,8 +7,9 @@ var app = angular.module('application', []);
 app.controller('appController', function($scope, appFactory) {
 
   $("#successCreateLotNo").hide();
-  $("#errorDate").hide();
+  $("#errorLotNoDate").hide();
   $("#sucessCreateNewProcess").hide();
+  $("#errorProcessDate").hide();
 
   // Create angular function for traceability system
   $scope.queryAllUnprocessedPigs = function() {
@@ -40,9 +41,9 @@ app.controller('appController', function($scope, appFactory) {
     //console.log(lotNoDate);
     
     appFactory.queryLotNoWithDate(lotNoDate, function(data) {
-      console.log(data);
+      //console.log(data);
       $scope.allLotNos = data;
-      if ($scope.allLotNos == "error") {
+      if ($scope.allLotNos == "error" || $scope.allLotNos.length == 0) {
         $("#errorDate").show();
       } else {
         $("#errorDate").hide();
@@ -52,20 +53,32 @@ app.controller('appController', function($scope, appFactory) {
 
   $scope.createNewProcess = function() {
     var lotNo = $scope.lotNoIn;
-    console.log(lotNo);
-    
+    //console.log(lotNo);
+
     appFactory.createNewProcess(lotNo, function(data) {
-      if ($scope.newLotNo != "error") {
+      $scope.newProcessNo = data;
+      if ($scope.newProcessNo != "error") {
         $("#sucessCreateNewProcess").show();
       } else {
         $("#sucessCreateNewProcess").hide();
       }
     });
   }
+  
+  $scope.queryProcessInfoWithDate = function() {
+    var processDate = $scope.processDateIn;
 
+    appFactory.queryProcessInfo(processDate, function(data) {
+      $scope.allProcessInfo = data;
+      //console.log(data);
+      if ($scope.allProcessInfo == "error" || $scope.allProcessInfo.length == 0) {
+        $("#errorProcessDate").show();
+      } else {
+        $("#errorProcessDate").hide();
+      }
+    });
+  }
 });
-
-
 
 // Angular Factory
 app.factory('appFactory', function($http) {
@@ -73,28 +86,35 @@ app.factory('appFactory', function($http) {
 
   // For traceability system
   factory.queryAllUnprocessedPigs = function(callback) {
-    $http.get('/get_all_unprocessed_pigs/').success(function(output){
+    $http.get('/get_all_unprocessed_pigs/').success(function(output) {
       callback(output)
     });
   }
 
   factory.createLotNo = function(traceNos, callback) {
-    $http.get('/create_lot_no/'+traceNos).success(function(output){
+    $http.get('/create_lot_no/'+traceNos).success(function(output) {
       callback(output)
     });
   }
 
   factory.queryLotNoWithDate = function(createdDate, callback) {
 
-    $http.get('/query_lot_no_with_date/'+createdDate).success(function(output){
+    $http.get('/query_lot_no_with_date/'+createdDate).success(function(output) {
       callback(output)
     });
-  },
+  }
 
-  factory.createNewProcess = function(lotNo, callback ){
+  factory.createNewProcess = function(lotNo, callback) {
 
-    $http.get('/create_new_process/'+lotNo).success(function(output){
+    $http.get('/create_new_process/'+lotNo).success(function(output) {
       callback(output)
+    });
+  }
+
+  factory.queryProcessInfo = function(processDate, callback) {
+
+    $http.get('/query_process_info_with_date/'+processDate).success(function(output) {
+      callback(output);
     });
   }
 

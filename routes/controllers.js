@@ -57,7 +57,32 @@ return {
       else
         res.send('error');
     });
-  }
+  },
 
+  create_new_process: function(req, res) {
+    console.log("Creating new processNo");
+
+    var lotNo = req.params.lotNo;
+
+    helpers.utils.createNewProcessNo(lotNo, (err, processNo) => {
+      if (!err)
+        res.send(processNo)
+      else
+        res.send('error');
+    });
+  },
+
+  query_process_info_with_date: function(req, res) {
+    console.log("Query processInfo with process date");
+    
+    var processDate = req.params.process_date;
+
+    helpers.utils.queryProcessInfoWithDate(processDate, (err, processInfoArr) => {
+      if (!err)
+        res.send(processInfoArr)
+      else
+        res.send('error');
+    });
+  }
 }
 })();

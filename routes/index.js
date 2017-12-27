@@ -47,4 +47,11 @@ app.get('/query_lot_no_with_date/:created_date', (req, res) => {
   obj.query_lot_no_with_date(req, res);
 });
 
+app.get('/create_new_process/:lotNo', (req, res) => {
+  obj.create_new_process(req, res);
+});
+
+app.get('/query_process_info_with_date/:process_date', (req, res) => {
+  obj.query_process_info_with_date(req, res);
+});
 module.exports = app;

@@ -193,7 +193,7 @@ var self = module.exports = {
       //console.log(body);
       var updateLotNo = models.schemas.pigLotNo;
       updateLotNo._id = lotNo;
-      updateLotNo._rev = body.rows[0].value;
+      updateLotNo._rev = body.rows[0].value._rev;
       for (var i = 0; i < pigsArr.length; i++) {
         updateLotNo.referenceKey.push(pigsArr[i]);
         console.log(updateLotNo);
@@ -206,7 +206,7 @@ var self = module.exports = {
             }
           };
           //console.log(queryString);
-          pigsdb.runViewWithQuery('pigsDoc', 'traceNo-view', queryString, (pigsBody) => {
+          pigsdb.runViewWithQuery('pigsDoc', 'pig-view', queryString, (pigsBody) => {
             //console.log(body);
             pigsBody.rows.forEach((row) => {
               row.value.processed = 1
@@ -223,14 +223,12 @@ var self = module.exports = {
 
   queryLotNoWithDate(createdDate, callback) {
     var queryString = {
-      "selector": {
-        "createdDate": createdDate
-      }
+      "key": createdDate
     };
 
     //console.log(createdDate);
     console.log(queryString);
-    pigsdb.runViewWithQuery('pigsDoc', 'pigLotNo-view', queryString, (error, body) => {
+    pigsdb.runViewWithQuery('pigsDoc', 'pigLotNo-by-createdDate-view', queryString, (error, body) => {
       if (error) 
         console.log('[error] queryLotNoWithDate');
       callback(error, body);
@@ -239,16 +237,14 @@ var self = module.exports = {
 
   createNewProcessNo(lotNo, callback) {
     var queryString = {
-      "selector": {
-        "lotNo": lotNo
-      }
+      "key": lotNo
     };
     //console.log(queryString);
-    pigsdb.runViewWithQuery('pigsDoc', 'processInfo-view', queryString, (error, processBody) => {
+    pigsdb.runViewWithQuery('pigsDoc', 'processInfo-by-lotNo-view', queryString, (error, processBody) => {
       //console.log(processBody);
       var seriesNo = processBody.rows.length;
       var today = self.getTodayYYYYMMDD();
-      var processNo = today + lotNo + seriesNo;
+      var processNo = today + lotNo + pad(3, seriesNo, '0');
 
       processInfo = models.schemas.processInfo;
       processInfo.lotNo = lotNo;
@@ -316,8 +312,19 @@ var self = module.exports = {
       console.log(processBody.rows[0].value);
       
       pigsdb.update(processBody.rows[0].value, processNo, (err, updateBody) => {
-        callback(updateBody);
+        callback(err, updateBody);
       });
+    });
+  },
+
+  queryProcessInfoWithDate(processDate, callback) {
+    var queryString = {
+      "key": processDate
+    };
+
+    pigsdb.runViewWithQuery('pigsDoc', 'processInfo-by-processYmd-view', queryString, (err, processBody) => {
+      //console.log(processBody.rows);
+      callback(err, processBody.rows);
     });
   },
 

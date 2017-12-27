@@ -145,7 +145,6 @@
         #>
       </div>  
 
-
       <div class="outer-div">
         <div class="form-group">
           <label>현재 입고된 미처리 개체</label>
@@ -186,16 +185,13 @@
       <div class="outer-div">  
         <div class="form-group">
           <label>묶음번호 조회</label><br>
-          <h5 style="color:red;margin-bottom:2%" id="errorDate">Error: 날짜를 다시 입력해 주세요</h5>
+          <h5 style="color:red;margin-bottom:2%" id="errorLotNoDate">Error: 날짜를 다시 입력해 주세요</h5>
         
           날짜 입력: <input id="queryLotNoWithDate" class="form-control" type="text" placeholder="Ex: 20171227" ng-model="lotNoDateIn">
           <input id="queryLotNo" type="submit" value="조회" class="btn btn-primary" ng-click="queryLotNo()">
         </div>
 
         <table id="allLotNos" class="table" align="center">
-          <tr>
-            <th colspan="4">{{ lotNoDate }} 일자 묶음번호</th>
-          </tr>
           <tr>
             <th>묶음번호</th>
             <th>생성일자</th>
@@ -219,25 +215,33 @@
         </div>
       </div>
 
-      <div class="outer-div">
+      <div class="outer-div">  
         <div class="form-group">
-          <label>처리 중인 물량</label>
-          <h5 style="color:green;margin-bottom:2%" id="success_register">Success! Tx ID: {{register_cattle}}</h5>
-          <br>
-          이력번호: <input class="form-control" type="text" placeholder="Ex: 104021864078" ng-model="cattle.traceId">
-          <!--
-          농장식별번호: <input class="form-control" type="text" placeholder="Ex: 0239L" ng-model="cow.farm_id">
-          개체식별번호: <input id="createName" class="form-control" type="text" placeholder="Ex: 28.012" ng-model="cow.cow_id"> 
-          -->
-          출생년월일: <input id="createName" class="form-control" type="text" placeholder="Ex: 20121012" ng-model="cattle.birthYmd">
-          개체 종류: <input class="form-control" type="text" placeholder="Ex: 한우, 수입" ng-model="cattle.lsTypeNm">
-          성별: <input class="form-control" type="text" placeholder="Ex: 거세, 숫소, 암소" ng-model="cattle.sexNm">
-          소유주: <input class="form-control" type="text" placeholder="Ex: 홍길동" ng-model="cattle.farmerNm">
-          신고구분: <input class="form-control" type="text" placeholder="Ex: 전산등록, 양수, 출하" ng-model="cattle.regType">
-          년월일: <input class="form-control" type="text" placeholder="Ex: 20130103" ng-model="cattle.regYmd">
-          사육지 주소: <input class="form-control" type="text" placeholder="Ex: 경기도 양주시 만송통" ng-model="cattle.farmAddr">
-          <input id="registerSubmit" type="submit" value="Create" class="btn btn-primary" ng-click="registerCattle()"> 
+          <label>유통번호 조회</label><br>
+          <h5 style="color:red;margin-bottom:2%" id="errorProcessDate">Error: 날짜를 다시 입력해 주세요</h5>
+        
+          날짜 입력: <input id="queryProcessInfoWithDate" class="form-control" type="text" placeholder="Ex: 20171227" ng-model="processDateIn">
+          <input id="queryProcessInfoWithDate" type="submit" value="조회" class="btn btn-primary" ng-click="queryProcessInfoWithDate()">
         </div>
+
+        <table id="allProcessInfo" class="table" align="center">
+          <tr>
+            <th>유통번호</th>
+            <th>생성일자</th>
+            <th>유통중량(kg)</th>
+            <th>부위</th>
+            <th>원가</th>
+            <th>판매가</th>
+          </tr>
+          <tr ng-repeat="processInfo in allProcessInfo">
+            <td>{{ processInfo.id }}</td>
+            <td>{{ processInfo.value.processYmd }}</td>
+            <td>{{ processInfo.value.processWeight }}</td>
+            <td>{{ processInfo.value.processPart }}</td>
+            <td>{{ processInfo.value.purchasingCost }}</td>
+            <td>{{ processInfo.value.sellingPrice }}</td>
+          </tr>
+        </table>
       </div>
     </div>
   </body>

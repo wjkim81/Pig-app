@@ -69,10 +69,17 @@ helpers.utils.getUnprocessedPigs((err, pigsArr) => {
 });
 */
 /*
-helpers.utils.createNewProcessNo('L117122612345000', (body) => {
+var queryString = {
+  "key": "20171227"
+}
+pigsdb.runViewWithQuery('pigsDoc', 'pigLotNo-by-createdDate-view', queryString, (err, body) => {
   console.log(body);
+  body.rows.forEach((row) => {
+    console.log(row.id, row.key);
+  });
 });
-
+*/
+/*
 helpers.utils.updateProcessInfoWeight('20171226L1171226123450000', 80, (body) => {
   //console.log(body);
 });
