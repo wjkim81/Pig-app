@@ -98,14 +98,14 @@ var self = module.exports = {
         //console.log(key);
 
         pigsdb.insert(pig, pig._id, (err, body) => {
-          if (err) console.log('[error] updateButcheryInfoFromEkape');
+          if (err) console.log('[error] updateButcheryInfoFromEkape, pigsdb.insert');
           //callback(body);
         });
 
         pigsArr.push(pig)
       })
       .on('done', (error) => {
-        if (error) console.log('updateButcheryInfoFromEkape: ' + error);
+        if (error) console.log('[error] updateButcheryInfoFromEkape, csv.done');
         console.log("Number of pigs: " + pigsArr.length);
         callback(pigsArr.length)
       }
@@ -163,6 +163,7 @@ var self = module.exports = {
       var newLotNo = 'L1' + today + corpNo + pad(3, seriesNo.toString(), '0');
 
       var newPigLotNo = models.schemas.pigLotNo;
+      newPigLotNo.traceNoArr = [];
       newPigLotNo.createdDate = self.getTodayYYYYMMDD();
       //console.log('seriesNo: ' + seriesNo)
       //console.log(body);

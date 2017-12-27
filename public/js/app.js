@@ -71,7 +71,7 @@ app.controller('appController', function($scope, appFactory) {
 
     appFactory.queryProcessInfo(processDate, function(data) {
       $scope.allProcessInfo = data;
-      //console.log(data);
+      console.log(data);
       if ($scope.allProcessInfo == "error" || $scope.allProcessInfo.length == 0) {
         $("#errorProcessDate").show();
       } else {
