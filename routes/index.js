@@ -39,4 +39,12 @@ app.get('/get_all_unprocessed_pigs/', (req, res) => {
   obj.get_all_unprocessed_pigs(req, res);
 });
 
+app.get('/create_lot_no/:trace_nos', (req, res) => {
+  obj.create_lot_no(req, res);
+});
+
+app.get('/query_lot_no_with_date/:created_date', (req, res) => {
+  obj.query_lot_no_with_date(req, res);
+});
+
 module.exports = app;

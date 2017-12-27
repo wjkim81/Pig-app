@@ -17,18 +17,47 @@ var path          = require('path');
 var util          = require('util');
 var os            = require('os');
 
-var helpers      = require('../helpers');
+var helpers       = require('../helpers');
 
 module.exports = (function() {
 return {
   get_all_unprocessed_pigs: function(req, res) {
-    console.log("getting all unprocessed pigs from database: ");
+    console.log("Getting all unprocessed pigs from database");
     helpers.utils.getUnprocessedPigs((err, pigsArr) => {
       if (!err) 
         res.send(pigsArr.rows);
       else
-        res.send(err);
+        res.send('error');
+    });
+  },
+
+  create_lot_no: function(req, res) {
+    console.log("Creating new lotNo")
+    
+    var traceNoArr = req.params.trace_nos.split('-');
+    //console.log(traceNoArr);
+
+    helpers.utils.createLotNo(traceNoArr, (err, newLotNo) => {
+      if (!err)
+        res.send(newLotNo);
+      else
+        res.send('error');
+    });
+  },
+
+  query_lot_no_with_date: function(req, res) {
+    console.log("Query lotNo with created date")
+    
+    var created_date = req.params.created_date;
+    //console.log(created_date);
+
+    helpers.utils.queryLotNoWithDate(created_date, (err, lotNoArr) => {
+      if (!err)
+        res.send(lotNoArr.rows);
+      else
+        res.send('error');
     });
   }
+
 }
 })();

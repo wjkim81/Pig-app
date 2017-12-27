@@ -35,53 +35,6 @@ app.use('/static', express.static(__dirname + '/public'));
 
 //app.use(require('./controllers'))(app)
 
-/*
-const nunjucks    = require('nunjucks')
-
-nunjucks.configure('views', {
-    autoescape: true,
-    express: app
-});
-
-app.get('/', (req, res) => {
-  var pigsArr = []
-  res.render('index.html', { pigsArr: pigsArr.rows });
-  //console.log(req);
-  //res.sendFile(path.join(__dirname, '../views/pigs', 'index.html'), {test: 'test'})
-  //helpers.utils.getUnprocessedPigs((pigsArr) => {
-    //helpers.utils.
-    //console.log('pigsArr: ' + pigsArr);
-    //console.log(pigsArr.rows);
-    //res.render('index.html', { pigsArr: pigsArr.rows });
-  //});
-})
-*/
-/*
-app.post('/upload', function(req, res) {
-  console.log(req.files);
-  if (!req.files)
-    return res.status(400).send('No files were uploaded.');
- 
-  // The name of the input field (i.e. "sampleFile") is used to retrieve the uploaded file
-  let csvFile = req.files.csvFile;
- 
-
-  
-  // Use the mv() method to place the file somewhere on your server
-  csvFilePath = path.join(__dirname, 'pigs_data', csvFile.name);
-  csvFile.mv(csvFilePath, function(err) {
-    if (err)
-      return res.status(500).send(err);
-    console.log(csvFilePath);
-    helpers.utils.updateButcheryInfoFromEkape(csvFilePath, (numUpdated) => {
-      console.log(numUpdated + ' of pigs are updated');
-      //fs.unlinkSync(csvFilePath);
-      res.status(200);
-      res.redirect('/');
-    });
-  });
-});
-*/
 
 /*
 helpers.utils.updateButcheryInfoFromEkape(csvFilePath, function(numUpdated) {
@@ -135,7 +88,13 @@ helpers.utils.updateProcessInfoPurchasingCost('20171226L1171226123450000', 20000
 helpers.utils.updateProcessInfoSellingPrice('20171226L1171226123450000', 300000, (body) => {
   //console.log(body);
 });
+
+helpers.utils.queryLotNoWithDate('20171227', (err, body) => {
+  console.log(body);
+});
 */
+
+
 // Save our port
 var port = process.env.PORT || 3000;
 

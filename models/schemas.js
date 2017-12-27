@@ -73,7 +73,9 @@ pigParts = {
 
 pigLotNo = {
 	"type": "pigLotNo",
+	"createdDate": null,
 	"referenceKey": [],
+	"traceNoArr": [],
 	"labels": [],
 }
 

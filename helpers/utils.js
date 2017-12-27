@@ -142,7 +142,7 @@ var self = module.exports = {
    * CreateLotNo is starting point of works
    * 
    */
-  createLotNo(callback) {
+  createLotNo(traceNoArr, callback) {
     let today = self.getToday();
 
     var corpNo = '12345';
@@ -157,21 +157,28 @@ var self = module.exports = {
       limit: 1000
     };
 
-    // Retrieve all lotNo with current day and 
+    // Retrieve all lotNo with current day 
     pigsdb.runQuery(queryString, (body) => {
       var seriesNo = body.rows.length;
-      var lotNo = 'L1' + today + corpNo + pad(3, seriesNo.toString(), '0');
+      var newLotNo = 'L1' + today + corpNo + pad(3, seriesNo.toString(), '0');
 
       var newPigLotNo = models.schemas.pigLotNo;
+      newPigLotNo.createdDate = self.getTodayYYYYMMDD();
       //console.log('seriesNo: ' + seriesNo)
       //console.log(body);
       
-      
-      pigsdb.insert(newPigLotNo, lotNo, (body) => {
-        console.log(body);
+      if (traceNoArr.length > 0) {
+        for (var i = 0; i < traceNoArr.length; i++)
+        /**
+         * Let's check traceNo with exisitng traceNo here!
+         */
+          newPigLotNo.traceNoArr.push(traceNoArr[i]);
+      }
+
+      pigsdb.insert(newPigLotNo, newLotNo, (err, body) => {
+        console.log('[insert] ' + body);
+        callback(err, newLotNo);
       });
-      
-      callback(lotNo);
     });
   },
 
@@ -190,7 +197,7 @@ var self = module.exports = {
       for (var i = 0; i < pigsArr.length; i++) {
         updateLotNo.referenceKey.push(pigsArr[i]);
         console.log(updateLotNo);
-        pigsdb.update(updateLotNo, lotNo, (lotNoBody) => {
+        pigsdb.update(updateLotNo, lotNo, (err, lotNoBody) => {
 
           console.log(pigsArr[i]);
           queryString = {
@@ -204,13 +211,29 @@ var self = module.exports = {
             pigsBody.rows.forEach((row) => {
               row.value.processed = 1
               console.log(row.value);
-              pigsdb.update(row.value, row.value._id, (body) => {
+              pigsdb.update(row.value, row.value._id, (err, body) => {
                 console.log(body);
               });    
             });
           });
         });
       }
+    });
+  },
+
+  queryLotNoWithDate(createdDate, callback) {
+    var queryString = {
+      "selector": {
+        "createdDate": createdDate
+      }
+    };
+
+    //console.log(createdDate);
+    console.log(queryString);
+    pigsdb.runViewWithQuery('pigsDoc', 'pigLotNo-view', queryString, (error, body) => {
+      if (error) 
+        console.log('[error] queryLotNoWithDate');
+      callback(error, body);
     });
   },
 
@@ -221,7 +244,7 @@ var self = module.exports = {
       }
     };
     //console.log(queryString);
-    pigsdb.runViewWithQuery('pigsDoc', 'processInfo-view', queryString, (processBody) => {
+    pigsdb.runViewWithQuery('pigsDoc', 'processInfo-view', queryString, (error, processBody) => {
       //console.log(processBody);
       var seriesNo = processBody.rows.length;
       var today = self.getTodayYYYYMMDD();
@@ -234,9 +257,9 @@ var self = module.exports = {
 
       //console.log(processInfo);
       //console.log(processNo);
-      pigsdb.insert(processInfo, processNo, (body) => {
+      pigsdb.insert(processInfo, processNo, (err, body) => {
         //console.log(body);
-        callback(processNo);
+        callback(err, processNo);
       });
     });
   },
@@ -245,13 +268,13 @@ var self = module.exports = {
     var queryString = {
       "key": processNo
     };
-    pigsdb.runViewWithQuery('pigsDoc', 'processInfo-view', queryString, (processBody) => {
+    pigsdb.runViewWithQuery('pigsDoc', 'processInfo-view', queryString, (error, processBody) => {
       //console.log(processBody);
       processBody.rows[0].value.processWeight = processWeight;
       //console.log(processBody.rows[0].value);
       
-      pigsdb.update(processBody.rows[0].value, processNo, (updateBody) => {
-        callback(updateBody);
+      pigsdb.update(processBody.rows[0].value, processNo, (err, updateBody) => {
+        callback(err, updateBody);
       });
     });
   },
@@ -260,11 +283,11 @@ var self = module.exports = {
     var queryString = {
       "key": processNo
     };
-    pigsdb.runViewWithQuery('pigsDoc', 'processInfo-view', queryString, (processBody) => {
+    pigsdb.runViewWithQuery('pigsDoc', 'processInfo-view', queryString, (error, processBody) => {
       processBody.rows[0].value.processPart = processPart;
       console.log(processBody.rows[0].value);
       
-      pigsdb.update(processBody.rows[0].value, processNo, (updateBody) => {
+      pigsdb.update(processBody.rows[0].value, processNo, (err, updateBody) => {
         callback(updateBody);
       });
     });
@@ -274,11 +297,11 @@ var self = module.exports = {
     var queryString = {
       "key": processNo
     };
-    pigsdb.runViewWithQuery('pigsDoc', 'processInfo-view', queryString, (processBody) => {
+    pigsdb.runViewWithQuery('pigsDoc', 'processInfo-view', queryString, (error, processBody) => {
       processBody.rows[0].value.purchasingCost = purchasingCost;
       console.log(processBody.rows[0].value);
       
-      pigsdb.update(processBody.rows[0].value, processNo, (updateBody) => {
+      pigsdb.update(processBody.rows[0].value, processNo, (err, updateBody) => {
         callback(updateBody);
       });
     });
@@ -288,11 +311,11 @@ var self = module.exports = {
     var queryString = {
       "key": processNo
     };
-    pigsdb.runViewWithQuery('pigsDoc', 'processInfo-view', queryString, (processBody) => {
+    pigsdb.runViewWithQuery('pigsDoc', 'processInfo-view', queryString, (error, processBody) => {
       processBody.rows[0].value.sellingPrice = sellingPrice;
       console.log(processBody.rows[0].value);
       
-      pigsdb.update(processBody.rows[0].value, processNo, (updateBody) => {
+      pigsdb.update(processBody.rows[0].value, processNo, (err, updateBody) => {
         callback(updateBody);
       });
     });

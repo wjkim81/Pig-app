@@ -11,7 +11,7 @@ module.exports = {
       }
       //console.log('Updated pig');
       //console.log(body);
-      callback(body);
+      callback(err, body);
     })
   },
 
@@ -24,7 +24,7 @@ module.exports = {
       if(!error) obj._rev = existing._rev;
       db.insert(obj, key, (err, body) => {
         if (!err) console.log(body);
-        callback(body);
+        callback(err, body);
       });
     });
   },
@@ -62,7 +62,7 @@ module.exports = {
 
   runViewWithQuery(designname, viewname, queryString, callback) {
     db.view(designname, viewname, queryString, (err, body) => {
-        if (!err) callback(body);
+        if (!err) callback(err, body);
     });
   }
 }

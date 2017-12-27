@@ -121,7 +121,7 @@
             <input type='submit' value='Upload!' />
           </form>     
         </div>
-
+        <#
         <table id="importedPigs" class="table" align="center">
           <tr>
             <th>이력번호</th>
@@ -142,6 +142,7 @@
           </tr>
           <% endfor %>
         </table>
+        #>
       </div>  
 
 
@@ -161,7 +162,6 @@
             <th>도체중</th>
           </tr>
           
-          
           <tr ng-repeat="pig in unprocessedPigs">
             <td>{{ pig.value.traceNo }}</td>
             <td>{{ pig.value.pigNo }}</td>
@@ -171,114 +171,52 @@
             <td>{{ pig.value.butcheryInfo.butcheryWeight }}</td>
           </tr>
         </table>
-      </div>  
+      </div>
+
+      <div class="outer-div">
+        <div class="form-group">
+          <label>새 묶음 번호 생성 (작업지시)</label><br>
+          <h5 style="color:green;margin-bottom:2%" id="successCreateLotNo">새로운 묶음 번호 {{ newLotNo }} 가 생성되었습니다.</h5>
+        
+          이력번호 입력: <input id="multiTraceNos" class="form-control" type="text" placeholder="Ex: 160074700588, 160025400284, 150060500390 (여러 번호 입력시 쉼표로 구분)" ng-model="traceNosIn">
+          <input id="createLotNo" type="submit" value="입력" class="btn btn-primary" ng-click="createLotNo()">
+        </div>
+      </div>
 	  
       <div class="outer-div">  
         <div class="form-group">
-          <label>현재 처리하는 이력번호 혹은 묶음번호</label><br>
-          <h5 style="color:red;margin-bottom:2%" id="error_query">에러: 이력 번호(12자리)가 잘못 입력되었습니다.</h5>
+          <label>묶음번호 조회</label><br>
+          <h5 style="color:red;margin-bottom:2%" id="errorDate">Error: 날짜를 다시 입력해 주세요</h5>
         
-          이력번호 입력: <input id="createName" class="form-control" type="text" placeholder="Ex: 002021864077" ng-model="trace_id">
-          <input id="queryCattle" type="submit" value="Query" class="btn btn-primary" ng-click="queryCattle()">
+          날짜 입력: <input id="queryLotNoWithDate" class="form-control" type="text" placeholder="Ex: 20171227" ng-model="lotNoDateIn">
+          <input id="queryLotNo" type="submit" value="조회" class="btn btn-primary" ng-click="queryLotNo()">
         </div>
 
-        <table id="query_cattle" class="table" align="center">
+        <table id="allLotNos" class="table" align="center">
           <tr>
-            <th colspan="4">사육정보</th>
+            <th colspan="4">{{ lotNoDate }} 일자 묶음번호</th>
           </tr>
           <tr>
+            <th>묶음번호</th>
+            <th>생성일자</th>
             <th>이력번호</th>
-            <th>출생년월일</th>
-            <th>개체 종류</th>
-            <th>성별</th>
           </tr>
-          <tr>
-            <td>{{query_cattle.traceId}}</td>
-            <td>{{query_cattle.birthYmd}}</td>
-            <td>{{query_cattle.lsTypeNm}}</td>
-            <td>{{query_cattle.sexNm}}</td>
+          <tr ng-repeat="lotNo in allLotNos">
+            <td>{{ lotNo.id }}</td>
+            <td>{{ lotNo.value.createdDate }}</td>
+            <td>{{ lotNo.value.traceNoArr }}</td>
           </tr>
         </table>
+      </div>
 
-        <table id="query_cattle" class="table" align="center">
-          <tr>
-            <th colspan="4">개체 출생 등 신고 정보</th>
-          </tr>
-          <tr>
-            <th>소유주</th>
-            <th>신고구분</th>
-            <th>년월일</th>
-            <th>사육지</th>
-          </tr>
-          <tr>
-            <td>{{query_cattle.farmInfo[0].farmerNm}}</td>
-            <td>{{query_cattle.farmInfo[0].regType}}</td>
-            <td>{{query_cattle.farmInfo[0].regYmd}}</td>
-            <td>{{query_cattle.farmInfo[0].farmAddr}}</td>
-          </tr>
-        </table>
-	    
-        <table id="query_cattle" class="table" align="center">
-          <tr>
-            <th colspan="6">도축 처리 정보</th>
-          </tr>
-          <tr>
-            <th>도축장</th>
-            <th>도축일자</th>
-            <th>도축검사결과</th>
-            <th>도체중</th>
-            <th>육질등급</th>
-            <th>도축처리업소</th>
-          </tr>
-          <tr>
-            <td>{{query_cattle.butcheryInfo.butcheryPlaceNm}}</td>
-            <td>{{query_cattle.butcheryInfo.butcheryYmd}}</td>
-            <td>{{query_cattle.butcheryInfo.inspectPassYn}}</td>
-            <td>{{query_cattle.butcheryInfo.butcheryWeight}}</td>
-            <td>{{query_cattle.butcheryInfo.gradeNm}}</td>
-            <td>{{query_cattle.butcheryInfo.processPlaceNm}}</td>
-          </tr>
-        </table>
-		
-        <table id="all_process_info" class="table" align="center">
-          <tr>
-            <th colspan="5">포장 처리 정보</th>
-          </tr>
-          <tr>
-            <th>포장회사</th>
-            <th>포장회사주소</th>
-            <th>포장부위</th>
-            <th>포장단위(g)</th>
-            <th>포장일자</th>
-          </tr>
-          <tr ng-repeat="process_info in all_process_info">
-            <td>{{process_info.processPlaceNm}}</td>
-            <td>{{process_info.processPlaceAddr}}</td>
-            <td>{{process_info.processPart}}</td>
-            <td>{{process_info.processWeight}}</td>
-            <td>{{process_info.processYmd}}</td>
-          </tr>
-        </table>
-	    
-        <table id="query_cattle" class="table" align="center">
-          <tr>
-            <th colspan="6">구제역 백신접종 및 가축질병 검사 정보</th>
-          </tr>
-          <tr>
-            <th>구제역 예방접종최종일자</th>
-            <th>브루셀라 검사최종일자</th>
-            <th>브루셀라 검사결과</th>
-            <th>결핵 검사최종일자</th>
-            <th>결핵 검사결과</th>
-          </tr>
-          <tr>
-            <td>{{query_cattle.footAndMouth[0].injectionYmd}}</td>
-            <td>{{query_cattle.brucelliasis[0].injectionYmd}}</td>
-            <td>{{query_cattle.brucelliasis[0].injectionResult}}</td>
-            <td>{{query_cattle.tuberculosis[0].injectionYmd}}</td>
-            <td>{{query_cattle.tuberculosis[0].injectionResult}}</td>
-          </tr>
-        </table>
+      <div class="outer-div">
+        <div class="form-group">
+          <label>새 라벨 생성</label><br>
+          <h5 style="color:green;margin-bottom:2%" id="sucessCreateNewProcess">새로운 라벨 {{ newProcessNo }} 가 생성되었습니다.</h5>
+        
+          묶음 입력: <input id="lotNo" class="form-control" type="text" placeholder="Ex: L117122712345000" ng-model="lotNoIn">
+          <input id="createNewProcess" type="submit" value="입력" class="btn btn-primary" ng-click="createNewProcess()">
+        </div>
       </div>
 
       <div class="outer-div">
