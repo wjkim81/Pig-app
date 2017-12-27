@@ -18,8 +18,9 @@ module.exports = {
       if (err) return res.status(500).send(err);
     
       helpers.utils.updateButcheryInfoFromEkape(csvFilePath, (numUpdated) => {
-        res.status(200);
+        //res.status(200);
         console.log(numUpdated + ' of pigs are updated');
+        res.send(numUpdated + ' of pigs are updated');
         //setTimeout(()=>{
           //fs.unlinkSync(csvFilePath);
           // Emulate the delay of the job - async!

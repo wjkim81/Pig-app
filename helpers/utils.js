@@ -97,8 +97,8 @@ var self = module.exports = {
         var pig = self.convertFromEkape(ekapeJsonPig);
         //console.log(key);
 
-        pigsdb.insert(pig, pig._id, (body) => {
-          console.log(body);
+        pigsdb.insert(pig, pig._id, (err, body) => {
+          if (err) console.log('[error] updateButcheryInfoFromEkape');
           //callback(body);
         });
 
@@ -334,34 +334,9 @@ var self = module.exports = {
 
   getUnprocessedPigs(callback) {
     // Get pig documents where processed is false
-    /*
-    queryString = {
-      "selector": {
-        "processed": {
-         "$and": [
-            {
-               "$exists": true
-            },
-            {
-               "$eq": 0
-            }
-          ]
-        }
-      },
-      "include_docs": true,
-      "limit": 1000
-    }
-    pigsdb.runQuery(queryString, (body) => {
-      //console.log(body.rows);
-      //var uniqueTraceNo = Array.from(new Set(body.rows.doc.traceNo));
-      //console.log(uniquteTraceNo);
-      //console.log(body);
-      callback(body);
-    })
-    */
-    //console.log('started');
     pigsdb.runView('pigsDoc', 'non-processed-view', (err, body) => {
       //console.log(err, body);
+      if (err) console.log('[error] getUnprocessedPigs');
       callback(err, body);
     });
   },

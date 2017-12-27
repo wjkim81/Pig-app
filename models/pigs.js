@@ -7,7 +7,7 @@ module.exports = {
     //console.log(key);
     db.insert(obj, key, (err, body, header) => {
       if (err) {
-        console.log('[insert] ' + err.message);
+        console.log('[error] db.insert');
       }
       //console.log('Updated pig');
       //console.log(body);
@@ -51,9 +51,9 @@ module.exports = {
   },
 
   runView(designname, viewname, callback) {
-    db.view(designname, viewname, (err, body) => {
-      if (err) console.log('[error] runView');
-      callback(err, body);
+    db.view(designname, viewname, (viewError, body) => {
+      if (viewError) console.log('[error] runView: ' + viewError);
+      callback(viewError, body);
     });
   },
 

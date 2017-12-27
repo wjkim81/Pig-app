@@ -34,8 +34,37 @@ app.use('/static', express.static(__dirname + '/public'));
 //app.use('/', routes);
 
 //app.use(require('./controllers'))(app)
+/*
+var designDoc = {
+  "views": {
+    "non-processed-view": {
+      "map": "function (doc) {\n  if (doc.processed == 0)\n    emit(doc._id, doc);\n}"
+    },
+    "pig-view": {
+      "map": "function (doc) {\n  if (doc.type == \"pig\")\n    emit(doc._id, doc);\n}"
+    },
+    "pigLotNo-by-createdDate-view": {
+      "map": "function (doc) {\n  if (doc.type == \"pigLotNo\")\n    emit(doc.createdDate, doc);\n}"
+    },
+    "processInfo-by-lotNo-view": {
+      "map": "function (doc) {\n  if (doc.type == \"processInfo\")\n    emit(doc.lotNo, null);\n}"
+    },
+    "pigLotNo-view": {
+      "map": "function (doc) {\n  if (doc.type == \"pigLotNo\")\n    emit(doc._id, doc);\n}"
+    },
+    "processInfo-by-processYmd-view": {
+      "map": "function (doc) {\n  if (doc.type == \"processInfo\")\n    emit(doc.processYmd, doc);\n}"
+    },
+    "processInfo-view": {
+      "map": "function (doc) {\n  if (doc.type == \"processInfo\")\n    emit(doc._id, doc);\n}"
+    }
+  },
+};
 
-
+pigsdb.insert(designDoc, '_design/pigsDoc', (err, body) => {
+  console.log(body);
+});
+*/
 /*
 helpers.utils.updateButcheryInfoFromEkape(csvFilePath, function(numUpdated) {
   console.log(numUpdated + ' of pigs are updated');

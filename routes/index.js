@@ -32,7 +32,7 @@ app.get('/', (req, res) => {
   res.render('index.html', { pigsArr: pigsArr.rows });
 });
 
-app.post('/upload', upload.uploadFiles);
+app.post('/upload/', upload.uploadFiles);
 
 // Router for angular
 app.get('/get_all_unprocessed_pigs/', (req, res) => {
