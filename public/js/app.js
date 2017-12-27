@@ -10,6 +10,7 @@ app.controller('appController', function($scope, appFactory) {
   $("#errorLotNoDate").hide();
   $("#sucessCreateNewProcess").hide();
   $("#errorProcessDate").hide();
+  $("#successUpdateProcess").hide();
 
   // Create angular function for traceability system
   $scope.queryAllUnprocessedPigs = function() {

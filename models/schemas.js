@@ -25,8 +25,8 @@ butcheryInfo = {
 processInfo = {
   // key (23) = YYYYMMDD (8) + lotNo (12) + seresNo(3)
 	"type": "processInfo",
-  "referenceId": [],
-  "childId": null,
+  "previousKeyHistory": [],
+  "nextKey": null,
   "trackHistory": null,
   "corpNo": null,
   "lotNo": null,

@@ -10,8 +10,8 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.3/angular.min.js"></script>
-    <!--<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>-->
+    <!--<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.3/angular.min.js"></script>-->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
 
     
     <!-- adding style here -->
@@ -107,7 +107,7 @@
     <div id="body">
       <div class="outer-div">
         <div class="form-group">
-          <label>입고물량 입력</label>
+          <label>입고물량 입력 (csv 파일)</label>
           <!--
           <form ref='uploadForm' id='uploadForm' action='http://localhost:3000/upload' method='post' encType="multipart/form-data">
             <input id="getFile" type="button" value="csv 파일 입력" class="btn btn-primary" ng-click="getFile()">
@@ -234,7 +234,7 @@
             <th>판매가</th>
           </tr>
           <tr ng-repeat="processInfo in allProcessInfo">
-            <td>{{ processInfo.id }}</td>
+            <td ng-model="{{ processInfo.id }}">{{ processInfo.id }}</td>
             <td>{{ processInfo.value.processYmd }}</td>
             <td>{{ processInfo.value.processWeight }}</td>
             <td>{{ processInfo.value.processPart }}</td>
@@ -243,6 +243,23 @@
           </tr>
         </table>
       </div>
+
+      <div class="outer-div">
+        <div class="form-group">
+          <label>유통 정보 업데이트</label>
+          <h5 style="color:green;margin-bottom:2%" id="successUpdateProcess">{{updateProcess}}</h5>
+          <br>
+          유통번호: <input class="form-control" type="text" placeholder="Ex: 20171227L117122712345000000" ng-model="process_info.traceId">
+          묶음번호 혹은 이력번호: <input class="form-control" type="text" placeholder="Ex: 104021864078" ng-model="process_info.traceId">
+          포장회사: <input class="form-control" type="text" placeholder="Ex: 우림축산 (경기도 동두천시 동두천동)" ng-model="process_info.processPlaceNm">
+          처리일자: <input class="form-control" type="text" placeholder="Ex: 경기도 양주시 고읍동" ng-model="process_info.processPlaceAddr">
+          포장부위: <input class="form-control" type="text" placeholder="Ex: 안심, 등심, 채끝살 등등" ng-model="process_info.processPart">
+          포장단위(kg): <input class="form-control" type="text" placeholder="Ex: 1000" ng-model="process_info.processWeight"> 
+          포장일자: <input class="form-control" type="text" placeholder="Ex: 20140304" ng-model="process_info.processYmd">
+          <input id="processSubmit" type="submit" value="Create" class="btn btn-primary" ng-click="updateProcessInfo()"> 
+        </div>
+      </div>
+
     </div>
   </body>
   <!-- requiring the angular page -->
