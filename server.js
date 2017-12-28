@@ -1,17 +1,15 @@
 // Import for web server
-const express = require('express'); 
-const logger = require('morgan');
-const errorhandler = require('errorhandler');
-const bodyParser = require('body-parser');
-const path          = require('path');
-const fs = require('fs');
-
-
+const express          = require('express'); 
+const logger           = require('morgan');
+const errorhandler     = require('errorhandler');
+const bodyParser       = require('body-parser');
+const path             = require('path');
+const fs               = require('fs');
 
 // Import eatformation libraries
-const helpers = require('./helpers');
-const models = require('./models');
-const pigsdb = require('./models/pigs');
+const helpers          = require('./helpers');
+const models           = require('./models');
+const pigsdb           = require('./models/pigs');
 
 
 //let app = express()
