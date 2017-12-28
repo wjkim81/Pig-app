@@ -79,6 +79,24 @@ app.controller('appController', function($scope, appFactory) {
       }
     });
   }
+
+  $scope.updateProcessInfo = function() {
+    var processInfoIn = $scope.processInfoIn.key + '-' + 
+                        $scope.processInfoIn.lotNo + '-' + 
+                        $scope.processInfoIn.processPlaceNm + '-' + 
+                        $scope.processInfoIn.processPlaceAddr + '-' +
+                        $scope.processInfoIn.processPart + '-' + 
+                        $scope.processInfoIn.processWeight + '-' + 
+                        $scope.processInfoIn.processYmd + '-' + 
+                        $scope.processInfoIn.purchasingCost + '-' + 
+                        $scope.processInfoIn.sellingPrice;
+
+    //console.log(processInfoIn);
+    appFactory.updateProcessInfo(processInfoIn, function(data) {
+      
+    });
+    
+  }
 });
 
 // Angular Factory
@@ -115,6 +133,12 @@ app.factory('appFactory', function($http) {
   factory.queryProcessInfo = function(processDate, callback) {
 
     $http.get('/query_process_info_with_date/'+processDate).success(function(output) {
+      callback(output);
+    });
+  }
+
+  factory.updateProcessInfo = function(processInfoIn, callback) {
+    $http.get('/update_process_info/'+processInfoIn).success(function(output) {
       callback(output);
     });
   }

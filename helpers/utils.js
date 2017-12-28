@@ -261,6 +261,38 @@ var self = module.exports = {
     });
   },
 
+  updateProcessInfoFromApp(processInfo, callback) {
+    console.log(`processInfo[0]: ${processInfo[0]}`)
+    var queryString = {
+      "key": processInfo[0]
+    }
+    pigsdb.runViewWithQuery('pigsDoc', 'processInfo-view', queryString, (error, processBody) => {
+      if (error) {
+        console.log(`[error] runViewWithQuery: ${error}`);
+        callback(error, processBody);
+      }
+      //console.log(processBody);
+      if (processBody.rows.length !== 0) {
+        newProcessInfo = processBody.rows[0].value;
+        newProcessInfo.lotNo = processInfo[1];
+        newProcessInfo.processPlaceNm = processInfo[2];
+        newProcessInfo.processPlaceAddr = processInfo[3];
+        newProcessInfo.processPart = processInfo[4];
+        newProcessInfo.processWeight = processInfo[5];
+        newProcessInfo.processYmd = processInfo[6];
+        newProcessInfo.purchasingCost = processInfo[7];
+        newProcessInfo.sellingPrice = processInfo[8];
+
+        //console.log(`newProcessInfo: ${JSON.stringify(newProcessInfo)}`);
+        pigsdb.update(newProcessInfo, processInfo[0], (updateErr, updateResult) => {
+          if (updateErr) console.log(`[error] ${updateErr}`);
+
+          callback(updateErr, updateResult);
+        });
+      }
+    });
+  },
+
   updateProcessInfoWeight(processNo, processWeight, callback) {
     var queryString = {
       "key": processNo

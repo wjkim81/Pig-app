@@ -83,6 +83,19 @@ return {
       else
         res.send('error');
     });
+  },
+
+  update_process_info: function(req, res) {
+    console.log("Updating processInfo");
+
+    var processInfo = req.params.process_info_in.split('-')
+    //console.log(processInfo);
+    helpers.utils.updateProcessInfoFromApp(processInfo, (err, body) => {
+      if (!err)
+        res.send(body)
+      else
+        res.send('error');
+    })
   }
 }
 })();

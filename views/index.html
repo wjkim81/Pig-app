@@ -249,14 +249,16 @@
           <label>유통 정보 업데이트</label>
           <h5 style="color:green;margin-bottom:2%" id="successUpdateProcess">{{updateProcess}}</h5>
           <br>
-          유통번호: <input class="form-control" type="text" placeholder="Ex: 20171227L117122712345000000" ng-model="process_info.traceId">
-          묶음번호 혹은 이력번호: <input class="form-control" type="text" placeholder="Ex: 104021864078" ng-model="process_info.traceId">
-          포장회사: <input class="form-control" type="text" placeholder="Ex: 우림축산 (경기도 동두천시 동두천동)" ng-model="process_info.processPlaceNm">
-          처리일자: <input class="form-control" type="text" placeholder="Ex: 경기도 양주시 고읍동" ng-model="process_info.processPlaceAddr">
-          포장부위: <input class="form-control" type="text" placeholder="Ex: 안심, 등심, 채끝살 등등" ng-model="process_info.processPart">
-          포장단위(kg): <input class="form-control" type="text" placeholder="Ex: 1000" ng-model="process_info.processWeight"> 
-          포장일자: <input class="form-control" type="text" placeholder="Ex: 20140304" ng-model="process_info.processYmd">
-          <input id="processSubmit" type="submit" value="Create" class="btn btn-primary" ng-click="updateProcessInfo()"> 
+          유통번호: <input class="form-control" type="text" placeholder="Ex: 20171227L117122712345000000" ng-model="processInfoIn.key">
+          묶음번호 혹은 이력번호: <input class="form-control" type="text" placeholder="Ex: 104021864078" ng-model="processInfoIn.lotNo">
+          포장회사: <input class="form-control" type="text" placeholder="Ex: 삼호 축산" ng-model="processInfoIn.processPlaceNm">
+          유통주소: <input class="form-control" type="text" placeholder="Ex: 경기도 양주시 고읍동" ng-model="processInfoIn.processPlaceAddr">
+          포장부위: <input class="form-control" type="text" placeholder="Ex: 안심, 등심, 채끝살 등등" ng-model="processInfoIn.processPart">
+          포장단위(kg): <input class="form-control" type="text" placeholder="Ex: 100" ng-model="processInfoIn.processWeight"> 
+          포장일자: <input class="form-control" type="text" placeholder="Ex: 20171228" ng-model="processInfoIn.processYmd">
+          원가(원): <input class="form-control" type="text" placeholder="Ex: 200000" ng-model="processInfoIn.purchasingCost"> 
+          판매가(원): <input class="form-control" type="text" placeholder="Ex: 300000" ng-model="processInfoIn.sellingPrice">
+          <input id="updateProcessInfo" type="submit" value="입력" class="btn btn-primary" ng-click="updateProcessInfo()">
         </div>
       </div>
 

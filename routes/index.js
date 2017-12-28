@@ -54,4 +54,9 @@ app.get('/create_new_process/:lotNo', (req, res) => {
 app.get('/query_process_info_with_date/:process_date', (req, res) => {
   obj.query_process_info_with_date(req, res);
 });
+
+app.get('/update_process_info/:process_info_in', (req, res) => {
+  obj.update_process_info(req, res);
+});
+
 module.exports = app;
