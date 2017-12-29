@@ -73,6 +73,7 @@ processType = {
 }
 
 pigLotNo = {
+	//key = 'L1'(2) + today(6) + corpNo(5) + '000'(3)
 	"type": "pigLotNo",
 	"pigLotNoYmd": null,
 	"referenceKey": [],
