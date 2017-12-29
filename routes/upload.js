@@ -26,7 +26,7 @@ module.exports = {
           // Emulate the delay of the job - async!
         //  this.emit('done', { completedOn: new Date() })
         //}, 3000)
-        res.redirect('/');
+        //res.redirect('/');
       });
     });
   }
