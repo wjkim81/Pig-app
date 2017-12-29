@@ -40,5 +40,6 @@ var designDoc = {
 
 
 pigsdb.update(designDoc, '_design/pigsDoc', (err, body) => {
+  if (err) console.log(`[error] ${err}`);
   console.log(body);
 });
