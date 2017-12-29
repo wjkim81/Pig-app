@@ -11,6 +11,7 @@ app.controller('appController', function($scope, appFactory) {
   $("#sucessCreateNewProcess").hide();
   $("#errorProcessDate").hide();
   $("#successUpdateProcess").hide();
+  $("#errorSummaryInfo").hide();
 
   // Create angular function for traceability system
   $scope.queryAllUnprocessedPigs = function() {
@@ -93,9 +94,30 @@ app.controller('appController', function($scope, appFactory) {
 
     //console.log(processInfoIn);
     appFactory.updateProcessInfo(processInfoIn, function(data) {
-      
+      $scope.updateProcess = data.id;
+      //console.log(data);
+      if ($scope.updateProcess != "error") {
+        $("#successUpdateProcess").show();
+      } else {
+        $("#successUpdateProcess").hide();
+      }
     });
-    
+  }
+
+  $scope.queryProcessSummary = function() {
+    var dateRangeIn = $scope.summaryStartDateIn + '-' + $scope.summaryEndDateIn;
+
+    console.log(dateRangeIn);
+    appFactory.queryProcessSummary(dateRangeIn, function(data) {
+      $scope.allProcessSummary = data;
+      //console.log(data);
+
+      if ($scope.allProcessSummary == "error") {
+        $("#errorSummaryInfo").show();
+      } else {
+        $("#errorSummaryInfo").hide();
+      }
+    });
   }
 });
 
@@ -141,6 +163,12 @@ app.factory('appFactory', function($http) {
     $http.get('/update_process_info/'+processInfoIn).success(function(output) {
       callback(output);
     });
+  }
+
+  factory.queryProcessSummary = function(dateRange, callback) {
+    $http.get('/query_process_summary/'+dateRange).success(function(output) {
+      callback(output);
+    })
   }
 
   return factory;

@@ -95,7 +95,20 @@ return {
         res.send(body)
       else
         res.send('error');
-    })
+    });
+  },
+
+  query_process_summary: function(req, res) {
+    console.log("Querying summary information of processInfo");
+
+    var dates = req.params.date_range.split('-');
+
+    helpers.utils.queryProcessSummary(dates[0], dates[1], (err, result) => {
+      if (!err)
+        res.send(result)
+      else
+        res.send('error');
+    });
   }
 }
 })();

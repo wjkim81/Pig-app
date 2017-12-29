@@ -4,7 +4,7 @@
 <html>
   <head>
     <title>Eatformation System Version 0.8</title>
-    <link rel="icon" href="favicon.png" type="image/gif">
+    <link rel="icon" href="/static/img/favicon.png" type="image/gif">
 
     <!-- require jquery and bootstrap scripts -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -247,7 +247,7 @@
       <div class="outer-div">
         <div class="form-group">
           <label>유통 정보 업데이트</label>
-          <h5 style="color:green;margin-bottom:2%" id="successUpdateProcess">{{updateProcess}}</h5>
+          <h5 style="color:green;margin-bottom:2%" id="successUpdateProcess">{{updateProcess}} 를 업데이트 하였습니다.</h5>
           <br>
           유통번호: <input class="form-control" type="text" placeholder="Ex: 20171227L117122712345000000" ng-model="processInfoIn.key">
           묶음번호 혹은 이력번호: <input class="form-control" type="text" placeholder="Ex: 104021864078" ng-model="processInfoIn.lotNo">
@@ -262,6 +262,37 @@
         </div>
       </div>
 
+      <div class="outer-div">  
+        <div class="form-group">
+          <label>날자별 유통 현황 정리</label><br>
+          <h5 style="color:red;margin-bottom:2%" id="errorSummaryInfo">Error: 날짜를 다시 입력해 주세요</h5>
+        
+          시작 날짜: <input id="queryProcessSummary" class="form-control" type="text" placeholder="Ex: 20171220" ng-model="summaryStartDateIn">
+          완료 날짜: <input id="queryProcessSummary" class="form-control" type="text" placeholder="Ex: 20171230" ng-model="summaryEndDateIn">
+          <input id="queryProcessSummary" type="submit" value="조회" class="btn btn-primary" ng-click="queryProcessSummary()">
+        </div>
+
+        <table id="allProcessSummary" class="table" align="center">
+          <tr>
+            <th>일자</th>
+            <th>묶음번호</th>
+            <th>유통번호</th>
+            <th>갯수</th>
+            <th>유통중량(kg)</th>
+            <th>원가</th>
+            <th>판매가</th>
+          </tr>
+          <tr ng-repeat="processSummary in allProcessSummary">
+            <td>{{ processSummary.key[0] }}</td>
+            <td>{{ processSummary.key[1] }}</td>
+            <td>{{ processSummary.key[2] }}</td>
+            <td>{{ processSummary.value[0] }}</td>
+            <td>{{ processSummary.value[1] }}</td>
+            <td>{{ processSummary.value[2] }}</td>
+            <td>{{ processSummary.value[3] }}</td>
+          </tr>
+        </table>
+      </div>
     </div>
   </body>
   <!-- requiring the angular page -->

@@ -383,23 +383,21 @@ var self = module.exports = {
         uniqueTraceNoArr.push(pigsArr.rows[i].value.traceNo);
     }
     callback(uniqueTraceNoArr);
-    //var uniqueTraceNo = [];
-      
-    //for (var i = 0; i < body.rows.length; i++) {
-      //console.log(body.rows[i]);
-      //if (!uniqueTraceNo.includes(body.rows[i].doc.traceNo)) 
-      //  uniqueTraceNo.push(body.rows[i].doc.traceNo);
-    //}
-    //console.log(uniqueTraceNo);
+  },
 
-    //body.rows.forEach((doc) => {
-    //  if (!uniqueTraceNo.includes(doc.doc.traceNo)) 
-    //    uniqueTraceNo.push(doc.doc.traceNo);
-
-      //console.log(doc.doc.traceNo, doc.doc.pigNo);
-      //console.log(uniqueTraceNo);
-    //})
-    
+  queryProcessSummary(startDate, endDate, callback) {
+    var queryString = {
+      //"startkey": "20171220",
+      //"endkey": "20171229"
+      //"key": ["20171228", "L117122812345000"]
+      //"key": "20171228"
+      "startkey": [startDate, null, null],
+      "endkey": [endDate, null, null],
+      "group_level": 3
+    };
+    pigsdb.runViewWithQuery('pigsDoc', 'processInfo-summary-view', queryString, (error, viewResult) => {
+      //console.log(viewResult.rows);
+      callback(error, viewResult.rows);
+    })
   }
-
 }

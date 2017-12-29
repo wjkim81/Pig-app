@@ -27,18 +27,19 @@ processInfo = {
 	"type": "processInfo",
   "previousKeyHistory": [],
   "nextKey": null,
-  "trackHistory": null,
+  //"trackHistory": null,
   "corpNo": null,
+  "nextCorpNo": null,
   "lotNo": null,
   "processPlaceNm": null,
   "processPlaceAddr": null,
   "processYmd": null,
-  "processWeight": null,
+  "processWeight": 0,
   "processPart": null,
-  "purchasingCost": null,
-  "sellingPrice": null,
-  "cost": null,
-  "marginRate": null
+  "purchasingCost": 0,
+  "sellingPrice": 0,
+  "cost": 0,
+  "marginRate": 0.0
 }
 
 pig = {
@@ -62,7 +63,7 @@ pig = {
 	"processHistory": []
 }
 
-pigParts = {
+processType = {
 	frozenType: ['냉장', '냉동'],
   parts: ['삼겹살', '대박삼겹살', '목심', '미박목심', '앞다리', '미박앞다리', '뒷다리', '미박뒷다리', '갈비', '등갈비',
 	  '등심', '미박등심', '안심', '사태', '미박사태', '갈매기살', '항정살', '등심덧살', '잡육', '퉁삼겹', '뒷다리3mm',
@@ -73,7 +74,7 @@ pigParts = {
 
 pigLotNo = {
 	"type": "pigLotNo",
-	"createdDate": null,
+	"pigLotNoYmd": null,
 	"referenceKey": [],
 	"traceNoArr": [],
 	"labels": [],
@@ -87,7 +88,7 @@ trackHistory = {
 var schemas = {
   "pig": pig,
 	"processInfo": processInfo,
-	"pigParts": pigParts,
+	"processType": processType,
 	"pigLotNo": pigLotNo,
   "trackHistory": trackHistory
 }

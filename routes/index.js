@@ -27,36 +27,18 @@ app.use(fileUpload());
 
 // Basic Routings
 app.get('/', (req, res) => {
-  var pigsArr = [];
-  //res.sendFile(path.join(__dirname, '../views', 'index.html'), { pigsArr: pigsArr.rows });
-  res.render('index.html', { pigsArr: pigsArr.rows });
+  res.render('index.html', { "test": "test" });
 });
 
 app.post('/upload/', upload.uploadFiles);
 
 // Router for angular
-app.get('/get_all_unprocessed_pigs/', (req, res) => {
-  obj.get_all_unprocessed_pigs(req, res);
-});
-
-app.get('/create_lot_no/:trace_nos', (req, res) => {
-  obj.create_lot_no(req, res);
-});
-
-app.get('/query_lot_no_with_date/:created_date', (req, res) => {
-  obj.query_lot_no_with_date(req, res);
-});
-
-app.get('/create_new_process/:lotNo', (req, res) => {
-  obj.create_new_process(req, res);
-});
-
-app.get('/query_process_info_with_date/:process_date', (req, res) => {
-  obj.query_process_info_with_date(req, res);
-});
-
-app.get('/update_process_info/:process_info_in', (req, res) => {
-  obj.update_process_info(req, res);
-});
+app.get('/get_all_unprocessed_pigs/', obj.get_all_unprocessed_pigs);
+app.get('/create_lot_no/:trace_nos', obj.create_lot_no);
+app.get('/query_lot_no_with_date/:created_date', obj.query_lot_no_with_date);
+app.get('/create_new_process/:lotNo', obj.create_new_process);
+app.get('/query_process_info_with_date/:process_date', obj.query_process_info_with_date);
+app.get('/update_process_info/:process_info_in', obj.update_process_info);
+app.get('/query_process_summary/:date_range', obj.query_process_summary);
 
 module.exports = app;
