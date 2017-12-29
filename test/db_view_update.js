@@ -39,6 +39,6 @@ var designDoc = {
 }
 
 
-  pigsdb.insert(designDoc, '_design/pigsDoc', (err, body) => {
+pigsdb.update(designDoc, '_design/pigsDoc', (err, body) => {
   console.log(body);
 });
