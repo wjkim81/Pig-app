@@ -16,14 +16,13 @@
 var path          = require('path');
 var util          = require('util');
 var os            = require('os');
-
-var helpers       = require('../helpers');
+var db            = require('../models/pigs')
 
 module.exports = (function() {
 return {
   get_all_unprocessed_pigs: function(req, res) {
     console.log("Getting all unprocessed pigs from database");
-    helpers.utils.getUnprocessedPigs((err, pigsArr) => {
+    db.getUnprocessedPigs((err, pigsArr) => {
       if (!err) 
         res.send(pigsArr.rows);
       else
@@ -37,7 +36,7 @@ return {
     var traceNoArr = req.params.trace_nos.split('-');
     //console.log(traceNoArr);
 
-    helpers.utils.createLotNo(traceNoArr, (err, newLotNo) => {
+    db.createLotNo(traceNoArr, (err, newLotNo) => {
       if (!err)
         res.send(newLotNo);
       else
@@ -51,7 +50,7 @@ return {
     var created_date = req.params.created_date;
     //console.log(created_date);
 
-    helpers.utils.queryLotNoWithDate(created_date, (err, lotNoArr) => {
+    db.queryLotNoWithDate(created_date, (err, lotNoArr) => {
       if (!err)
         res.send(lotNoArr.rows);
       else
@@ -64,7 +63,7 @@ return {
 
     var lotNo = req.params.lotNo;
 
-    helpers.utils.createNewProcessNo(lotNo, (err, processNo) => {
+    db.createNewProcessNo(lotNo, (err, processNo) => {
       if (!err)
         res.send(processNo)
       else
@@ -77,7 +76,7 @@ return {
     
     var processDate = req.params.process_date;
 
-    helpers.utils.queryProcessInfoWithDate(processDate, (err, processInfoArr) => {
+    db.queryProcessInfoWithDate(processDate, (err, processInfoArr) => {
       if (!err)
         res.send(processInfoArr)
       else
@@ -90,7 +89,7 @@ return {
 
     var processInfo = req.params.process_info_in.split('-')
     //console.log(processInfo);
-    helpers.utils.updateProcessInfoFromApp(processInfo, (err, body) => {
+    db.updateProcessInfoFromApp(processInfo, (err, body) => {
       if (!err)
         res.send(body)
       else
@@ -103,7 +102,7 @@ return {
 
     var dates = req.params.date_range.split('-');
 
-    helpers.utils.queryProcessSummary(dates[0], dates[1], (err, result) => {
+    db.queryProcessSummary(dates[0], dates[1], (err, result) => {
       if (!err)
         res.send(result)
       else

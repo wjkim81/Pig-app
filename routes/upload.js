@@ -1,5 +1,6 @@
 const path          = require('path');
 const fileUpload    = require('express-fileupload');
+const pigsdb        = require('../models/pigs')
 const helpers       = require('../helpers');
 
 module.exports = {
@@ -17,7 +18,7 @@ module.exports = {
     csvFile.mv(csvFilePath, function(err) {
       if (err) return res.status(500).send(err);
     
-      helpers.utils.updateButcheryInfoFromEkape(csvFilePath, (numUpdated) => {
+      pigsdb.updateButcheryInfoFromEkape(csvFilePath, (numUpdated) => {
         //res.status(200);
         console.log(numUpdated + ' of pigs are updated');
         res.send(numUpdated + ' of pigs are updated');

@@ -7,7 +7,18 @@ var farmInfo = {
 	"regYmd": null
 }
 
-butcheryInfo = {
+class FarmInfo {
+	constructor() {
+	  this.farmNo =  null;
+	  this.farmNm = null;
+	  this.farmAddr = null;
+	  this.farmerNm = null;
+	  this.regType = null;
+	  this.regYmd = null;
+	}
+}
+
+var butcheryInfo = {
 	"butcheryPlaceAddr": null,
 	"butcheryPlaceNm": null,
 	"butcheryYmd": null,
@@ -22,7 +33,24 @@ butcheryInfo = {
 	//"processPlaceNm": null,
 }
 
-processInfo = {
+class ButcheryInfo {
+	constructor() {
+	  this.butcheryPlaceAddr = null;
+	  this.butcheryPlaceNm = null;
+	  this.butcheryYmd = null;
+	  this.firstGradeNm = null;
+	  this.gradeNm = null;
+	  this.inspectPassYn = null;
+	  this,inspectMethod = null;
+	  this.butcheryShape = null;
+	  this.butcheryWeight = null;
+	  this.backFatThickness = null;
+	  //"abattCode": null,
+	  //"processPlaceNm": null,
+	}
+}
+
+var processInfo = {
   // key (23) = YYYYMMDD (8) + lotNo (12) + seresNo(3)
 	"type": "processInfo",
   "previousKeyHistory": [],
@@ -42,7 +70,35 @@ processInfo = {
   "marginRate": 0.0
 }
 
-pig = {
+class ProcessInfo {
+  constructor(idIn) {
+    this._id = idIn;
+    this.type =  "processInfo";
+    this.previousKeyHistory = [];
+    this.nextKey = null;
+    //"trackHistory": null,
+    this.corpNo = null;
+    this.nextCorpNo = null;
+    this.lotNo = null;
+    this.processPlaceNm = null;
+    this.processPlaceAddr = null;
+    this.processYmd = null;
+    this.processWeight = 0;
+    this.processPart = null;
+    this.purchasingCost = 0;
+    this.sellingPrice = 0;
+    this.cost = [0];
+    this.marginRate = 0.0;
+	}
+
+  /*
+	setLotNo(lotNoIn) {
+			this.lotNo = lotNoIn;
+  }
+	*/
+}
+
+var pig = {
 	// key (24) = pig.butcheryInfo.butcheryYmd (8) + pig.traceNo (12) + pig.pigNo (4)
 	"_id": null,
 	"type": "pig",
@@ -63,7 +119,30 @@ pig = {
 	"processHistory": []
 }
 
-processType = {
+class Pig {
+	constructor(idIn) {
+	// key (24) = pig.butcheryInfo.butcheryYmd (8) + pig.traceNo (12) + pig.pigNo (4)
+	  this._id = idIn;
+	  this.type = "pig";
+    this.traceNo = null;
+	  this.pigNo = null;
+	  this.birthYmd = null;
+	  this.lsTypeCd = null;
+	  this.lsTypeNm = null;
+	  this.sexCd = null;
+	  this.sexNm = null;
+    
+	  this.farmInfo = new FarmInfo;
+	  this.butcheryInfo = new ButcheryInfo,
+
+    this.processed = 0;
+	  this.processInfo = [];
+
+	  this.processHistory = [];
+	}
+}
+
+var processType = {
 	frozenType: ['냉장', '냉동'],
   parts: ['삼겹살', '대박삼겹살', '목심', '미박목심', '앞다리', '미박앞다리', '뒷다리', '미박뒷다리', '갈비', '등갈비',
 	  '등심', '미박등심', '안심', '사태', '미박사태', '갈매기살', '항정살', '등심덧살', '잡육', '퉁삼겹', '뒷다리3mm',
@@ -72,7 +151,7 @@ processType = {
 	]
 }
 
-pigLotNo = {
+var pigLotNo = {
 	//key = 'L1'(2) + today(6) + corpNo(5) + '000'(3)
 	"type": "pigLotNo",
 	"pigLotNoYmd": null,
@@ -81,7 +160,17 @@ pigLotNo = {
 	"labels": [],
 }
 
-trackHistory = {
+class PigLotNo {
+	constructor() {
+		this.type = "pigLotNo";
+		this.pigLotNoYmd = null;
+		this.referenceKey = [];
+		this.traceNoArr = [];
+		this.labels = []
+	}
+}
+
+var trackHistory = {
 	"start": null,
 	"end": null
 }
@@ -91,8 +180,10 @@ var schemas = {
 	"processInfo": processInfo,
 	"processType": processType,
 	"pigLotNo": pigLotNo,
-  "trackHistory": trackHistory
+  "trackHistory": trackHistory,
+	"Pig": Pig,
+	"ProcessInfo": ProcessInfo,
+	"PigLotNo": PigLotNo
 }
-
 
 module.exports = schemas;
