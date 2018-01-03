@@ -7,7 +7,7 @@ module.exports = {
     //console.log(key);
     db.insert(obj, key, (err, body, header) => {
       if (err) {
-        console.log('[error] db.insert');
+        console.log(`[error] db.insert: ${err}`);
       }
       //console.log('Updated pig');
       //console.log(body);
@@ -23,7 +23,7 @@ module.exports = {
     db.get(key, (error, existing) => { 
       if(!error) obj._rev = existing._rev;
       db.insert(obj, key, (err, body) => {
-        if (!err) console.log(body);
+        if (!err) console.log(`[error] update: ${err}`);
         callback(err, body);
       });
     });
@@ -59,7 +59,7 @@ module.exports = {
 
   runViewWithQuery(designname, viewname, queryString, callback) {
     db.view(designname, viewname, queryString, (viewError, body) => {
-      if (viewError) console.log('[error] runViewWithQuery: ' + viewError);
+      if (viewError) console.log(`[error] runViewWithQuery: ${viewError}`);
       callback(viewError, body);
     });
   }

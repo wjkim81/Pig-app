@@ -278,10 +278,10 @@ var self = module.exports = {
         newProcessInfo.processPlaceNm = processInfo[2];
         newProcessInfo.processPlaceAddr = processInfo[3];
         newProcessInfo.processPart = processInfo[4];
-        newProcessInfo.processWeight = processInfo[5];
+        newProcessInfo.processWeight = parseInt(processInfo[5]);
         newProcessInfo.processYmd = processInfo[6];
-        newProcessInfo.purchasingCost = processInfo[7];
-        newProcessInfo.sellingPrice = processInfo[8];
+        newProcessInfo.purchasingCost = parseInt(processInfo[7]);
+        newProcessInfo.sellingPrice = parseInt(processInfo[8]);
 
         //console.log(`newProcessInfo: ${JSON.stringify(newProcessInfo)}`);
         pigsdb.update(newProcessInfo, processInfo[0], (updateErr, updateResult) => {
@@ -397,6 +397,7 @@ var self = module.exports = {
     };
     pigsdb.runViewWithQuery('pigsDoc', 'processInfo-summary-view', queryString, (error, viewResult) => {
       //console.log(viewResult.rows);
+      if (error) console.log(`[error] queryProcessSummary: ${eerror}`);
       callback(error, viewResult.rows);
     })
   }

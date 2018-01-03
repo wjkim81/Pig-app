@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "ajv": "^5.5.2",
     "angular": "^1.6.8",
     "body-parser": "^1.18.2",
     "csvtojson": "^1.1.9",
