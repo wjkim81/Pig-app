@@ -1,0 +1,34 @@
+{
+  "_id": "201812111600747005881050",
+  "type": "pig",
+  "traceNo": "160074700588",
+  "pigNo": "1050",
+  "birthYmd": null,
+  "lsTypeCd": null,
+  "lsTypeNm": null,
+  "sexCd": null,
+  "sexNm": "암",
+  "farmInfo":
+    {
+     "farmNo": null,
+     "farmNm": "농업회사법인 주식회사드림피그",
+     "farmAddr": null,
+     "farmerNm": null,
+     "regType": null,
+     "regYmd": null },
+  "butcheryInfo":
+    {
+     "butcheryPlaceAddr": null,
+     "butcheryPlaceNm": "(유)참푸른글로벌",
+     "butcheryYmd": "20181211",
+     "firstGradeNm": "1+",
+     "gradeNm": "1+",
+     "inspectPassYn": null,
+     "inspectMethod": "온",
+     "butcheryShape": "탕박",
+     "butcheryWeight": "85",
+     "backFatThickness": "25" },
+  "processed": 0,
+  "processInfo": [],
+  "processHistory": [] 
+}
