@@ -1,7 +1,7 @@
 var path          = require('path');
 var csv           = require('csvtojson');
 var models        = require('../models')
-var pigsdb        = require('../models/pigs')
+var Pig           = models.schemas.Pig;
 var pad           = require('pad');
 
 var self = module.exports = {
@@ -43,7 +43,10 @@ var self = module.exports = {
     date = new Date();
     //console.log(date.getFullYear())
     dateYear = date.getFullYear();
-    var pig = models.schemas.pig;
+    //var pig = models.schemas.pig;
+    var pigId = dateYear + ekapeJsonPig['월'] + ekapeJsonPig['일'] + ekapeJsonPig['이력번호'] + ekapeJsonPig['도체번호'];
+    console.log(`pigId: ${pigId}`);
+    var pig = new Pig(pigId);
     
     //key = 
     
@@ -71,12 +74,12 @@ var self = module.exports = {
     pig.butcheryInfo.gradeNm = ekapeJsonPig['최종등급']
     //pig.butcheryInfo.inspectPassYn = ekapeJsonPig
     pig.butcheryInfo.butcheryWeight = ekapeJsonPig['도체중(kg)'];
-    pig.butcheryInfo.backFatThickness = ekapeJsonPig['등지방두꼐'];
+    pig.butcheryInfo.backFatThickness = ekapeJsonPig['등지방두께'];
     //pig.butcheryInfo.abattCode = ekapeJsonPig
     //pig.butcheryInfo.processPlaceNm = ekapeJsonPig
     //console.log(pig);
 
-    pig._id = pig.butcheryInfo.butcheryYmd + pig.traceNo + pig.pigNo;
+    //pig._id = pig.butcheryInfo.butcheryYmd + pig.traceNo + pig.pigNo;
     return pig;
   },
 

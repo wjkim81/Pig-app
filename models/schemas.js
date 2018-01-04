@@ -41,7 +41,7 @@ class ButcheryInfo {
 	  this.firstGradeNm = null;
 	  this.gradeNm = null;
 	  this.inspectPassYn = null;
-	  this,inspectMethod = null;
+	  this.inspectMethod = null;
 	  this.butcheryShape = null;
 	  this.butcheryWeight = null;
 	  this.backFatThickness = null;
@@ -72,6 +72,10 @@ var processInfo = {
 
 class ProcessInfo {
   constructor(idIn) {
+		if (!idIn) {
+		  //console.log('No id was entered');
+		  throw "No id was entered";
+	  }
     this._id = idIn;
     this.type =  "processInfo";
     this.previousKeyHistory = [];
@@ -122,6 +126,11 @@ var pig = {
 class Pig {
 	constructor(idIn) {
 	// key (24) = pig.butcheryInfo.butcheryYmd (8) + pig.traceNo (12) + pig.pigNo (4)
+	//console.log(idIn);
+	  if (!idIn) {
+		  //console.log('No id was entered');
+		  throw "No id was entered";
+	  }
 	  this._id = idIn;
 	  this.type = "pig";
     this.traceNo = null;
@@ -161,7 +170,12 @@ var pigLotNo = {
 }
 
 class PigLotNo {
-	constructor() {
+	constructor(idIn) {
+		if (!idIn) {
+		  //console.log('No id was entered');
+		  throw "No id was entered";
+	  }
+		this._id = idIn;
 		this.type = "pigLotNo";
 		this.pigLotNoYmd = null;
 		this.referenceKey = [];
