@@ -1,7 +1,14 @@
-var db        = require('./db_crud')
-var csv       = require('csvtojson');
+var db        = require('./db')
+var models    = require('./schemas')
+
 var utils     = require('../helpers/utils');
 
+var Pig       = models.Pig;
+var PigLotNo  = models.PigLotNo;
+var ProcessInfo = models.ProcessInfo;
+
+var csv       = require('csvtojson');
+var pad       = require('pad');
 
 module.exports = {
   /**
@@ -40,10 +47,10 @@ module.exports = {
    * CreateLotNo is starting point of works
    * 
    */
-  createLotNo(traceNoArr, callback) {
-    let today = self.getToday();
+  createLotNo(traceNoArr, corpNo, callback) {
+    let today = utils.getTodayYYMMDD();
 
-    var corpNo = '12345';
+    //var corpNo = '1234';
 
     var startKey = 'L1' + today + corpNo + '000';
     var endKey = 'L1' + today + corpNo + '999';
@@ -56,15 +63,15 @@ module.exports = {
     };
 
     // Retrieve all lotNo with current day 
-    db.runQuery(queryString, (body) => {
-      var seriesNo = body.rows.length;
+    db.runQuery(queryString, (result) => {
+      var seriesNo = result.rows.length;
       var newLotNo = 'L1' + today + corpNo + pad(3, seriesNo.toString(), '0');
 
-      var newPigLotNo = models.schemas.pigLotNo;
-      newPigLotNo.traceNoArr = [];
-      newPigLotNo.createdDate = self.getTodayYYYYMMDD();
+      var newPigLotNo = new PigLotNo(newLotNo);
+      //newPigLotNo.traceNoArr = [];
+      newPigLotNo.pigLotNoYmd = utils.getTodayYYYYMMDD();
       //console.log('seriesNo: ' + seriesNo)
-      //console.log(body);
+      //console.log(result);
       
       if (traceNoArr.length > 0) {
         for (var i = 0; i < traceNoArr.length; i++)
@@ -74,8 +81,8 @@ module.exports = {
           newPigLotNo.traceNoArr.push(traceNoArr[i]);
       }
 
-      db.insert(newPigLotNo, newLotNo, (err, body) => {
-        console.log('[insert] ' + body);
+      db.insert(newPigLotNo, newLotNo, (err, insesrtResult) => {
+        console.log('[insert] ' + insesrtResult);
         callback(err, newLotNo);
       });
     });
@@ -120,17 +127,38 @@ module.exports = {
     });
   },
 
-  queryLotNoWithDate(createdDate, callback) {
+  queryLotNoWithDate(pigLotNoYmd, callback) {
+    console.log(`pigLotNoYmd: ${pigLotNoYmd}`)
     var queryString = {
-      "key": createdDate
+      "key": pigLotNoYmd
     };
 
     //console.log(createdDate);
-    console.log(queryString);
-    db.runViewWithQuery('pigsDoc', 'pigLotNo-by-createdDate-view', queryString, (error, body) => {
-      if (error) 
+    //console.log(queryString);
+    db.runViewWithQuery('pigsDoc', 'pigLotNo-by-lotNoYmd-view', queryString, (err, pigLotNoKeys) => {
+      if (err) {
         console.log('[error] queryLotNoWithDate');
-      callback(error, body);
+        callback(err, pigLotNoKeys);
+        return;
+      }
+      
+      //console.log(pigLotNoKeys);
+      keysArr = [];
+      for (var i = 0; i < pigLotNoKeys.rows.length; i++) {
+        //console.log(pigLotNoKeys.rows[i].id)
+        keysArr.push(pigLotNoKeys.rows[i].id);
+      }
+      //console.log(keysArr);
+
+      queryString = {
+        "keys": keysArr
+      }
+      db.runFetch(queryString, (errFetch, docResults) => {
+        if (errFetch) console.log('[error] queryLotNoWithDate');
+
+        //console.log(docResults);
+        callback(errFetch, docResults);
+      })
     });
   },
 
@@ -139,16 +167,18 @@ module.exports = {
       "key": lotNo
     };
     //console.log(queryString);
-    db.runViewWithQuery('pigsDoc', 'processInfo-by-lotNo-view', queryString, (error, processBody) => {
-      //console.log(processBody);
-      var seriesNo = processBody.rows.length;
-      var today = self.getTodayYYYYMMDD();
+    db.runViewWithQuery('pigsDoc', 'processInfo-by-lotNo-view', queryString, (error, processResult) => {
+      //console.log(processResult);
+      var seriesNo = processResult.rows[0].value;
+      var today = utils.getTodayYYYYMMDD();
+      //console.log(seriesNo)
       var processNo = today + lotNo + pad(3, seriesNo, '0');
 
-      processInfo = models.schemas.processInfo;
+      //console.log(processNo)
+      processInfo = new ProcessInfo(processNo);
       processInfo.lotNo = lotNo;
       processInfo.processYmd = today;
-      processInfo.corpNo = '12345';
+      processInfo.corpNo = '1234';
 
       //console.log(processInfo);
       //console.log(processNo);
@@ -160,32 +190,39 @@ module.exports = {
   },
 
   updateProcessInfoFromApp(processInfo, callback) {
-    console.log(`processInfo[0]: ${processInfo[0]}`)
+    //console.log(`processInfo[0]: ${processInfo[0]}`)
     var queryString = {
       "key": processInfo[0]
     }
-    db.runViewWithQuery('pigsDoc', 'processInfo-view', queryString, (error, processBody) => {
-      if (error) {
-        console.log(`[error] runViewWithQuery: ${error}`);
-        callback(error, processBody);
+    db.runViewWithQuery('pigsDoc', 'processInfo-view', queryString, (err, queryResult) => {
+      if (err) {
+        console.log(`[error] runViewWithQuery: ${err}`);
+        callback(error, queryResult);
       }
-      //console.log(processBody);
-      if (processBody.rows.length !== 0) {
-        newProcessInfo = processBody.rows[0].value;
-        newProcessInfo.lotNo = processInfo[1];
-        newProcessInfo.processPlaceNm = processInfo[2];
-        newProcessInfo.processPlaceAddr = processInfo[3];
-        newProcessInfo.processPart = processInfo[4];
-        newProcessInfo.processWeight = parseInt(processInfo[5]);
-        newProcessInfo.processYmd = processInfo[6];
-        newProcessInfo.purchasingCost = parseInt(processInfo[7]);
-        newProcessInfo.sellingPrice = parseInt(processInfo[8]);
+      //console.log('queryResult:');
+      //console.log(queryResult);
+      
+      if (queryResult.rows.length == 0) {
+        callback("No processInfo with processInfo Number", null);
+      } else {
+        db.select(queryResult.rows[0].id, (selectErr, resultDoc) => {
+          //console.log(resultDoc);
+          newProcessInfo = resultDoc;
+          newProcessInfo.lotNo = processInfo[1];
+          newProcessInfo.processPlaceNm = processInfo[2];
+          newProcessInfo.processPlaceAddr = processInfo[3];
+          newProcessInfo.processPart = processInfo[4];
+          newProcessInfo.processWeight = parseInt(processInfo[5]);
+          newProcessInfo.processYmd = processInfo[6];
+          newProcessInfo.purchasingCost = parseInt(processInfo[7]);
+          newProcessInfo.sellingPrice = parseInt(processInfo[8]);
 
-        //console.log(`newProcessInfo: ${JSON.stringify(newProcessInfo)}`);
-        db.update(newProcessInfo, processInfo[0], (updateErr, updateResult) => {
-          if (updateErr) console.log(`[error] ${updateErr}`);
+          //console.log(`newProcessInfo: ${JSON.stringify(newProcessInfo)}`);
+          db.update(newProcessInfo, processInfo[0], (updateErr, updateResult) => {
+            if (updateErr) console.log(`[error] ${updateErr}`);
 
-          callback(updateErr, updateResult);
+            callback(updateErr, updateResult);
+          });
         });
       }
     });
@@ -253,9 +290,28 @@ module.exports = {
       "key": processDate
     };
 
-    db.runViewWithQuery('pigsDoc', 'processInfo-by-processYmd-view', queryString, (err, processBody) => {
+    db.runViewWithQuery('pigsDoc', 'processInfo-by-processYmd-view', queryString, (err, processInfoKeys) => {
       //console.log(processBody.rows);
-      callback(err, processBody.rows);
+      if (err) {
+        console.log('[error] queryProcessInfoWithDate')
+        callback(err, processInfoKeys);
+        return;
+      }
+
+      keysArr = [];
+      for (var i = 0; i < processInfoKeys.rows.length; i++) {
+        keysArr.push(processInfoKeys.rows[i].id);
+      }
+
+      queryString = {
+        "keys": keysArr
+      };
+      db.runFetch(queryString, (errFetch, resultDocs) => {
+        if (errFetch) console.log('[error] queryProcessInfoWithDate');
+
+        //console.log(resultDocs.rows);
+        callback(err, resultDocs.rows);
+      });
     });
   },
 
@@ -293,10 +349,10 @@ module.exports = {
       "endkey": [endDate, null, null],
       "group_level": 3
     };
-    db.runViewWithQuery('pigsDoc', 'processInfo-summary-view', queryString, (error, viewResult) => {
+    db.runViewWithQuery('pigsDoc', 'processInfo-summary-view', queryString, (err, viewResult) => {
       //console.log(viewResult.rows);
-      if (error) console.log(`[error] queryProcessSummary: ${eerror}`);
-      callback(error, viewResult.rows);
+      if (err) console.log(`[error] queryProcessSummary: ${err}`);
+      callback(err, viewResult.rows);
     })
   }
 }

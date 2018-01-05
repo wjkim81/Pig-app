@@ -35,7 +35,7 @@ app.post('/upload/', upload.uploadFiles);
 // Router for angular
 app.get('/get_all_unprocessed_pigs/', obj.get_all_unprocessed_pigs);
 app.get('/create_lot_no/:trace_nos', obj.create_lot_no);
-app.get('/query_lot_no_with_date/:created_date', obj.query_lot_no_with_date);
+app.get('/query_lot_no_with_date/:pig_lot_ymd', obj.query_lot_no_with_date);
 app.get('/create_new_process/:lotNo', obj.create_new_process);
 app.get('/query_process_info_with_date/:process_date', obj.query_process_info_with_date);
 app.get('/update_process_info/:process_info_in', obj.update_process_info);

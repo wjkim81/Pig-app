@@ -187,8 +187,8 @@
           <label>묶음번호 조회</label><br>
           <h5 style="color:red;margin-bottom:2%" id="errorLotNoDate">Error: 날짜를 다시 입력해 주세요</h5>
         
-          날짜 입력: <input id="queryLotNoWithDate" class="form-control" type="text" placeholder="Ex: 20171227" ng-model="lotNoDateIn">
-          <input id="queryLotNo" type="submit" value="조회" class="btn btn-primary" ng-click="queryLotNo()">
+          날짜 입력: <input id="queryLotNoWithDateIn" class="form-control" type="text" placeholder="Ex: 20171227" ng-model="lotNoDateIn">
+          <input id="queryLotNoWithDate" type="submit" value="조회" class="btn btn-primary" ng-click="queryLotNoWithDate()">
         </div>
 
         <table id="allLotNos" class="table" align="center">
@@ -199,8 +199,8 @@
           </tr>
           <tr ng-repeat="lotNo in allLotNos">
             <td>{{ lotNo.id }}</td>
-            <td>{{ lotNo.value.createdDate }}</td>
-            <td>{{ lotNo.value.traceNoArr }}</td>
+            <td>{{ lotNo.doc.lotNoYmd }}</td>
+            <td>{{ lotNo.doc.traceNoArr }}</td>
           </tr>
         </table>
       </div>
@@ -235,11 +235,11 @@
           </tr>
           <tr ng-repeat="processInfo in allProcessInfo">
             <td>{{ processInfo.id }}</td>
-            <td>{{ processInfo.value.processYmd }}</td>
-            <td>{{ processInfo.value.processWeight }}</td>
-            <td>{{ processInfo.value.processPart }}</td>
-            <td>{{ processInfo.value.purchasingCost }}</td>
-            <td>{{ processInfo.value.sellingPrice }}</td>
+            <td>{{ processInfo.doc.processYmd }}</td>
+            <td>{{ processInfo.doc.processWeight }}</td>
+            <td>{{ processInfo.doc.processPart }}</td>
+            <td>{{ processInfo.doc.purchasingCost }}</td>
+            <td>{{ processInfo.doc.sellingPrice }}</td>
           </tr>
         </table>
       </div>

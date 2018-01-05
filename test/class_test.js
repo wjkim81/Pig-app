@@ -1,4 +1,5 @@
 const pigs        = require('../models/schemas');
+const db          = require('../models/db')
 const pigsdb      = require('../models/pigs')
 const Pig         = pigs.Pig;
 const ProcessInfo = pigs.ProcessInfo;
@@ -35,11 +36,42 @@ csv()
 var ekapePig = require('./pig_ekape.json');
 var jsonPig     = require('./pig_ex.json');
 
-/*
-console.log(ekapePig);
-var newPig = utils.convertFromEkape(ekapePig);
-console.log(newPig);
-*/
+
+//console.log(ekapePig);
+//var newPig = utils.convertFromEkape(ekapePig);
+//console.log(newPig);
+
+
 //var newPig2 = new Pig('201812111600750000001050');
-var newPig2 = new Pig('201812111600750000001050');
-console.log(newPig2);
+//var newPig2 = new Pig('201812111600750000001051');
+//console.log(newPig2); 
+
+// Test db operations
+/* 
+db.insert(newPig2, newPig2._id, (err, result) => {
+  console.log(result);
+})
+
+db.update(newPig2, newPig2._id, (err, result) => {
+  console.log(result);
+})
+
+db.delete('201812111600750000001050', (err, result) => {
+  console.log(`[test] ${result}`);
+})
+*/
+
+var queryString = {
+  "key": "20171227"
+};
+/*
+db.runViewWithQuery('pigsDoc', 'pigLotNo-by-lotNoYmd-view', queryString, (err, result) => {
+  if (err) 
+    console.log('[error] queryLotNoWithDate');
+  console.log(err, result);
+});
+*/
+pigsdb.queryLotNoWithDate("20171227", (err, results) => {
+  if (err) console.log(err);
+  console.log(results);
+})

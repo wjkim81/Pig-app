@@ -75,7 +75,10 @@ class ProcessInfo {
 		if (!idIn) {
 		  //console.log('No id was entered');
 		  throw "No id was entered";
-	  }
+	  } else if (idIn.length != 26) {
+			throw "ID is incorrect (Wrong lenght of ID). It must be 23 long"
+		}
+		// key (26) = YYYYMMDD (8) + lotNo (15) + seresNo(3)
     this._id = idIn;
     this.type =  "processInfo";
     this.previousKeyHistory = [];
@@ -102,25 +105,23 @@ class ProcessInfo {
 	*/
 }
 
-var pig = {
-	// key (24) = pig.butcheryInfo.butcheryYmd (8) + pig.traceNo (12) + pig.pigNo (4)
-	"_id": null,
-	"type": "pig",
-  "traceNo": null,
-	"pigNo": null,
-	"birthYmd": null,
-	"lsTypeCd": null,
-	"lsTypeNm": null,
-	"sexCd": null,
-	"sexNm": null,
-    
-	"farmInfo": farmInfo,
-	"butcheryInfo": butcheryInfo,
+class Corp {
+	constructor() {
+	  this.name = null;
+		this.corpNo = null;
+		this.ownerName = null;
+		this.corpPhone = null;
+		this.corpMobile = null;
+		this.address = null;
+		this.category = null;
+		this.bussness = null;
+		this.fax = null;
+		this.email = null;
+	}
+}
 
-  "processed": 0,
-	"processInfo": [],
+class Animal {
 
-	"processHistory": []
 }
 
 class Pig {
@@ -130,7 +131,10 @@ class Pig {
 	  if (!idIn) {
 		  //console.log('No id was entered');
 		  throw "No id was entered";
-	  }
+	  } else if (idIn.length != 24) {
+			throw "ID is incorrect (Wrong lenght of ID). It must be 24 long"
+		}
+
 	  this._id = idIn;
 	  this.type = "pig";
     this.traceNo = null;
@@ -149,6 +153,7 @@ class Pig {
 
 	  this.processHistory = [];
 	}
+
 }
 
 var processType = {
@@ -161,9 +166,9 @@ var processType = {
 }
 
 var pigLotNo = {
-	//key = 'L1'(2) + today(6) + corpNo(5) + '000'(3)
+	//key = 'L1'(2) + today(6) + corpNo(4) + '000'(3)
 	"type": "pigLotNo",
-	"pigLotNoYmd": null,
+	"lotNoYmd": null,
 	"referenceKey": [],
 	"traceNoArr": [],
 	"labels": [],
@@ -174,7 +179,9 @@ class PigLotNo {
 		if (!idIn) {
 		  //console.log('No id was entered');
 		  throw "No id was entered";
-	  }
+	  } else if (idIn.length != 15) {
+			throw "ID is incorrect (Wrong lenght of ID). It must be 15 long"
+		}
 		this._id = idIn;
 		this.type = "pigLotNo";
 		this.pigLotNoYmd = null;
@@ -190,7 +197,7 @@ var trackHistory = {
 }
 
 var schemas = {
-  "pig": pig,
+  //"pig": pig,
 	"processInfo": processInfo,
 	"processType": processType,
 	"pigLotNo": pigLotNo,

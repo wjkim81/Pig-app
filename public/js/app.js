@@ -38,11 +38,11 @@ app.controller('appController', function($scope, appFactory) {
     });
   }
 
-  $scope.queryLotNo = function() {
-    var lotNoDate = $scope.lotNoDateIn;
+  $scope.queryLotNoWithDate = function() {
+    var lotNoDateIn = $scope.lotNoDateIn;
     //console.log(lotNoDate);
     
-    appFactory.queryLotNoWithDate(lotNoDate, function(data) {
+    appFactory.queryLotNoWithDate(lotNoDateIn, function(data) {
       //console.log(data);
       $scope.allLotNos = data;
       if ($scope.allLotNos == "error" || $scope.allLotNos.length == 0) {
@@ -127,12 +127,14 @@ app.factory('appFactory', function($http) {
 
   // For traceability system
   factory.queryAllUnprocessedPigs = function(callback) {
+    
     $http.get('/get_all_unprocessed_pigs/').success(function(output) {
       callback(output)
     });
   }
 
   factory.createLotNo = function(traceNos, callback) {
+
     $http.get('/create_lot_no/'+traceNos).success(function(output) {
       callback(output)
     });

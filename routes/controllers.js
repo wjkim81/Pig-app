@@ -36,7 +36,7 @@ return {
     var traceNoArr = req.params.trace_nos.split('-');
     //console.log(traceNoArr);
 
-    db.createLotNo(traceNoArr, (err, newLotNo) => {
+    db.createLotNo(traceNoArr, '1234', (err, newLotNo) => {
       if (!err)
         res.send(newLotNo);
       else
@@ -47,14 +47,16 @@ return {
   query_lot_no_with_date: function(req, res) {
     console.log("Query lotNo with created date")
     
-    var created_date = req.params.created_date;
-    //console.log(created_date);
+    var pigLotYmd = req.params.pig_lot_ymd;
+    //console.log(pigLotYmd);
 
-    db.queryLotNoWithDate(created_date, (err, lotNoArr) => {
-      if (!err)
-        res.send(lotNoArr.rows);
-      else
+    db.queryLotNoWithDate(pigLotYmd, (err, lotNoDocs) => {
+      if (!err) {
+        res.send(lotNoDocs.rows);
+      } else {
+        console.log(`[error] db.queryLotNoWithDate: err`);
         res.send('error');
+      }
     });
   },
 
@@ -89,9 +91,9 @@ return {
 
     var processInfo = req.params.process_info_in.split('-')
     //console.log(processInfo);
-    db.updateProcessInfoFromApp(processInfo, (err, body) => {
+    db.updateProcessInfoFromApp(processInfo, (err, result) => {
       if (!err)
-        res.send(body)
+        res.send(result)
       else
         res.send('error');
     });

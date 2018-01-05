@@ -84,8 +84,8 @@ var self = module.exports = {
   },
 
 
-  // Get today in the format YYYYMMDD
-  getToday() {
+  // Get today in the format YYMMDD
+  getTodayYYMMDD() {
     var date = new Date();
 
     todayYY = date.getFullYear().toString().substring(2);
@@ -98,6 +98,7 @@ var self = module.exports = {
     return today;
   },
 
+  // Get today in the format YYYYMMDD
   getTodayYYYYMMDD() {
     var date = new Date();
 
