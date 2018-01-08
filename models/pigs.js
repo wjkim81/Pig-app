@@ -128,7 +128,7 @@ module.exports = {
   },
 
   queryLotNoWithDate(pigLotNoYmd, callback) {
-    console.log(`pigLotNoYmd: ${pigLotNoYmd}`)
+    //console.log(`pigLotNoYmd: ${pigLotNoYmd}`)
     var queryString = {
       "key": pigLotNoYmd
     };
