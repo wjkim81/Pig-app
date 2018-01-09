@@ -1,15 +1,18 @@
-const express       = require('express');
-const path          = require('path');
-const fileUpload    = require('express-fileupload');
-const nunjucks      = require('nunjucks')
-
-
-var helpers         = require('../helpers');
-var upload          = require('./upload.js')
+/**
+ * index.js file manages routings for various addresses.
+ */
+const nunjucks         = require('nunjucks')
 var obj             = require('./controllers.js');
 
-let app = express();
 
+var app = require('./app')
+
+/**
+ * Configuration for nunjucks
+ * Because eatformation is currently using angular.js
+ * we need to chcange variable parenthesis from {{ }} to others
+ * 
+ */
 nunjucks.configure('views', {
   autoescape: true,
   express: app,
@@ -23,14 +26,13 @@ nunjucks.configure('views', {
   }
 });
 
-app.use(fileUpload());
 
 // Basic Routings
 app.get('/', (req, res) => {
   res.render('index.html', { "test": "test" });
 });
 
-app.post('/upload/', upload.uploadFiles);
+
 
 // Router for angular
 app.get('/get_all_unprocessed_pigs/', obj.get_all_unprocessed_pigs);
