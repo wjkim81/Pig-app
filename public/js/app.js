@@ -16,7 +16,10 @@ app.controller('appController', function($scope, appFactory) {
 
   $scope.downloadButechryInfoFromEkape = function() {
     //console.log($scope.issueYmd)
-    if (!$scope.issueYmd) return;
+    if (!$scope.issueYmd) {
+      alert('값을 제대로 입력해 주시기 바랍니다.')
+      return;
+    }
     var issueYmd = $scope.issueYmd;
 
     appFactory.downloadButechryInfoFromEkape(issueYmd, function(data) {
@@ -37,7 +40,10 @@ app.controller('appController', function($scope, appFactory) {
   // Create angular function for traceability system
   $scope.queryPigsWithDate = function() {
 
-    if (!$scope.queryButcheryYmdIn) return;
+    if (!$scope.queryButcheryYmdIn) {
+      alert('값을 제대로 입력해 주시기 바랍니다.')
+      return;
+    }
 
     var queryDate = $scope.queryButcheryYmdIn;
 
