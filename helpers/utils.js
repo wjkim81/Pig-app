@@ -36,15 +36,19 @@ var self = module.exports = {
         console.log('All data were downloaded from ekape')
         parseString(xmldata, parseOption, (err, jsData) => {
           //console.log(jsData.pigVoes.pigVo[0].returnCd);
-          if (jsData.pigVoes.pigVo[0].returnCd === 'INFO_0000') {
-            for (var i = 0; i < jsData.pigVoes.pigVo.length; i++) {
-              //console.log(idx);
-              //console.log(self.convertFromEkape(jsEl));
-              pigsJsArr.push(self.convertFromEkape(jsData.pigVoes.pigVo[i]));
+          if (!err) {
+            if (jsData.pigVoes.pigVo[0].returnCd === 'INFO_0000') {
+              for (var i = 0; i < jsData.pigVoes.pigVo.length; i++) {
+                //console.log(idx);
+                //console.log(self.convertFromEkape(jsEl));
+                pigsJsArr.push(self.convertFromEkape(jsData.pigVoes.pigVo[i]));
+              }
+              callback(null, pigsJsArr);
+            } else {
+              console.log('Some error while download butcheryInfo with open-api');
             }
-            callback(null, pigsJsArr);
-          } else {
-            console.log('Some error while download butcheryInfo with open-api');
+          } else{
+            console.log('Cannot access open-api');
           }
         });
       });
