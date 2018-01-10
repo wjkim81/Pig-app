@@ -27,7 +27,8 @@ app.controller('appController', function($scope, appFactory) {
       if ($scope.numButcheryInfo != "error") {
         $("#successDownload").show();
       } else {
-        $("#successDownload").hide();
+        $scope.numButcheryInfo = 'error';
+        $("#successDownload").show();
       }
     });
   }

@@ -36,16 +36,24 @@ var self = module.exports = {
         }
         console.log('Accessing ekape finished')
         parseString(xmldata, parseOption, (err, jsData) => {
-          //console.log(jsData.pigVoes.pigVo[0].returnCd);
-          if (jsData.pigVoes.pigVo[0].returnCd === 'INFO_0000') {
+          //console.log(jsData);
+
+          var returnCode = jsData.pigVoes.pigVo.returnCd;
+          if (returnCode === 'INFO_0001' || returnCode === 'WARN_0001' || returnCode === 'ERROR_0001' ||
+              returnCode === 'ERROR_0001' || returnCode === 'ERROR_0002' || returnCode === 'ERROR_0003' ||
+              returnCode === 'ERROR_0004' || returnCode === 'ERROR_0005' || returnCode === 'ERROR_9001' ||
+              returnCode === 'ERROR_9002') {
+            console.log('Some error while download butcheryInfo with open-api');
+            callback('error', null);
+            return;
+          } else {
             for (var i = 0; i < jsData.pigVoes.pigVo.length; i++) {
               //console.log(idx);
               //console.log(self.convertFromEkape(jsEl));
               pigsJsArr.push(self.convertFromEkape(jsData.pigVoes.pigVo[i]));
             }
             callback(null, pigsJsArr);
-          } else {
-            console.log('Some error while download butcheryInfo with open-api');
+            return;
           }
         });
       });
