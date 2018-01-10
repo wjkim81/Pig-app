@@ -17,16 +17,42 @@ var path          = require('path');
 var util          = require('util');
 var os            = require('os');
 var db            = require('../models/pigs')
+var utils         = require('../helpers/utils')
 
 module.exports = (function() {
 return {
-  get_all_unprocessed_pigs: function(req, res) {
-    console.log("Getting all unprocessed pigs from database");
-    db.getUnprocessedPigs((err, pigsArr) => {
-      if (!err) 
-        res.send(pigsArr.rows);
-      else
+  download_butcheryinfo_from_ekape: function(req,res) {
+
+    console.log(`Downloading butcheryInfo from Ekape through open-api issued date ${issuedYmd}`);
+    var issuedYmd = req.params.issued_ymd;
+
+    //console.log(issuedYmd);
+
+    var apiKey = 'HpbHwExDWDaHWHg02BYslcfcWD6TSQ02FvrYEj3owuCWt0ijSLUeBthHqLsYMdR9f5Sq';
+    db.updateButcheryInfoFromEkape(issuedYmd, apiKey, (err, numResult) => {
+      if (!err) {
+        //console.log('done');
+        res.send(numResult.toString());
+      } else {
         res.send('error');
+      }
+    });
+  },
+
+  query_pigs_with_date: function(req, res) {
+    console.log("Getting all unprocessed pigs from database");
+
+    var queryYmd = req.params.query_ymd;
+
+
+    db.queryPigsWithDate(queryYmd, (err, pigsArr) => {
+      if (!err) {
+        //console.log(pigsArr);
+        res.send(pigsArr);
+      }
+      else {
+        res.send('error');
+      }
     });
   },
 

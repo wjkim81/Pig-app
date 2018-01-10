@@ -7,40 +7,35 @@ var Pig       = models.Pig;
 var PigLotNo  = models.PigLotNo;
 var ProcessInfo = models.ProcessInfo;
 
-var csv       = require('csvtojson');
 var pad       = require('pad');
 
 module.exports = {
-  /**
-   * This will insert pig json object data from data given by ekape
-   * 1. csvtojson
-   * 2. convert json of ekape to json of our database schema
-   * 3. insert into each json of pig data into couchdb
-   * @param {*} csvFilePath 
-   */
-  updateButcheryInfoFromEkape(csvFilePath, callback) {
-    var pigsArr = [];
 
-    // Convert csv format file into json
-    // For each json object, insert into couchDB 
-    csv()
-      .fromFile(csvFilePath)
-      .on('json', (ekapeJsonPig) => {
-        var pig = utils.convertFromEkape(ekapeJsonPig);
-        //console.log(key);
+  updateButcheryInfoFromEkape(issuedYmd, apiKey, callback) {
+    utils.downloadButcheryInfoFromEkape(issuedYmd, apiKey, (err, pigsArr) => {
+      if (err) {
+        console.log('Updating butcheryInfo from ekape failed');
+      } else {
+          let numSuccess = 0;
+          //var numInsert = pigsArr.length;
 
-        db.insert(pig, pig._id, (err, body) => {
-          if (err) console.log('[error] updateButcheryInfoFromEkape, db.insert');
-          //callback(body);
-        });
+          db.bulkInsert(pigsArr, (bulkErr, bulkResult) => {
+            //if (!bulkErr) bulkSuccessArr.push[false]
+            //else bulkSuccessArr.push(true);
+            //console.log(`${pigsArr.length} are updated`)
+            if (bulkErr) console.log('[error] bulkInsert');
+            console.log('BulkInsert was done');
+            //console.log(bulkResult);
+            for (var i = 0; i < bulkResult.length; i++) {
+              //console.log(`i: ${i}`);
+              if (!bulkResult[i].error) numSuccess++;
+            }
+            console.log(`${numSuccess} are inserted by bulk`)
+            callback(bulkErr, numSuccess);
+          });
 
-        pigsArr.push(pig)
-      })
-      .on('done', (error) => {
-        if (error) console.log('[error] updateButcheryInfoFromEkape, csv.done');
-        console.log("Number of pigs: " + pigsArr.length);
-        callback(pigsArr.length)
-      })
+      }
+    });
   },
 
   /**
@@ -319,12 +314,15 @@ module.exports = {
 
   },
 
-  getUnprocessedPigs(callback) {
+  queryPigsWithDate(queryYmd, callback) {
     // Get pig documents where processed is false
-    db.runView('pigsDoc', 'non-processed-view', (err, body) => {
+    var queryString = {
+      "key": queryYmd
+    }
+    db.getDocsFromViewWithQuery('pigsDoc', 'pigs-by-issueYmd-view', queryString, (err, queryResult) => {
       //console.log(err, body);
-      if (err) console.log('[error] getUnprocessedPigs');
-      callback(err, body);
+      if (err) console.log('[error] queryPigsWithDate');
+      callback(err, queryResult);
     });
   },
 

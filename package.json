@@ -22,6 +22,7 @@
     "pad": "^2.0.3",
     "superlogin": "^0.6.1",
     "superlogin-client": "^0.8.0",
+    "xml2js": "^0.4.19",
     "yamljs": "^0.3.0"
   }
 }

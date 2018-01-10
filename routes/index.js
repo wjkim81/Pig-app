@@ -2,7 +2,7 @@
  * index.js file manages routings for various addresses.
  */
 const nunjucks         = require('nunjucks')
-var obj             = require('./controllers.js');
+var obj                = require('./controllers.js');
 
 var apps = require('./app');
 
@@ -97,7 +97,8 @@ app.get('/login', (req, res) => {
 })
 
 // Router for angular
-app.get('/get_all_unprocessed_pigs/', obj.get_all_unprocessed_pigs);
+app.get('/download_butcheryinfo_from_ekape/:issued_ymd', obj.download_butcheryinfo_from_ekape);
+app.get('/query_pigs_with_date/:query_ymd', obj.query_pigs_with_date);
 app.get('/create_lot_no/:trace_nos', obj.create_lot_no);
 app.get('/query_lot_no_with_date/:pig_lot_ymd', obj.query_lot_no_with_date);
 app.get('/create_new_process/:lotNo', obj.create_new_process);

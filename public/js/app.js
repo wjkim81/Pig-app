@@ -6,6 +6,7 @@ var app = angular.module('application', []);
 // Angular Controller
 app.controller('appController', function($scope, appFactory) {
 
+  $("#successDownload").hide();
   $("#successCreateLotNo").hide();
   $("#errorLotNoDate").hide();
   $("#sucessCreateNewProcess").hide();
@@ -13,11 +14,31 @@ app.controller('appController', function($scope, appFactory) {
   $("#successUpdateProcess").hide();
   $("#errorSummaryInfo").hide();
 
+  $scope.downloadButechryInfoFromEkape = function() {
+    var issuedYmd = $scope.issuedYmd;
+
+    appFactory.downloadButechryInfoFromEkape(issuedYmd, function(data) {
+      
+      $scope.numButcheryInfo = data;
+
+      if ($scope.numButcheryInfo != "error") {
+        $("#successDownload").show();
+      } else {
+        $("#successDownload").hide();
+      }
+    });
+  }
+
+
   // Create angular function for traceability system
-  $scope.queryAllUnprocessedPigs = function() {
-    appFactory.queryAllUnprocessedPigs(function(data) {
-      //console.log('queryAllUnprocessedPigs')
-      $scope.unprocessedPigs = data;
+  $scope.queryPigsWithDate = function() {
+
+    var queryDate = $scope.queryButcheryYmdIn;
+
+    appFactory.queryPigsWithDate(queryDate, function(data) {
+      //console.log('queryPigsWithDate')
+      //console.log(data);
+      $scope.pigsInfo = data;
     });
   }
 
@@ -126,9 +147,15 @@ app.factory('appFactory', function($http) {
   var factory = {};
 
   // For traceability system
-  factory.queryAllUnprocessedPigs = function(callback) {
+  factory.downloadButechryInfoFromEkape = function(issuedYmd, callback) {
+    $http.get('/download_butcheryinfo_from_ekape/'+issuedYmd).success(function(output) {
+      callback(output);
+    });
+  }
+
+  factory.queryPigsWithDate = function(queryYmd, callback) {
     
-    $http.get('/get_all_unprocessed_pigs/').success(function(output) {
+    $http.get('/query_pigs_with_date/'+queryYmd).success(function(output) {
       callback(output)
     });
   }

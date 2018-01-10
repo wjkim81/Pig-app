@@ -12,6 +12,7 @@ class FarmInfo {
 	  this.farmNo =  null;
 	  this.farmNm = null;
 	  this.farmAddr = null;
+		this.farmerNo = null;
 	  this.farmerNm = null;
 	  this.regType = null;
 	  this.regYmd = null;
@@ -35,17 +36,32 @@ var butcheryInfo = {
 
 class ButcheryInfo {
 	constructor() {
+		// Check how to handl these two corp variable
+		this.corpNo = null;
+		this.corpNm = null;
+		this.nextKey = null;
+
+
+
+		this.butcheryCode = null;
 	  this.butcheryPlaceAddr = null;
 	  this.butcheryPlaceNm = null;
 	  this.butcheryYmd = null;
+		this.issueYmd = null;
+		this.issueNo = null;
+		this.butcheryUseCd = null;
+		this.butcheryUseNm = null;
 	  this.firstGradeNm = null;
 	  this.gradeNm = null;
+		this.judgeYmd = null;
 	  this.inspectPassYn = null;
+		this.inspectCode = null;
 	  this.inspectMethod = null;
+		this.skinYn = null;
 	  this.butcheryShape = null;
 	  this.butcheryWeight = null;
 	  this.backFatThickness = null;
-	  //"abattCode": null,
+    this.fatup = null;
 	  //"processPlaceNm": null,
 	}
 }

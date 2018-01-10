@@ -68,6 +68,16 @@ module.exports = {
       });
     });
   },
+
+  bulkInsert(docs, callback) {
+    db.bulk({"docs": docs}, (err, result) => {
+      if (err) {
+        console.log(`[error] db.bulk: ${err}`);
+      }
+
+      callback(err, result);
+    });
+  },
   
   /**
    * Run Query
@@ -133,7 +143,7 @@ module.exports = {
     db.view(designname, viewname, queryString, (err, resultKeys) => {
       if (err) {
         console.log(`[error] getDocsFromViewWithQuery: ${err}`);
-        callback(err, result);
+        callback(err, resultKeys);
         return;
       }
 
