@@ -4,8 +4,13 @@
 const nunjucks         = require('nunjucks')
 var obj             = require('./controllers.js');
 
+var apps = require('./app');
 
-var app = require('./app')
+//var app = require('./app');
+//var superlogin = require('.app');
+var app = apps.app;
+var sl = apps.superlogin;
+var profile = apps.profile;
 
 /**
  * Configuration for nunjucks
@@ -27,12 +32,69 @@ nunjucks.configure('views', {
 });
 
 
-// Basic Routings
+/**
+ * Basic routings
+ * If we need routings, define function in routing.js and import it to use
+ * Never define actions here
+ * 
+ */
+
+app.use('/', (req, res, next) => {
+  //if (superlogin.authenticated()) {
+  //  console.log('authenticated')
+  //}
+  /*
+  http.get('http://localhost:3000/session', (httpres) => {
+    console.log(httpres);
+  })
+  */
+  //console.log(valid)
+  /*
+  profile.get(req.user._id)
+    .then(function(userProfile) {
+      res.status(200).json(userProfile);
+    }, function(err) {
+      return next(err);
+    });
+    */
+  //console.log(profile)
+  /*
+  console.log(superlogin);
+  console.log('req');
+  console.log(req);
+  console.log('res');
+  console.log(res);
+  */
+  next();
+});
+
 app.get('/', (req, res) => {
+  //console.log(profile)
+  /*
+  console.log(superlogin);
+  console.log('req');
+  console.log(req);
+  console.log('res');
+  console.log(res);
+  */
   res.render('index.html', { "test": "test" });
 });
 
+app.get('/admin', sl.requireAuth, (req, res) => {
+  //console.log(profile)
+  /*
+  console.log(superlogin);
+  console.log('req');
+  console.log(req);
+  console.log('res');
+  console.log(res);
+  */
+  res.render('index.html', { "test": "test" });
+});
 
+app.get('/login', (req, res) => {
+  res.render('login.html', { "test": "test_login" });
+})
 
 // Router for angular
 app.get('/get_all_unprocessed_pigs/', obj.get_all_unprocessed_pigs);

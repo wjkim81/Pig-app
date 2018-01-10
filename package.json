@@ -20,6 +20,8 @@
     "nano": "^6.4.2",
     "nunjucks": "^3.0.1",
     "pad": "^2.0.3",
-    "superlogin": "^0.6.1"
+    "superlogin": "^0.6.1",
+    "superlogin-client": "^0.8.0",
+    "yamljs": "^0.3.0"
   }
 }
