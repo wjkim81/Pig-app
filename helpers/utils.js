@@ -30,25 +30,22 @@ var self = module.exports = {
         xmldata += chunk;
       });
       res.on('end', () => {
-        //console.log('end')
-        //console.log(xmldata);
-        //console.log('Parsed json')
-        console.log('All data were downloaded from ekape')
+        if (data) {
+          callback(null, null);
+          return;
+        }
+        console.log('Accessing ekape finished')
         parseString(xmldata, parseOption, (err, jsData) => {
           //console.log(jsData.pigVoes.pigVo[0].returnCd);
-          if (!err) {
-            if (jsData.pigVoes.pigVo[0].returnCd === 'INFO_0000') {
-              for (var i = 0; i < jsData.pigVoes.pigVo.length; i++) {
-                //console.log(idx);
-                //console.log(self.convertFromEkape(jsEl));
-                pigsJsArr.push(self.convertFromEkape(jsData.pigVoes.pigVo[i]));
-              }
-              callback(null, pigsJsArr);
-            } else {
-              console.log('Some error while download butcheryInfo with open-api');
+          if (jsData.pigVoes.pigVo[0].returnCd === 'INFO_0000') {
+            for (var i = 0; i < jsData.pigVoes.pigVo.length; i++) {
+              //console.log(idx);
+              //console.log(self.convertFromEkape(jsEl));
+              pigsJsArr.push(self.convertFromEkape(jsData.pigVoes.pigVo[i]));
             }
-          } else{
-            console.log('Cannot access open-api');
+            callback(null, pigsJsArr);
+          } else {
+            console.log('Some error while download butcheryInfo with open-api');
           }
         });
       });
