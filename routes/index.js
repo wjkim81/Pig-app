@@ -97,7 +97,7 @@ app.get('/login', (req, res) => {
 })
 
 // Router for angular
-app.get('/download_butcheryinfo_from_ekape/:issued_ymd', obj.download_butcheryinfo_from_ekape);
+app.get('/download_butcheryinfo_from_ekape/:issue_ymd', obj.download_butcheryinfo_from_ekape);
 app.get('/query_pigs_with_date/:query_ymd', obj.query_pigs_with_date);
 app.get('/create_lot_no/:trace_nos', obj.create_lot_no);
 app.get('/query_lot_no_with_date/:pig_lot_ymd', obj.query_lot_no_with_date);

@@ -23,8 +23,8 @@ module.exports = (function() {
 return {
   download_butcheryinfo_from_ekape: function(req,res) {
 
-    console.log(`Downloading butcheryInfo from Ekape through open-api issued date ${issuedYmd}`);
-    var issuedYmd = req.params.issued_ymd;
+    console.log(`Downloading butcheryInfo from Ekape through open-api issued date ${issue_ymd}`);
+    var issuedYmd = req.params.issue_ymd;
 
     //console.log(issuedYmd);
 

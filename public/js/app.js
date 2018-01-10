@@ -15,9 +15,9 @@ app.controller('appController', function($scope, appFactory) {
   $("#errorSummaryInfo").hide();
 
   $scope.downloadButechryInfoFromEkape = function() {
-    var issuedYmd = $scope.issuedYmd;
+    var issueYmd = $scope.issuedYmd;
 
-    appFactory.downloadButechryInfoFromEkape(issuedYmd, function(data) {
+    appFactory.downloadButechryInfoFromEkape(issueYmd, function(data) {
       
       $scope.numButcheryInfo = data;
 
@@ -147,8 +147,8 @@ app.factory('appFactory', function($http) {
   var factory = {};
 
   // For traceability system
-  factory.downloadButechryInfoFromEkape = function(issuedYmd, callback) {
-    $http.get('/download_butcheryinfo_from_ekape/'+issuedYmd).success(function(output) {
+  factory.downloadButechryInfoFromEkape = function(issueYmd, callback) {
+    $http.get('/download_butcheryinfo_from_ekape/'+issueYmd).success(function(output) {
       callback(output);
     });
   }
