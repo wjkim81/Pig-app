@@ -30,7 +30,7 @@ var self = module.exports = {
         xmldata += chunk;
       });
       res.on('end', () => {
-        if (data) {
+        if (xmldata) {
           callback(null, null);
           return;
         }
@@ -50,7 +50,8 @@ var self = module.exports = {
         });
       });
     }).on('error', (err) => {
-      console.log(err, null);
+      console.log(err);
+      callback(err, null);
     });
   },
 
