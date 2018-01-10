@@ -31,7 +31,7 @@ var self = module.exports = {
       });
       res.on('end', () => {
         if (xmldata) {
-          callback(null, null);
+          callback('error', null);
           return;
         }
         console.log('Accessing ekape finished')
