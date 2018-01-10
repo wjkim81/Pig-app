@@ -15,6 +15,8 @@ module.exports = {
     utils.downloadButcheryInfoFromEkape(issuedYmd, apiKey, (err, pigsArr) => {
       if (err) {
         console.log('Updating butcheryInfo from ekape failed');
+        callback(err, null);
+        return;
       } else {
           let numSuccess = 0;
           //var numInsert = pigsArr.length;

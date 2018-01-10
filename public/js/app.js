@@ -15,10 +15,13 @@ app.controller('appController', function($scope, appFactory) {
   $("#errorSummaryInfo").hide();
 
   $scope.downloadButechryInfoFromEkape = function() {
-    var issueYmd = $scope.issuedYmd;
+    //console.log($scope.issueYmd)
+    if (!$scope.issueYmd) return;
+    var issueYmd = $scope.issueYmd;
 
     appFactory.downloadButechryInfoFromEkape(issueYmd, function(data) {
-      
+
+      //console.log('test')
       $scope.numButcheryInfo = data;
 
       if ($scope.numButcheryInfo != "error") {
@@ -32,6 +35,8 @@ app.controller('appController', function($scope, appFactory) {
 
   // Create angular function for traceability system
   $scope.queryPigsWithDate = function() {
+
+    if (!$scope.queryButcheryYmdIn) return;
 
     var queryDate = $scope.queryButcheryYmdIn;
 

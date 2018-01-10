@@ -30,7 +30,7 @@ var self = module.exports = {
         xmldata += chunk;
       });
       res.on('end', () => {
-        if (xmldata) {
+        if (!xmldata) {
           callback('error', null);
           return;
         }

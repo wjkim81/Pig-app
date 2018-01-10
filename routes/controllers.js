@@ -23,13 +23,13 @@ module.exports = (function() {
 return {
   download_butcheryinfo_from_ekape: function(req,res) {
 
-    console.log(`Downloading butcheryInfo from Ekape through open-api issued date ${issue_ymd}`);
-    var issuedYmd = req.params.issue_ymd;
+    var issueYmd = req.params.issue_ymd;
+    console.log(`Downloading butcheryInfo from Ekape through open-api issued date ${issueYmd}`);
 
     //console.log(issuedYmd);
 
     var apiKey = 'HpbHwExDWDaHWHg02BYslcfcWD6TSQ02FvrYEj3owuCWt0ijSLUeBthHqLsYMdR9f5Sq';
-    db.updateButcheryInfoFromEkape(issuedYmd, apiKey, (err, numResult) => {
+    db.updateButcheryInfoFromEkape(issueYmd, apiKey, (err, numResult) => {
       if (!err) {
         //console.log('done');
         res.send(numResult.toString());
