@@ -107,7 +107,7 @@
     <div id="body">
       <div class="outer-div">
         <div class="form-group">
-          <label>축산품질평가원으로부터 도축정보 받아오기 (업데이트 시간이 수십초 걸릴 수 있으니 클릭을 한번 하시고 기다려 주시기 바랍니다. (업데이트 결과는 나옵니다)</label><br>
+          <label>축산품질평가원으로부터 도축정보 받아오기 (업데이트 시간이 수십초 걸릴 수 있으니 클릭을 한번 하시고 기다려 주시기 바랍니다. 업데이트 결과는 나옵니다)</label><br>
           <h5 style="color:green;margin-bottom:2%" id="successDownload"> 새로운 도축 정보 {{ numButcheryInfo }} 가 업데이트 되었습니다.</h5>
         
           도축날짜 입력: <input id="multiTraceNos" class="form-control" type="text" placeholder="Ex: 20180105 (8자리: YYYYMMDD)" ng-model="issueYmd">
@@ -139,8 +139,8 @@
 
       <div class="outer-div">
         <div class="form-group">
-          <label>날자별 입고된 처리 현황 조회</label><br>
-          <h5 style="color:red;margin-bottom:2%" id="errorLotNoDate">Error: 날짜를 다시 입력해 주세요</h5>
+          <label>날짜별 입고된 처리 현황 조회</label><br>
+          <h5 style="color:red;margin-bottom:2%" id="errorPigDate">Error: 날짜를 다시 입력해 주세요</h5>
         
           날짜 입력: <input id="queryLotNoWithDateIn" class="form-control" type="text" placeholder="Ex: 20171227" ng-model="queryButcheryYmdIn">
           <input id="queryPigsWithDate" type="submit" value="조회" class="btn btn-primary" ng-click="queryPigsWithDate()">
@@ -259,7 +259,7 @@
 
       <div class="outer-div">  
         <div class="form-group">
-          <label>날자별 유통 현황 정리</label><br>
+          <label>날짜별 유통 현황 정리</label><br>
           <h5 style="color:red;margin-bottom:2%" id="errorSummaryInfo">Error: 날짜를 다시 입력해 주세요</h5>
         
           시작 날짜: <input id="queryProcessSummary" class="form-control" type="text" placeholder="Ex: 20171220" ng-model="summaryStartDateIn">

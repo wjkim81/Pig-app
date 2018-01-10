@@ -7,6 +7,7 @@ var app = angular.module('application', []);
 app.controller('appController', function($scope, appFactory) {
 
   $("#successDownload").hide();
+  $("#errorPigDate").hide();
   $("#successCreateLotNo").hide();
   $("#errorLotNoDate").hide();
   $("#sucessCreateNewProcess").hide();
