@@ -39,11 +39,40 @@ var self = module.exports = {
           //console.log(jsData);
 
           var returnCode = jsData.pigVoes.pigVo.returnCd;
-          if (returnCode === 'INFO_0001' || returnCode === 'WARN_0001' || returnCode === 'ERROR_0001' ||
-              returnCode === 'ERROR_0001' || returnCode === 'ERROR_0002' || returnCode === 'ERROR_0003' ||
-              returnCode === 'ERROR_0004' || returnCode === 'ERROR_0005' || returnCode === 'ERROR_9001' ||
-              returnCode === 'ERROR_9002') {
-            console.log('Some error while download butcheryInfo with open-api');
+          if (returnCode === 'INFO_0001') {
+            console.log('INFO_0001: 조회결과가 존재하지 않습니다.')
+            callback('error', null);
+            return;
+          } else if (returnCode === 'WARN_0001') {
+            console.log('WARN_0001: 개체식별번호 오류입니다.')
+            callback('error', null);
+            return;
+          } else if (returnCode === 'ERROR_0001') {
+            console.log('ERROR_0001: 인증된 사용자가 아닙니다.')
+            callback('error', null);
+            return;
+          } else if (returnCode === 'ERROR_0002') {
+            console.log('ERROR_0002: 승인대기중인 사용자입니다.')
+            callback('error', null);
+            return;
+          } else if (returnCode === 'ERROR_0003') {
+            console.log('ERROR_0003: 허용된 기능이 아닙니다. 서비스신청 후 사용하시기 바랍니다')
+            callback('error', null);
+            return;
+          } else if (returnCode === 'ERROR_0004') {
+            console.log('ERROR_0004: 일별/월별 허용된 조회 건수가 초과되었습니다.')
+            callback('error', null);
+            return;
+          } else if (returnCode === 'ERROR_0005') {
+            console.log('ERROR_0005: 접속허용된 서버주소가 아닙니다.')
+            callback('error', null);
+            return;
+          } else if (returnCode === 'ERROR_9001') {
+            console.log('ERROR_9001: 미제공 서비스 요청입니다.')
+            callback('error', null);
+            return;
+          } else if (returnCode === 'ERROR_9002') {
+            console.log('ERROR_9002: 웹서버 오류입니다.')
             callback('error', null);
             return;
           } else {

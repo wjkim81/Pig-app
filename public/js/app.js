@@ -20,6 +20,7 @@ app.controller('appController', function($scope, appFactory) {
       alert('값을 제대로 입력해 주시기 바랍니다.')
       return;
     }
+    $("#successDownload").hide();
     var issueYmd = $scope.issueYmd;
 
     appFactory.downloadButechryInfoFromEkape(issueYmd, function(data) {
