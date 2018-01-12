@@ -3,6 +3,10 @@ var models    = require('./schemas')
 
 var utils     = require('../helpers/utils');
 
+const EventEmitter = require('events');
+
+class MyEmitter extends EventEmitter {}
+
 var Pig       = models.Pig;
 var PigLotNo  = models.PigLotNo;
 var ProcessInfo = models.ProcessInfo;
@@ -71,7 +75,8 @@ module.exports = {
       //console.log('seriesNo: ' + seriesNo)
       //console.log(result);
       
-      // Updating pig data accrodingly with pigLotNo
+      MyEmitter.on('updatePigs', (traceNoArr) => {
+              // Updating pig data accrodingly with pigLotNo
       var traceNoEl, traceNo, pigNo;
       for (var i = 0; i < traceNoArr.length; i++) {
       /**
@@ -110,12 +115,21 @@ module.exports = {
           }          
         });
       }
+      })
 
+      MyEmitter.on('insertNewLotNo', (newPigLotNo, newLotNo) => {
       // Updating pigLotNo
       db.insert(newPigLotNo, newLotNo, (err, insesrtResult) => {
         console.log('[insert] ' + insesrtResult);
         callback(err, newLotNo);
       });
+
+      })
+
+      MyEmitter.emit('updatePigs', traceNoArr);
+      MyEmitter.emit('insertNewLotNo', newPigLotNo, newLotNo);
+
+      MyEmitter.removeAllListeners();
 
     });
   },
