@@ -1,3 +1,8 @@
+/**
+ * app.js defines modules of angular.js
+ * 
+ */
+
 // SPDX-License-Identifier: Apache-2.0
 'use strict';
 
@@ -18,10 +23,12 @@ app.controller('appController', function($scope, appFactory) {
   $scope.downloadButechryInfoFromEkape = function() {
     //console.log($scope.issueYmd)
     if (!$scope.issueYmd) {
-      alert('값을 제대로 입력해 주시기 바랍니다.')
+      alert('날짜 값을 제대로 입력해 주시기 바랍니다.')
       return;
     }
+
     $("#successDownload").hide();
+    
     var issueYmd = $scope.issueYmd;
 
     appFactory.downloadButechryInfoFromEkape(issueYmd, function(data) {
@@ -43,7 +50,7 @@ app.controller('appController', function($scope, appFactory) {
   $scope.queryPigsWithDate = function() {
 
     if (!$scope.queryButcheryYmdIn) {
-      alert('값을 제대로 입력해 주시기 바랍니다.')
+      alert('날짜 값을 제대로 입력해 주시기 바랍니다.')
       return;
     }
 
@@ -57,10 +64,34 @@ app.controller('appController', function($scope, appFactory) {
   }
 
   $scope.createLotNo = function() {
+    
+    if (!$scope.traceNosIn) {
+      alert('값을 제대로 입력해 주시기 바랍니다.')
+      return;
+    }
+
     var traceNos = $scope.traceNosIn;
     traceNos = traceNos.replace(/\s+/g, '');
-    traceNos = traceNos.replace(/,/g,'-');
+
+    var check= traceNos.split(',');
+
+    if (check.length > 20) {
+      alert('최대 20개까지 넣을 수 있습니다')
+      return;
+    }
+
+    for (var i = 0; i < check.length; i++) {
+      if (check[i].length != 17) {
+        alert('이력번호(12자리)-도체번호(4자리) 입력 값이 제대로 되지 않았습니다')
+        return;
+      }
+    }
+
+    $("#successCreateLotNo").hide();
+    
+    traceNos = traceNos.replace(/,/g,'_');
     //console.log(traceNos);
+
 
     appFactory.createLotNo(traceNos, function(data){
       $scope.newLotNo = data;

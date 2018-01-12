@@ -164,7 +164,7 @@ class Pig {
 	  this.farmInfo = new FarmInfo;
 	  this.butcheryInfo = new ButcheryInfo,
 
-    this.processed = 0;
+    this.processed = false;
 	  this.processInfo = [];
 
 	  this.processHistory = [];
@@ -200,6 +200,7 @@ class PigLotNo {
 		}
 		this._id = idIn;
 		this.type = "pigLotNo";
+		this.realKey = null;
 		this.pigLotNoYmd = null;
 		this.referenceKey = [];
 		this.traceNoArr = [];

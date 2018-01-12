@@ -42,7 +42,7 @@ module.exports = {
 
   /**
    * CreateLotNo is starting point of works
-   * 
+   * TraceNoArr: TraceNo(14) + PigNo(4)
    */
   createLotNo(traceNoArr, corpNo, callback) {
     let today = utils.getTodayYYMMDD();
@@ -52,7 +52,7 @@ module.exports = {
     var startKey = 'L1' + today + corpNo + '000';
     var endKey = 'L1' + today + corpNo + '999';
 
-    queryString = {
+    var queryString = {
       startkey: startKey,
       endkey: endKey,
       include_docs: true,
@@ -67,21 +67,56 @@ module.exports = {
       var newPigLotNo = new PigLotNo(newLotNo);
       //newPigLotNo.traceNoArr = [];
       newPigLotNo.pigLotNoYmd = utils.getTodayYYYYMMDD();
+      
       //console.log('seriesNo: ' + seriesNo)
       //console.log(result);
       
-      if (traceNoArr.length > 0) {
-        for (var i = 0; i < traceNoArr.length; i++)
-        /**
-         * Let's check traceNo with exisitng traceNo here!
-         */
-          newPigLotNo.traceNoArr.push(traceNoArr[i]);
+      // Updating pig data accrodingly with pigLotNo
+      var traceNoEl, traceNo, pigNo;
+      for (var i = 0; i < traceNoArr.length; i++) {
+      /**
+       * Let's check traceNo with exisitng traceNo here!
+       */
+        newPigLotNo.traceNoArr.push(traceNoArr[i]);
+        traceNoEl = traceNoArr[i].split('-');
+        traceNo = traceNoEl[0];
+        pigNo = traceNoEl[1];
+        queryString = {
+          "key": [traceNo, pigNo]
+        };
+        //console.log(traceNoEl, traceNo, pigNo);
+        
+        db.getDocsFromViewWithQuery('pigsDoc', 'pigs-by-traceNo-pigNo-view', queryString, (errView, result) => {
+          if (errView) {
+            console.log(`[error] ${errView}`);
+            callback(errView, null);
+            return;
+          }
+          
+          if (!result[0].doc.processed) {
+            result[0].doc.processed = true;
+            result[0].doc.processHistory.push([result[0].key, newPigLotNo._id]);
+
+                      
+            db.update(result[0].doc, result[0].key, (errUpdate, updateResult) => {
+              if (errUpdate) console.log(`[error] db.update ${errUpdate}`);
+             });
+             console.log(`push: ${result[0].key}`);
+             newPigLotNo.referenceKey.push = result[0].key;
+
+          } else {
+            console.log(`${result[0].key} was already processed`);
+            // Handle pig was already precessed!!           
+          }          
+        });
       }
 
+      // Updating pigLotNo
       db.insert(newPigLotNo, newLotNo, (err, insesrtResult) => {
         console.log('[insert] ' + insesrtResult);
         callback(err, newLotNo);
       });
+
     });
   },
 

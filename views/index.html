@@ -172,7 +172,7 @@
           <label>새 묶음 번호 생성 (작업지시) - 도체 번호별로 작업 지시 내릴 수 있도록 수정 계획 (현재는 이력 번호로만 작업 지시 가능)</label><br>
           <h5 style="color:green;margin-bottom:2%" id="successCreateLotNo">새로운 묶음 번호 {{ newLotNo }} 가 생성되었습니다.</h5>
         
-          이력번호 입력: <input id="multiTraceNos" class="form-control" type="text" placeholder="Ex: 160074700588, 160025400284, 150060500390 (여러 번호 입력시 쉼표로 구분)" ng-model="traceNosIn">
+          이력번호 입력: <input id="multiTraceNos" class="form-control" type="text" placeholder="이력번호(12자리)-도체번호(4자리) Ex: 160074700588-5001, 160025400284-5002, 150060500390-5003 (여러 번호 입력시 쉼표로 구분) 최대 20개 가능" ng-model="traceNosIn">
           <input id="createLotNo" type="submit" value="입력" class="btn btn-primary" ng-click="createLotNo()">
         </div>
       </div>

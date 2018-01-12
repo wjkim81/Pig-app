@@ -158,10 +158,10 @@ module.exports = {
       }
 
       db.fetch(queryString, (errFetch, resultDocs) => {
-        if (errFetch) console.log('[error] queryProcessInfoWithDate');
+        if (errFetch) console.log(`[error] queryProcessInfoWithDate: errFetch`);
 
         //console.log(docResults.rows);
-        callback(err, resultDocs.rows);
+        callback(errFetch, resultDocs.rows);
       })
     })
   }

@@ -40,10 +40,9 @@ return {
   },
 
   query_pigs_with_date: function(req, res) {
-    console.log("Getting all unprocessed pigs from database");
-
     var queryYmd = req.params.query_ymd;
 
+    console.log(`Getting pigs from database issued on date ${queryYmd}`);
 
     db.queryPigsWithDate(queryYmd, (err, pigsArr) => {
       if (!err) {
@@ -59,15 +58,17 @@ return {
   create_lot_no: function(req, res) {
     console.log("Creating new lotNo")
     
-    var traceNoArr = req.params.trace_nos.split('-');
+    var traceNoArr = req.params.trace_nos.split('_');
     //console.log(traceNoArr);
 
+    //traceNoArr: [traceNo(14)-pigNo(4), ... ]
     db.createLotNo(traceNoArr, '1234', (err, newLotNo) => {
       if (!err)
         res.send(newLotNo);
       else
         res.send('error');
     });
+    
   },
 
   query_lot_no_with_date: function(req, res) {
