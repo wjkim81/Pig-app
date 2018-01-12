@@ -2,3 +2,5 @@ node_modules/**
 pig_data/**
 pigs_data/**
 .vscode/settings.json
+etc/**
+routes/.DS_Store

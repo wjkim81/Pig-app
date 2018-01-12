@@ -123,8 +123,8 @@ var self = module.exports = {
     //pig.farmInfo.regYmd = ekapeJsonPig
       
     //pig.butcheryInfo.butcheryPlaceAddr = ekapeJsonPig
-    pig.butcheryInfo.requestCorpNo = ekapeJsonPig.requestCorpNo;
-    pig.butcheryInfo.requestCorpNm = ekapeJsonPig.requestCorpNm;
+    pig.butcheryInfo.corpNo = ekapeJsonPig.requestCorpNo;
+    pig.butcheryInfo.corpNm = ekapeJsonPig.requestCorpNm;
 
     pig.butcheryInfo.issueYmd = ekapeJsonPig.issueYmd;
     pig.butcheryInfo.issueNo = ekapeJsonPig.issueNo;
