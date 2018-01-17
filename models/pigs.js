@@ -3,14 +3,11 @@ var models    = require('./schemas')
 
 var utils     = require('../helpers/utils');
 
-const EventEmitter = require('events');
-
-class MyEmitter extends EventEmitter {}
-
 var Pig       = models.Pig;
 var PigLotNo  = models.PigLotNo;
 var ProcessInfo = models.ProcessInfo;
 
+var async     = require('async');
 var pad       = require('pad');
 
 module.exports = {
@@ -74,62 +71,91 @@ module.exports = {
       
       //console.log('seriesNo: ' + seriesNo)
       //console.log(result);
-      
-      MyEmitter.on('updatePigs', (traceNoArr) => {
-              // Updating pig data accrodingly with pigLotNo
-      var traceNoEl, traceNo, pigNo;
-      for (var i = 0; i < traceNoArr.length; i++) {
-      /**
-       * Let's check traceNo with exisitng traceNo here!
-       */
-        newPigLotNo.traceNoArr.push(traceNoArr[i]);
-        traceNoEl = traceNoArr[i].split('-');
-        traceNo = traceNoEl[0];
-        pigNo = traceNoEl[1];
-        queryString = {
-          "key": [traceNo, pigNo]
-        };
-        //console.log(traceNoEl, traceNo, pigNo);
+
+      // Updating pig data accrodingly with pigLotNo
+      var updatePigs = function(done) {
+        //console.log('updatePigs');
+        var traceNoEl, traceNo, pigNo;
+        for (var i = 0; i < traceNoArr.length; i++) {
+        /**
+         * [ErrorCheck] Let's check traceNo with exisitng traceNo here!
+         */
+          newPigLotNo.traceNoArr.push(traceNoArr[i]);
+
+          traceNoEl = traceNoArr[i].split('-');
+          traceNo = traceNoEl[0];
+          pigNo = traceNoEl[1];
+          queryString = {
+            "key": [traceNo, pigNo]
+          };
+          //console.log(traceNoEl, traceNo, pigNo);
         
-        db.getDocsFromViewWithQuery('pigsDoc', 'pigs-by-traceNo-pigNo-view', queryString, (errView, result) => {
-          if (errView) {
-            console.log(`[error] ${errView}`);
-            callback(errView, null);
-            return;
-          }
+          db.getDocsFromViewWithQuery('pigsDoc', 'pigs-by-traceNo-pigNo-view', queryString, (errView, result) => {
+            if (errView) {
+              console.log(`[error] ${errView}`);
+              //done(errView, null);
+              //return;
+            }
           
-          if (!result[0].doc.processed) {
-            result[0].doc.processed = true;
-            result[0].doc.processHistory.push([result[0].key, newPigLotNo._id]);
+            if (!result[0].doc.processed) {
+              result[0].doc.processed = true;
+              
+              newHistory = [result[0].key, newPigLotNo._id];
+              if (result[0].doc.processHistory.indexOf(newHistory))
+                result[0].doc.processHistory.push([result[0].key, newPigLotNo._id]);
 
                       
-            db.update(result[0].doc, result[0].key, (errUpdate, updateResult) => {
-              if (errUpdate) console.log(`[error] db.update ${errUpdate}`);
-             });
-             console.log(`push: ${result[0].key}`);
-             newPigLotNo.referenceKey.push = result[0].key;
+              db.update(result[0].doc, result[0].key, (errUpdate, updateResult) => {
+                if (errUpdate) console.log(`[error] db.update ${errUpdate}`);
+              });
+              console.log(`push: ${result[0].key}`);
+              newPigLotNo.referenceKey.push = result[0].key;
 
-          } else {
-            console.log(`${result[0].key} was already processed`);
-            // Handle pig was already precessed!!           
-          }          
+            } else {
+              console.log(`${result[0].key} was already processed`);
+              // Handle pig was already precessed!!           
+            }
+          
+          });
+        }
+        done(null, result);
+        //console.log(newLotNo);
+        //console.log('no problem')
+        //console.log(newPigLotNo.referenceKey)
+      }
+
+      var insertNewPigLotNo = function(done) {
+        //console.log('insertNewPigLotNo');
+        //console.log(newLotNo);
+        // Updating pigLotNo
+        db.insert(newPigLotNo, newLotNo, (err, insesrtResult) => {
+          //console.log('[insert] ' + insesrtResult);
+          done(err, newLotNo);
         });
       }
-      })
 
-      MyEmitter.on('insertNewLotNo', (newPigLotNo, newLotNo) => {
-      // Updating pigLotNo
-      db.insert(newPigLotNo, newLotNo, (err, insesrtResult) => {
-        console.log('[insert] ' + insesrtResult);
-        callback(err, newLotNo);
+      tasks = [
+        (callback) => {
+          updatePigs(callback);
+        }, 
+        (callback) => {
+          insertNewPigLotNo(callback);
+        }];
+
+      
+      async.series(tasks, (asyncErr, asyncResult) => {
+        /**
+         *  ErrorCheck: check if asyncErr[0] or asyncError[1]
+         */
+        if (asyncError)
+        //console.log('done');
+        //console.log('asyncErr');
+        //console.log(asyncErr);
+        //console.log('asyncResult');
+        //console.log(asyncResult[1]);
+        callback(null, asyncResult[1]);
+        //callback(asyncErr, asyncResult);
       });
-
-      })
-
-      MyEmitter.emit('updatePigs', traceNoArr);
-      MyEmitter.emit('insertNewLotNo', newPigLotNo, newLotNo);
-
-      MyEmitter.removeAllListeners();
 
     });
   },
