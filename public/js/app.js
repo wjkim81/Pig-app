@@ -17,6 +17,8 @@ app.controller('appController', function($scope, appFactory) {
   $("#errorLotNoDate").hide();
   $("#sucessCreateNewProcess").hide();
   $("#errorProcessDate").hide();
+  $("#successCreateBox").hide();
+  $("#errorBoxDate").hide();
   $("#successUpdateProcess").hide();
   $("#errorSummaryInfo").hide();
 
@@ -90,7 +92,7 @@ app.controller('appController', function($scope, appFactory) {
     $("#successCreateLotNo").hide();
     
     traceNos = traceNos.replace(/,/g,'_');
-    //console.log(traceNos);
+    console.log(traceNos);
 
 
     appFactory.createLotNo(traceNos, function(data){
@@ -105,6 +107,11 @@ app.controller('appController', function($scope, appFactory) {
   }
 
   $scope.queryLotNoWithDate = function() {
+
+    if (!$scope.lotNoDateIn) {
+      alert('날짜 값을 제대로 입력해 주시기 바랍니다.')
+      return;
+    }
     var lotNoDateIn = $scope.lotNoDateIn;
     //console.log(lotNoDate);
     
@@ -120,6 +127,12 @@ app.controller('appController', function($scope, appFactory) {
   }
 
   $scope.createNewProcess = function() {
+
+    if (!$scope.lotNoIn) {
+      alert('묶음번호를 입력해 주시기 바랍니다.')
+      return;
+    }
+
     var lotNo = $scope.lotNoIn;
     //console.log(lotNo);
 
@@ -132,17 +145,62 @@ app.controller('appController', function($scope, appFactory) {
       }
     });
   }
+
+  $scope.queryBoxwithDate = function() {
+    if (!$scope.boxDateIn) {
+      alert('날짜 값을 제대로 입력해 주시기 바랍니다.')
+      return;
+    }
+    var boxDate = $scope.boxDateIn;
+
+    console.log(boxDate);
+    appFactory.queryBoxwithDate(boxDate, function(data) {
+      $scope.allBox = data;
+    });
+  }
   
   $scope.queryProcessInfoWithDate = function() {
+
+    if (!$scope.processDateIn) {
+      alert('날짜 값을 제대로 입력해 주시기 바랍니다.')
+      return;
+    }
     var processDate = $scope.processDateIn;
 
     appFactory.queryProcessInfo(processDate, function(data) {
       $scope.allProcessInfo = data;
-      console.log(data);
+      //console.log(data);
       if ($scope.allProcessInfo == "error" || $scope.allProcessInfo.length == 0) {
         $("#errorProcessDate").show();
       } else {
         $("#errorProcessDate").hide();
+      }
+    });
+  }
+
+  $scope.createBox = function() {
+    if (!$scope.lotNoBoxIn) {
+      alert('묶음번호를 입력해 주시기 바랍니다.')
+      return;
+    }
+
+    var lotNoBox = $scope.lotNoBoxIn;
+    lotNoBox = lotNoBox.replace(/\s+/g, '');
+    var lotNos = lotNoBox.replace(/,/g,'-');
+
+    var nextCorp = $scope.nextCorpIn;
+
+    var input = lotNos + '-' + nextCorp;
+
+    //console.log(input);
+    
+    appFactory.createBox(input, function(data) {
+      $scope.createBox = data.id;
+
+      if ($scope.createBox != "error") {
+        $("#successCreateBox").show();
+      } else {
+        $("#successCreateBox").hide();
       }
     });
   }
@@ -231,6 +289,19 @@ app.factory('appFactory', function($http) {
     $http.get('/query_process_info_with_date/'+processDate).success(function(output) {
       callback(output);
     });
+  }
+
+  factory.createBox = function(input, callback) {
+
+    $http.get('/create_box/'+input).success(function(output) {
+      callback(output);
+    });
+  }
+
+  factory.queryBoxwithDate = function(boxDate, callback) {
+    $http.get('/query_box_with_date/'+boxDate).success(function(output) {
+      callback(output);
+    })
   }
 
   factory.updateProcessInfo = function(processInfoIn, callback) {

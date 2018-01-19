@@ -6,6 +6,7 @@ var utils     = require('../helpers/utils');
 var Pig       = models.Pig;
 var PigLotNo  = models.PigLotNo;
 var ProcessInfo = models.ProcessInfo;
+var PigBox = models.PigBox;
 
 var async     = require('async');
 var pad       = require('pad');
@@ -19,24 +20,23 @@ module.exports = {
         callback(err, null);
         return;
       } else {
-          let numSuccess = 0;
-          //var numInsert = pigsArr.length;
+        let numSuccess = 0;
+        //var numInsert = pigsArr.length;
 
-          db.bulkInsert(pigsArr, (bulkErr, bulkResult) => {
-            //if (!bulkErr) bulkSuccessArr.push[false]
-            //else bulkSuccessArr.push(true);
-            //console.log(`${pigsArr.length} are updated`)
-            if (bulkErr) console.log('[error] bulkInsert');
-            console.log('BulkInsert was done');
-            //console.log(bulkResult);
-            for (var i = 0; i < bulkResult.length; i++) {
-              //console.log(`i: ${i}`);
-              if (!bulkResult[i].error) numSuccess++;
-            }
-            console.log(`${numSuccess} are inserted by bulk`)
-            callback(bulkErr, numSuccess);
-          });
-
+        db.bulkInsert(pigsArr, (bulkErr, bulkResult) => {
+          //if (!bulkErr) bulkSuccessArr.push[false]
+          //else bulkSuccessArr.push(true);
+          //console.log(`${pigsArr.length} are updated`)
+          if (bulkErr) console.log('[error] bulkInsert');
+          console.log('BulkInsert was done');
+          //console.log(bulkResult);
+          for (var i = 0; i < bulkResult.length; i++) {
+            //console.log(`i: ${i}`);
+            if (!bulkResult[i].error) numSuccess++;
+          }
+          console.log(`${numSuccess} are inserted by bulk`)
+          callback(bulkErr, numSuccess);
+        });
       }
     });
   },
@@ -61,7 +61,11 @@ module.exports = {
     };
 
     // Retrieve all lotNo with current day 
+    /**
+     * [ErrorCheck] 만약 우리가 이미 가공한 도체번호를 다시 묶음번호에 넣을려고 할 때는 어떻게 해야 하나..
+     */
     db.runQuery(queryString, (result) => {
+      //console.log(result)
       var seriesNo = result.rows.length;
       var newLotNo = 'L1' + today + corpNo + pad(3, seriesNo.toString(), '0');
 
@@ -78,7 +82,7 @@ module.exports = {
         var traceNoEl, traceNo, pigNo;
         for (var i = 0; i < traceNoArr.length; i++) {
         /**
-         * [ErrorCheck] Let's check traceNo with exisitng traceNo here!
+         * [ErrorCheck] traceNo이 이미 있을 때는 넣지 말아야 한다.
          */
           newPigLotNo.traceNoArr.push(traceNoArr[i]);
 
@@ -97,31 +101,30 @@ module.exports = {
               //return;
             }
           
-            if (!result[0].doc.processed) {
-              result[0].doc.processed = true;
+            if (result[0].doc) {
+              if (!result[0].doc.processed) {
+                result[0].doc.processed = true;
               
-              newHistory = [result[0].key, newPigLotNo._id];
-              if (result[0].doc.processHistory.indexOf(newHistory))
-                result[0].doc.processHistory.push([result[0].key, newPigLotNo._id]);
+                newHistory = [result[0].key, newPigLotNo._id];
+                if (result[0].doc.processHistory.indexOf(newHistory) === -1)
+                  result[0].doc.processHistory.push([result[0].key, newPigLotNo._id]);
 
                       
-              db.update(result[0].doc, result[0].key, (errUpdate, updateResult) => {
-                if (errUpdate) console.log(`[error] db.update ${errUpdate}`);
-              });
-              console.log(`push: ${result[0].key}`);
-              newPigLotNo.referenceKey.push = result[0].key;
+                db.update(result[0].doc, result[0].key, (errUpdate, updateResult) => {
+                  if (errUpdate) console.log(`[error] db.update ${errUpdate}`);
+                });
+                console.log(`push: ${result[0].key}`);
+                newPigLotNo.referenceKey.push = result[0].key;
 
-            } else {
-              console.log(`${result[0].key} was already processed`);
-              // Handle pig was already precessed!!           
+              } else {
+                console.log(`${result[0].key} was already processed`);
+                // Handle pig was already precessed!!           
+              }
             }
           
           });
         }
         done(null, result);
-        //console.log(newLotNo);
-        //console.log('no problem')
-        //console.log(newPigLotNo.referenceKey)
       }
 
       var insertNewPigLotNo = function(done) {
@@ -129,7 +132,7 @@ module.exports = {
         //console.log(newLotNo);
         // Updating pigLotNo
         db.insert(newPigLotNo, newLotNo, (err, insesrtResult) => {
-          //console.log('[insert] ' + insesrtResult);
+          console.log(`[insert] ${newPigLotNo._id}`);
           done(err, newLotNo);
         });
       }
@@ -147,10 +150,11 @@ module.exports = {
         /**
          *  ErrorCheck: check if asyncErr[0] or asyncError[1]
          */
-        if (asyncError)
-        //console.log('done');
-        //console.log('asyncErr');
-        //console.log(asyncErr);
+        if (asyncErr) {
+          //console.log('done');
+          console.log('asyncErr');
+          console.log(asyncErr);
+        }
         //console.log('asyncResult');
         //console.log(asyncResult[1]);
         callback(null, asyncResult[1]);
@@ -200,7 +204,7 @@ module.exports = {
   },
 
   queryLotNoWithDate(pigLotNoYmd, callback) {
-    //console.log(`pigLotNoYmd: ${pigLotNoYmd}`)
+    console.log(`pigLotNoYmd: ${pigLotNoYmd}`)
     var queryString = {
       "key": pigLotNoYmd
     };
@@ -210,7 +214,7 @@ module.exports = {
     db.runViewWithQuery('pigsDoc', 'pigLotNo-by-lotNoYmd-view', queryString, (err, pigLotNoKeys) => {
       if (err) {
         console.log('[error] queryLotNoWithDate');
-        callback(err, pigLotNoKeys);
+        callback(err, null);
         return;
       }
       
@@ -240,8 +244,12 @@ module.exports = {
     };
     //console.log(queryString);
     db.runViewWithQuery('pigsDoc', 'processInfo-by-lotNo-view', queryString, (error, processResult) => {
-      //console.log(processResult);
-      var seriesNo = processResult.rows[0].value;
+      console.log(processResult);
+
+      var seriesNo = 0;
+      if (processResult.rows[0])
+        seriesNo = processResult.rows[0].value;
+
       var today = utils.getTodayYYYYMMDD();
       //console.log(seriesNo)
       var processNo = today + lotNo + pad(3, seriesNo, '0');
@@ -259,6 +267,30 @@ module.exports = {
         callback(err, processNo);
       });
     });
+  },
+
+  createBox(processInfoArr, nexCorp, callback) {
+    console.log('createBox in function')
+    //console.log(processInfoArr);
+    var newBox = new PigBox();
+
+    //console.log('newBox:');
+    //console.log(newBox);
+    newBox.boxYmd = utils.getTodayYYYYMMDD();
+    newBox.inBox = processInfoArr;
+    newBox.nextCorpNm = nexCorp;
+
+    //console.log('newBox:');
+    //console.log(newBox);
+    
+    db.insert(newBox, null, (insertErr, insertResult) => {
+      console.log(insertResult);
+      callback(insertErr, insertResult);
+    })
+  },
+
+  queryBoxWith(boxDate, callback) {
+
   },
 
   updateProcessInfoFromApp(processInfo, callback) {

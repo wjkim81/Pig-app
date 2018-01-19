@@ -113,14 +113,37 @@ return {
     });
   },
 
+  create_box: function(req, res) {
+    console.log('Createing box with processInfo numbers')
+    var input = req.params.process_info_nos_next_corp.split('-');
+    var processInfoArr = input.slice(0,input.length-1)
+    var nextCorp = input.slice(-1)[0];
+    console.log(processInfoArr);
+    console.log(nextCorp);
+
+    db.createBox(processInfoArr, nextCorp, (err, result) => {
+      if (!err)
+        res.send(result);
+      else
+        res.send('error');
+    });
+  },
+
+  query_box_with_date: function(req, res) {
+    console.log(`Query box with date`);
+    var boxDate = req.params.box_date;
+    console.log(boxDate);
+
+  },
+
   update_process_info: function(req, res) {
     console.log("Updating processInfo");
 
-    var processInfo = req.params.process_info_in.split('-')
+    var processInfo = req.params.process_info_in.split('-');
     //console.log(processInfo);
     db.updateProcessInfoFromApp(processInfo, (err, result) => {
       if (!err)
-        res.send(result)
+        res.send(result);
       else
         res.send('error');
     });

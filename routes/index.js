@@ -103,6 +103,8 @@ app.get('/create_lot_no/:trace_nos', obj.create_lot_no);
 app.get('/query_lot_no_with_date/:pig_lot_ymd', obj.query_lot_no_with_date);
 app.get('/create_new_process/:lotNo', obj.create_new_process);
 app.get('/query_process_info_with_date/:process_date', obj.query_process_info_with_date);
+app.get('/create_box/:process_info_nos_next_corp', obj.create_box);
+app.get('/query_box_with_date/:box_date', obj.query_box_with_date);
 app.get('/update_process_info/:process_info_in', obj.update_process_info);
 app.get('/query_process_summary/:date_range', obj.query_process_summary);
 

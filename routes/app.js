@@ -35,9 +35,9 @@ app.use(fileUpload());
 app.post('/upload/', upload.uploadFiles);
 
 // SuperLogin
-var middlewares = require('../middlewares')
-const SuperLogin    = require('superlogin');
-var superloginConfig = middlewares.superloginconfig; //require('../middlewares/superlogin/superlogin.config.js');
+const middlewares      = require('../middlewares')
+const SuperLogin       = require('superlogin');
+const superloginConfig = middlewares.superloginconfig; //require('../middlewares/superlogin/superlogin.config.js');
 // load SuperLogin routes
 var superlogin = new SuperLogin(superloginConfig);
 

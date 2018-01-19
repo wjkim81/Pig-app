@@ -169,7 +169,7 @@
 
       <div class="outer-div">
         <div class="form-group">
-          <label>새 묶음 번호 생성 (작업지시) - 도체 번호별로 작업 지시 내릴 수 있도록 수정 계획 (현재는 이력 번호로만 작업 지시 가능)</label><br>
+          <label>새 묶음 번호 생성 (작업지시)</label><br>
           <h5 style="color:green;margin-bottom:2%" id="successCreateLotNo">새로운 묶음 번호 {{ newLotNo }} 가 생성되었습니다.</h5>
         
           이력번호 입력: <input id="multiTraceNos" class="form-control" type="text" placeholder="이력번호(12자리)-도체번호(4자리) Ex: 160074700588-5001, 160025400284-5002, 150060500390-5003 (여러 번호 입력시 쉼표로 구분) 최대 20개 가능" ng-model="traceNosIn">
@@ -202,10 +202,10 @@
 
       <div class="outer-div">
         <div class="form-group">
-          <label>새 라벨 생성</label><br>
+          <label>새 라벨 (유통번호) 생성</label><br>
           <h5 style="color:green;margin-bottom:2%" id="sucessCreateNewProcess">새로운 라벨 {{ newProcessNo }} 가 생성되었습니다.</h5>
         
-          묶음 입력: <input id="lotNo" class="form-control" type="text" placeholder="Ex: L117122712345000" ng-model="lotNoIn">
+          묶음번호 혹은 이력번호 입력: <input id="lotNo" class="form-control" type="text" placeholder="Ex: L117122712345000" ng-model="lotNoIn">
           <input id="createNewProcess" type="submit" value="입력" class="btn btn-primary" ng-click="createNewProcess()">
         </div>
       </div>
@@ -213,7 +213,7 @@
       <div class="outer-div">  
         <div class="form-group">
           <label>유통번호 조회</label><br>
-          <h5 style="color:red;margin-bottom:2%" id="errorProcessDate">Error: 날짜를 다시 입력해 주세요</h5>
+          <h5 style="color:red;margin-bottom:2%" id="errorProcessDate">Error: 날짜를 다시 입력해 주세요.</h5>
         
           날짜 입력: <input id="queryProcessInfoWithDate" class="form-control" type="text" placeholder="Ex: 20171227" ng-model="processDateIn">
           <input id="queryProcessInfoWithDate" type="submit" value="조회" class="btn btn-primary" ng-click="queryProcessInfoWithDate()">
@@ -223,6 +223,7 @@
           <tr>
             <th>유통번호</th>
             <th>생성일자</th>
+            <th>묶음번호 혹은 이력번호</th>
             <th>유통중량(kg)</th>
             <th>부위</th>
             <th>원가</th>
@@ -231,10 +232,48 @@
           <tr ng-repeat="processInfo in allProcessInfo">
             <td>{{ processInfo.id }}</td>
             <td>{{ processInfo.doc.processYmd }}</td>
+            <td>{{ processInfo.doc.lotNo }}</td>
             <td>{{ processInfo.doc.processWeight }}</td>
             <td>{{ processInfo.doc.processPart }}</td>
             <td>{{ processInfo.doc.purchasingCost }}</td>
             <td>{{ processInfo.doc.sellingPrice }}</td>
+          </tr>
+        </table>
+      </div>
+
+      <div class="outer-div">
+        <div class="form-group">
+          <label>박스 묶음</label>
+          <h5 style="color:green;margin-bottom:2%" id="successCreateBox">{{createBox}} 를 만들었습니다.</h5>
+          <br>
+          유통번호: <input class="form-control" type="text" placeholder="Ex: 20171227L117122712345000000, 20171227L117122712345000000 고객에게 전달할 유통번호를 박스로 묶어 주세요" ng-model="lotNoBoxIn">
+          거래처: <input class="form-control" type="text" placeholder="Ex: 삼호축산" ng-model="nextCorpIn">
+          <input id="createBox" type="submit" value="입력" class="btn btn-primary" ng-click="createBox()">
+        </div>
+      </div>
+
+      <div class="outer-div">
+        <div class="form-group">
+          <label>박스 묶음 날짜별 조회</label>
+          <h5 style="color:green;margin-bottom:2%" id="errorBoxDate">Error: 날짜를 다시 입력해 주세요.</h5>
+
+          날짜 입력: <input id="queryBoxwithDate" class="form-control" type="text" placeholder="Ex: 20171227" ng-model="boxDateIn">
+          <input id="queryBoxwithDate" type="submit" value="조회" class="btn btn-primary" ng-click="queryBoxwithDate()">
+        </div>
+
+        <table id="allBox" class="table" align="center">
+          <tr>
+            <th>박스번호</th>
+            <th>생성일자</th>
+            <th>이력번호</th>
+            <th>거래처</th>
+          </tr>
+          <tr ng-repeat="box in allBox">
+            <td>{{ processInfo.id }}</td>
+            <td>{{ processInfo.doc.boxYmd }}</td>
+            <td>{{ processInfo.doc.lotNo }}</td>
+            <td>{{ processInfo.doc.nextCorpNm }}</td>
+            <td>{{ processInfo.doc.inBox }}</td>
           </tr>
         </table>
       </div>
@@ -256,7 +295,7 @@
           <input id="updateProcessInfo" type="submit" value="입력" class="btn btn-primary" ng-click="updateProcessInfo()">
         </div>
       </div>
-
+      
       <div class="outer-div">  
         <div class="form-group">
           <label>날짜별 유통 현황 정리</label><br>

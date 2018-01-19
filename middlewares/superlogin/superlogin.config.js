@@ -32,7 +32,8 @@ module.exports = {
   },
   userDBs: {
     defaultDBs: {
-      private: ['supertest']
+      //private: ['sl']
+      shared: ['sl-userdb']
     }
   },
   providers: {

@@ -1,12 +1,3 @@
-var farmInfo = {
-	"farmNo": null,
-	"farmNm": null,
-	"farmAddr": null,
-	"farmerNm": null,
-	"regType": null,
-	"regYmd": null
-}
-
 class FarmInfo {
 	constructor() {
 	  this.farmNo =  null;
@@ -17,21 +8,6 @@ class FarmInfo {
 	  this.regType = null;
 	  this.regYmd = null;
 	}
-}
-
-var butcheryInfo = {
-	"butcheryPlaceAddr": null,
-	"butcheryPlaceNm": null,
-	"butcheryYmd": null,
-	"firstGradeNm": null,
-	"gradeNm": null,
-	"inspectPassYn": null,
-	"inspectMethod": null,
-	"butcheryShape": null,
-	"butcheryWeight": null,
-	"backFatThickness": null,
-	"abattCode": null,
-	//"processPlaceNm": null,
 }
 
 class ButcheryInfo {
@@ -66,26 +42,6 @@ class ButcheryInfo {
 	}
 }
 
-var processInfo = {
-  // key (23) = YYYYMMDD (8) + lotNo (12) + seresNo(3)
-	"type": "processInfo",
-  "previousKeyHistory": [],
-  "nextKey": null,
-  //"trackHistory": null,
-  "corpNo": null,
-  "nextCorpNo": null,
-  "lotNo": null,
-  "processPlaceNm": null,
-  "processPlaceAddr": null,
-  "processYmd": null,
-  "processWeight": 0,
-  "processPart": null,
-  "purchasingCost": 0,
-  "sellingPrice": 0,
-  "cost": 0,
-  "marginRate": 0.0
-}
-
 class ProcessInfo {
   constructor(idIn) {
 		if (!idIn) {
@@ -112,6 +68,7 @@ class ProcessInfo {
     this.sellingPrice = 0;
     this.cost = [0];
     this.marginRate = 0.0;
+		this.boxReference = null;
 	}
 
   /*
@@ -181,15 +138,6 @@ var processType = {
 	]
 }
 
-var pigLotNo = {
-	//key = 'L1'(2) + today(6) + corpNo(4) + '000'(3)
-	"type": "pigLotNo",
-	"lotNoYmd": null,
-	"referenceKey": [],
-	"traceNoArr": [],
-	"labels": [],
-}
-
 class PigLotNo {
 	constructor(idIn) {
 		if (!idIn) {
@@ -205,6 +153,16 @@ class PigLotNo {
 		this.referenceKey = [];
 		this.traceNoArr = [];
 		this.labels = []
+		this.boxReference = null;
+	}
+}
+
+class PigBox {
+	constructor() {
+    this.type = "pigBox";
+		this.boxYmd = null;
+		this.nextCorpNm = null;
+		this.inBox = [];
 	}
 }
 
@@ -215,13 +173,14 @@ var trackHistory = {
 
 var schemas = {
   //"pig": pig,
-	"processInfo": processInfo,
-	"processType": processType,
-	"pigLotNo": pigLotNo,
-  "trackHistory": trackHistory,
+	//"processInfo": processInfo,
+	//"processType": processType,
+	//"pigLotNo": pigLotNo,
+  //"trackHistory": trackHistory,
 	"Pig": Pig,
 	"ProcessInfo": ProcessInfo,
-	"PigLotNo": PigLotNo
+	"PigLotNo": PigLotNo,
+	"PigBox": PigBox
 }
 
 module.exports = schemas;

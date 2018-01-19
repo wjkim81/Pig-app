@@ -94,8 +94,10 @@ module.exports = {
    */
   runQuery(queryString, callback) {
     db.list(queryString, (err, result) => {
-      if (!err) {
+      if (err) {
         console.log(`[error] db.list: ${err}`)
+        callback(null);
+      } else {
         callback(result);
       }
     });
