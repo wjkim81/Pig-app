@@ -132,7 +132,16 @@ return {
   query_box_with_date: function(req, res) {
     console.log(`Query box with date`);
     var boxDate = req.params.box_date;
-    console.log(boxDate);
+    
+    db.queryBoxWithDate(boxDate, (err, boxArr) => {
+      for (var i=0; i < boxArr.length; i++) {
+        console.log(boxArr);
+      }
+      if (!err)
+        res.send(boxArr)
+      else
+        res.send('error');
+    });
 
   },
 

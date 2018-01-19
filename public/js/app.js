@@ -146,38 +146,6 @@ app.controller('appController', function($scope, appFactory) {
     });
   }
 
-  $scope.queryBoxwithDate = function() {
-    if (!$scope.boxDateIn) {
-      alert('날짜 값을 제대로 입력해 주시기 바랍니다.')
-      return;
-    }
-    var boxDate = $scope.boxDateIn;
-
-    console.log(boxDate);
-    appFactory.queryBoxwithDate(boxDate, function(data) {
-      $scope.allBox = data;
-    });
-  }
-  
-  $scope.queryProcessInfoWithDate = function() {
-
-    if (!$scope.processDateIn) {
-      alert('날짜 값을 제대로 입력해 주시기 바랍니다.')
-      return;
-    }
-    var processDate = $scope.processDateIn;
-
-    appFactory.queryProcessInfo(processDate, function(data) {
-      $scope.allProcessInfo = data;
-      //console.log(data);
-      if ($scope.allProcessInfo == "error" || $scope.allProcessInfo.length == 0) {
-        $("#errorProcessDate").show();
-      } else {
-        $("#errorProcessDate").hide();
-      }
-    });
-  }
-
   $scope.createBox = function() {
     if (!$scope.lotNoBoxIn) {
       alert('묶음번호를 입력해 주시기 바랍니다.')
@@ -201,6 +169,39 @@ app.controller('appController', function($scope, appFactory) {
         $("#successCreateBox").show();
       } else {
         $("#successCreateBox").hide();
+      }
+    });
+  }
+
+  $scope.queryBoxwithDate = function() {
+    if (!$scope.boxDateIn) {
+      alert('날짜 값을 제대로 입력해 주시기 바랍니다.')
+      return;
+    }
+    var boxDate = $scope.boxDateIn;
+
+    //console.log(boxDate);
+    appFactory.queryBoxwithDate(boxDate, function(data) {
+      //console.log(data);
+      $scope.allBox = data;
+    });
+  }
+  
+  $scope.queryProcessInfoWithDate = function() {
+
+    if (!$scope.processDateIn) {
+      alert('날짜 값을 제대로 입력해 주시기 바랍니다.')
+      return;
+    }
+    var processDate = $scope.processDateIn;
+
+    appFactory.queryProcessInfo(processDate, function(data) {
+      $scope.allProcessInfo = data;
+      //console.log(data);
+      if ($scope.allProcessInfo == "error" || $scope.allProcessInfo.length == 0) {
+        $("#errorProcessDate").show();
+      } else {
+        $("#errorProcessDate").hide();
       }
     });
   }
@@ -229,6 +230,10 @@ app.controller('appController', function($scope, appFactory) {
   }
 
   $scope.queryProcessSummary = function() {
+    if (!$scope.summaryStartDateIn || !$scope.summaryEndDateIn) {
+      alert('날짜 값을 제대로 입력해 주시기 바랍니다.')
+      return;
+    }
     var dateRangeIn = $scope.summaryStartDateIn + '-' + $scope.summaryEndDateIn;
 
     console.log(dateRangeIn);

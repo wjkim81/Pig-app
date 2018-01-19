@@ -80,6 +80,7 @@ module.exports = {
       var updatePigs = function(done) {
         //console.log('updatePigs');
         var traceNoEl, traceNo, pigNo;
+
         for (var i = 0; i < traceNoArr.length; i++) {
         /**
          * [ErrorCheck] traceNo이 이미 있을 때는 넣지 말아야 한다.
@@ -101,10 +102,14 @@ module.exports = {
               //return;
             }
           
+
             if (result[0].doc) {
               if (!result[0].doc.processed) {
                 result[0].doc.processed = true;
               
+                console.log(`result[0].doc.butcheryInfo.butcheryWeight`)
+                newPigLotNo.lotNoTotalWeight += result[0].doc.butcheryInfo.butcheryWeight;
+
                 newHistory = [result[0].key, newPigLotNo._id];
                 if (result[0].doc.processHistory.indexOf(newHistory) === -1)
                   result[0].doc.processHistory.push([result[0].key, newPigLotNo._id]);
@@ -128,13 +133,18 @@ module.exports = {
       }
 
       var insertNewPigLotNo = function(done) {
-        //console.log('insertNewPigLotNo');
-        //console.log(newLotNo);
+        setTimeout(function() {
+          console.log('3000ms')
+          console.log('lotNoTotalWeight: ');
+          console.log(newPigLotNo.lotNoTotalWeight);
+          db.insert(newPigLotNo, newLotNo, (err, insesrtResult) => {
+            console.log(`[insert] ${newPigLotNo._id}`);
+            done(err, newLotNo);
+          });
+        }, 3000);
+
         // Updating pigLotNo
-        db.insert(newPigLotNo, newLotNo, (err, insesrtResult) => {
-          console.log(`[insert] ${newPigLotNo._id}`);
-          done(err, newLotNo);
-        });
+        //newPigLotNo.lotNoTotalWeight = lotNoTatalWeight;
       }
 
       tasks = [
@@ -145,7 +155,7 @@ module.exports = {
           insertNewPigLotNo(callback);
         }];
 
-      
+
       async.series(tasks, (asyncErr, asyncResult) => {
         /**
          *  ErrorCheck: check if asyncErr[0] or asyncError[1]
@@ -244,7 +254,7 @@ module.exports = {
     };
     //console.log(queryString);
     db.runViewWithQuery('pigsDoc', 'processInfo-by-lotNo-view', queryString, (error, processResult) => {
-      console.log(processResult);
+      //console.log(processResult);
 
       var seriesNo = 0;
       if (processResult.rows[0])
@@ -262,10 +272,20 @@ module.exports = {
 
       //console.log(processInfo);
       //console.log(processNo);
-      db.insert(processInfo, processNo, (err, body) => {
-        //console.log(body);
-        callback(err, processNo);
-      });
+      
+      queryString = {
+        "keys": [lotNo]
+      }
+      db.runFetch(queryString, (err, docResults) => {
+        console.log(docResults);
+        console.log(docResults.rows[0].doc);
+        processInfo.lotNoTotalWeight = docResults.rows[0].doc.lotNoTotalWeight;
+        db.insert(processInfo, processNo, (err, body) => {
+          //console.log(body);
+          callback(err, processNo);
+        });
+      })
+
     });
   },
 
@@ -284,13 +304,42 @@ module.exports = {
     //console.log(newBox);
     
     db.insert(newBox, null, (insertErr, insertResult) => {
-      console.log(insertResult);
+      //console.log(insertResult);
       callback(insertErr, insertResult);
     })
   },
 
-  queryBoxWith(boxDate, callback) {
+  queryBoxWithDate(boxDate, callback) {
 
+    var queryString = {
+      "key": boxDate
+    };
+
+    db.runViewWithQuery('pigsDoc', 'pigBox-by-boxYmd-view', queryString, (err, pibBoxKeys) => {
+      if (err) {
+        console.log('[error] queryBoxWith');
+        callback(err, null);
+        return;
+      }
+      
+      //console.log(pibBoxKeys);
+      keysArr = [];
+      for (var i = 0; i < pibBoxKeys.rows.length; i++) {
+        //console.log(pigLotNoKeys.rows[i].id)
+        keysArr.push(pibBoxKeys.rows[i].id);
+      }
+      console.log(keysArr);
+
+      queryString = {
+        "keys": keysArr
+      }
+      db.runFetch(queryString, (errFetch, docResults) => {
+        if (errFetch) console.log('[error] queryBoxWith');
+
+        console.log(docResults);
+        callback(errFetch, docResults.rows);
+      })
+    });
   },
 
   updateProcessInfoFromApp(processInfo, callback) {
@@ -456,6 +505,7 @@ module.exports = {
       "endkey": [endDate, null, null],
       "group_level": 3
     };
+    console.log(queryString);
     db.runViewWithQuery('pigsDoc', 'processInfo-summary-view', queryString, (err, viewResult) => {
       //console.log(viewResult.rows);
       if (err) console.log(`[error] queryProcessSummary: ${err}`);

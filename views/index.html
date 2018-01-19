@@ -269,11 +269,10 @@
             <th>거래처</th>
           </tr>
           <tr ng-repeat="box in allBox">
-            <td>{{ processInfo.id }}</td>
-            <td>{{ processInfo.doc.boxYmd }}</td>
-            <td>{{ processInfo.doc.lotNo }}</td>
-            <td>{{ processInfo.doc.nextCorpNm }}</td>
-            <td>{{ processInfo.doc.inBox }}</td>
+            <td>{{ box.id }}</td>
+            <td>{{ box.doc.boxYmd }}</td>
+            <td>{{ box.doc.inBox }}</td>
+            <td>{{ box.doc.nextCorpNm }}</td>
           </tr>
         </table>
       </div>
@@ -312,7 +311,9 @@
             <th>묶음번호</th>
             <th>유통번호</th>
             <th>갯수</th>
+            <th>묶음번호 총 중량(kg)</th>
             <th>유통중량(kg)</th>
+            <th>수주율</th>
             <th>원가</th>
             <th>판매가</th>
           </tr>
@@ -323,7 +324,9 @@
             <td>{{ processSummary.value[0] }}</td>
             <td>{{ processSummary.value[1] }}</td>
             <td>{{ processSummary.value[2] }}</td>
+            <td>{{ processSummary.value[1] / processSummary.value[2] }}</td>
             <td>{{ processSummary.value[3] }}</td>
+            <td>{{ processSummary.value[4] }}</td>
           </tr>
         </table>
       </div>

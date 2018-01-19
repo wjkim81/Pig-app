@@ -62,13 +62,14 @@ class ProcessInfo {
     this.processPlaceNm = null;
     this.processPlaceAddr = null;
     this.processYmd = null;
-    this.processWeight = 0;
+    this.processWeight = 0.0;
     this.processPart = null;
     this.purchasingCost = 0;
     this.sellingPrice = 0;
     this.cost = [0];
     this.marginRate = 0.0;
 		this.boxReference = null;
+		this.lotNoTotalWeight = 0.0;
 	}
 
   /*
@@ -154,6 +155,7 @@ class PigLotNo {
 		this.traceNoArr = [];
 		this.labels = []
 		this.boxReference = null;
+		this.lotNoTotalWeight = 0.0;
 	}
 }
 
