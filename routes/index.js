@@ -1,3 +1,5 @@
+'use strict';
+
 /**
  * index.js file manages routings for various addresses.
  */
@@ -38,8 +40,21 @@ nunjucks.configure('views', {
  * Never define actions here
  * 
  */
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header('Access-Control-Allow-Methods', 'DELETE, PUT');
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
 
-app.use('/', (req, res, next) => {
+app.use('/admin', (req, res, next) => {
+  console.log('superlogin: ');
+  console.log(sl.passport);
+  //if (sl.passport.authen)
+  //if (sl.requireAuth) {
+  //  res.redirect('login');
+  //} else {
+  //console.log(req.user);
   //if (superlogin.authenticated()) {
   //  console.log('authenticated')
   //}
@@ -65,7 +80,8 @@ app.use('/', (req, res, next) => {
   console.log('res');
   console.log(res);
   */
-  next();
+//    next();
+//  }
 });
 
 app.get('/', (req, res) => {

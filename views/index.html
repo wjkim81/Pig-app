@@ -7,6 +7,7 @@
     <link rel="icon" href="/static/img/favicon.png" type="image/gif">
 
     <!-- require jquery and bootstrap scripts -->
+    <!--<link rel="stylesheet" href="static/css/eatformation.css" type="text/css">-->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
@@ -194,7 +195,7 @@
           </tr>
           <tr ng-repeat="lotNo in allLotNos">
             <td>{{ lotNo.id }}</td>
-            <td>{{ lotNo.doc.lotNoYmd }}</td>
+            <td>{{ lotNo.doc.pigLotNoYmd }}</td>
             <td>{{ lotNo.doc.traceNoArr }}</td>
           </tr>
         </table>
@@ -324,7 +325,7 @@
             <td>{{ processSummary.value[0] }}</td>
             <td>{{ processSummary.value[1] }}</td>
             <td>{{ processSummary.value[2] }}</td>
-            <td>{{ processSummary.value[1] / processSummary.value[2] }}</td>
+            <td>{{ processSummary.value[2] / processSummary.value[1] * 100 }}</td>
             <td>{{ processSummary.value[3] }}</td>
             <td>{{ processSummary.value[4] }}</td>
           </tr>

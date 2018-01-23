@@ -31,8 +31,8 @@ app.use('/static', express.static(path.join(__dirname,'../public')));
  * We will change this module to directly down csv or xml from ekape (축산품질평가원) using open API
  * 
  */
-app.use(fileUpload());
-app.post('/upload/', upload.uploadFiles);
+//app.use(fileUpload());
+//app.post('/upload/', upload.uploadFiles);
 
 // SuperLogin
 const middlewares      = require('../middlewares')
