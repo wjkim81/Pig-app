@@ -15,6 +15,8 @@ const helpers          = require('./helpers');
 const models           = require('./models');
 const pigsdb           = require('./models/pigs');
 
+const schedule         = require('./helpers/schedule');
+
 
 //let app = express()
 // express app is defined in routes/index.js because to configure nunjucks using app.get routing than router
@@ -35,6 +37,7 @@ http.createServer(app).listen(port, '0.0.0.0', function() {
   console.log("Live on port: " + port);
 });
 */
+scheduleLoadPigs;
 
 //console.log('app.js')
 app.listen(port, '0.0.0.0', function() {

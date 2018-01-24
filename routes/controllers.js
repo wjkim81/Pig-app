@@ -39,11 +39,24 @@ return {
     });
   },
 
+  get_summary_pigs_by_date: function(req, res) {
+    console.log(`Summary of pigs per date`);
+
+    db.getSummaryPigsByDate((err, results) => {
+      if (!err) {
+        res.send(results.rows);
+      } else {
+        res.send('error');
+      }
+    });
+    
+  },
+
+
   query_pigs_with_date: function(req, res) {
     var queryYmd = req.params.query_ymd;
-
     console.log(`Getting pigs from database issued on date ${queryYmd}`);
-
+    
     db.queryPigsWithDate(queryYmd, (err, pigsArr) => {
       if (!err) {
         //console.log(pigsArr);

@@ -511,5 +511,25 @@ module.exports = {
       if (err) console.log(`[error] queryProcessSummary: ${err}`);
       callback(err, viewResult.rows);
     })
+  },
+
+  getSummaryPigsByDate(callback) {
+    var queryString ={
+      "startKey": "20000101",
+      "endKey": "30000101",
+      "group_level": 1,
+      "limit": 10,
+      "descending": true
+    }
+    db.runViewWithQuery('pigsDoc', 'pigs-by-issueYmd-view', queryString, (err, viewResults) => {
+      if (err) {
+        console.log(`[error] getSummaryPigsByDate: ${err}`);
+        callback(err, null);
+        return;
+      } else {
+        //console.log(viewResults);
+        callback(null, viewResults);
+      }
+    })
   }
 }

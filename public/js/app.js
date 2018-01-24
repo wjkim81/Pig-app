@@ -47,6 +47,13 @@ app.controller('appController', function($scope, appFactory) {
     });
   }
 
+  $scope.getSummaryPigsByDate = function() {
+
+    appFactory.getSummaryPigsByDate(function(data) {
+      //console.log(data);
+      $scope.pigsByDate = data;
+    });
+  }
 
   // Create angular function for traceability system
   $scope.queryPigsWithDate = function() {
@@ -256,7 +263,15 @@ app.factory('appFactory', function($http) {
 
   // For traceability system
   factory.downloadButechryInfoFromEkape = function(issueYmd, callback) {
+
     $http.get('/download_butcheryinfo_from_ekape/'+issueYmd).success(function(output) {
+      callback(output);
+    });
+  }
+
+  factory.getSummaryPigsByDate = function(callback) {
+
+    $http.get('/get_summary_pigs_by_date/').success(function(output) {
       callback(output);
     });
   }

@@ -1,5 +1,7 @@
-http        = require('http');
-querystring = require('querystring')
+const http        = require('http');
+const querystring = require('querystring')
+
+const SLC         = require('../middlewares/superlogin/superlogin-client')
 
 var user = {
   "name": "Kim Wonjin",

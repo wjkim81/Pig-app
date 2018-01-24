@@ -136,7 +136,44 @@
           <% endfor %>
         </table>
         #>
-      </div>  
+      </div>
+
+      <div class="outer-div">
+        <div class="form-group">
+          <label>최근 입고현황 정리</label><br>
+          <input id="getSummaryPigsByDate" type="submit" value="조회" class="btn btn-primary" ng-click="getSummaryPigsByDate()">
+        </div>
+
+        <table id="pigsByDate" class="table" align="center">
+          <tr>
+            <th>날짜</th>
+            <th>{{ pigsByDate[9].key }}</th>
+            <th>{{ pigsByDate[8].key }}</th>
+            <th>{{ pigsByDate[7].key }}</th>
+            <th>{{ pigsByDate[6].key }}</th>
+            <th>{{ pigsByDate[5].key }}</th>
+            <th>{{ pigsByDate[4].key }}</th>
+            <th>{{ pigsByDate[3].key }}</th>
+            <th>{{ pigsByDate[2].key }}</th>
+            <th>{{ pigsByDate[1].key }}</th>
+            <th>{{ pigsByDate[0].key }}</th>
+          </tr>
+          
+          <tr>
+            <td>입고 개체 수</td>
+            <td>{{ pigsByDate[9].value }}</td>
+            <td>{{ pigsByDate[8].value }}</td>
+            <td>{{ pigsByDate[7].value }}</td>
+            <td>{{ pigsByDate[6].value }}</td>
+            <td>{{ pigsByDate[5].value }}</td>
+            <td>{{ pigsByDate[4].value }}</td>
+            <td>{{ pigsByDate[3].value }}</td>
+            <td>{{ pigsByDate[2].value }}</td>
+            <td>{{ pigsByDate[1].value }}</td>
+            <td>{{ pigsByDate[0].value }}</td>
+          </tr>
+        </table>
+      </div>
 
       <div class="outer-div">
         <div class="form-group">
@@ -334,6 +371,6 @@
     </div>
   </body>
   <!-- requiring the angular page -->
-  <script type="text/javascript" src="/static/js/eatformation.js"></script>
+  <!--<script type="text/javascript" src="/static/js/eatformation.js"></script>-->
   <script type="text/javascript" src="/static/js/app.js"></script>
 </html>
