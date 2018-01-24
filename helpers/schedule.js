@@ -2,7 +2,7 @@ var db            = require('../models/pigs')
 var schedule      = require('node-schedule');
 var utils         = require('./utils')
  
-module.exports = scheduleLoadPigs = schedule.scheduleJob('00 * * * * *', function(){
+module.exports = scheduleLoadPigs = schedule.scheduleJob('00 00 20 * * *', function(){
   var date = new Date();
   console.log('------------------------')
   console.log(date);
