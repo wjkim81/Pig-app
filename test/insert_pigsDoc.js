@@ -1,4 +1,4 @@
-var db        = require('../models/pigs')
+var db        = require('../models/db')
 var fs        = require('fs');
 
 var pigsDocStr = fs.readFileSync('pigsDoc.json');  
