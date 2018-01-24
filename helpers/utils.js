@@ -171,12 +171,12 @@ var self = module.exports = {
   getTodayYYYYMMDD() {
     var date = new Date();
 
-    todayYYYY = date.getFullYear();
-    todayMM = (date.getMonth() + 1).toString();
-    todayMM = pad(2, todayMM, '0');
-    todayDD = date.getDate().toString();
-    todayDD = pad(2, todayDD, '0');
-    today = todayYYYY + todayMM + todayDD;
+    var todayYYYY = date.getFullYear();
+    var todayMM = (date.getMonth() + 1).toString();
+    var todayMM = pad(2, todayMM, '0');
+    var todayDD = date.getDate().toString();
+    var todayDD = pad(2, todayDD, '0');
+    var today = todayYYYY + todayMM + todayDD;
 
     return today;
   }

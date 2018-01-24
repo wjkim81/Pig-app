@@ -6,6 +6,17 @@
 // SPDX-License-Identifier: Apache-2.0
 'use strict';
 
+var converDateToYYYYMMDD = function(date) {
+  var todayYYYY = date.getFullYear();
+  var todayMM = (date.getMonth() + 1).toString();
+  var todayMM = todayMM.padStart(2, '0');
+  var todayDD = date.getDate().toString();
+  var todayDD = todayDD.padStart(2, '0');
+  var today = todayYYYY + todayMM + todayDD;
+  
+  return today;
+}
+
 var app = angular.module('application', []);
 
 // Angular Controller
@@ -22,16 +33,20 @@ app.controller('appController', function($scope, appFactory) {
   $("#successUpdateProcess").hide();
   $("#errorSummaryInfo").hide();
 
+  //var today = new Date();
+  //$scope.issueYmd = today.getFullYear() + '/' + today.getMonth() + 1 + '/' + today.getDay();
+  //console.log($scope.issueYmd);
+
   $scope.downloadButechryInfoFromEkape = function() {
-    //console.log($scope.issueYmd)
     if (!$scope.issueYmd) {
       alert('날짜 값을 제대로 입력해 주시기 바랍니다.')
       return;
     }
 
+    var issueYmd = converDateToYYYYMMDD($scope.issueYmd);
+    //console.log(issueYmd);
+
     $("#successDownload").hide();
-    
-    var issueYmd = $scope.issueYmd;
 
     appFactory.downloadButechryInfoFromEkape(issueYmd, function(data) {
 
