@@ -64,7 +64,7 @@ module.exports = {
     /**
      * [ErrorCheck] 만약 우리가 이미 가공한 도체번호를 다시 묶음번호에 넣을려고 할 때는 어떻게 해야 하나..
      */
-    db.runQuery(queryString, (result) => {
+    db.list(queryString, (err, result) => {
       //console.log(result)
       var seriesNo = result.rows.length;
       var newLotNo = 'L1' + today + corpNo + pad(3, seriesNo.toString(), '0');
@@ -358,7 +358,7 @@ module.exports = {
       if (queryResult.rows.length == 0) {
         callback("No processInfo with processInfo Number", null);
       } else {
-        db.select(queryResult.rows[0].id, (selectErr, resultDoc) => {
+        db.get(queryResult.rows[0].id, (getErr, resultDoc) => {
           //console.log(resultDoc);
           newProcessInfo = resultDoc;
           newProcessInfo.lotNo = processInfo[1];
@@ -475,7 +475,8 @@ module.exports = {
   queryPigsWithDate(queryYmd, callback) {
     // Get pig documents where processed is false
     var queryString = {
-      "key": queryYmd
+      "key": queryYmd,
+      "reduce": false
     }
     db.getDocsFromViewWithQuery('pigsDoc', 'pigs-by-issueYmd-view', queryString, (err, queryResult) => {
       //console.log(err, body);

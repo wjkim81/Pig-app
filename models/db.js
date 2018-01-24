@@ -30,7 +30,7 @@ module.exports = {
    * @param {*} key 
    * @param {*} callback 
    */
-  select(key, callback) {
+  get(key, callback) {
     db.get(key, (err, resultDoc) => {
       if (err) console.log(`[error] db.get ${err}`);
       callback(err, resultDoc);
@@ -92,13 +92,13 @@ module.exports = {
    *   "endkey": "20171220"
    * }
    */
-  runQuery(queryString, callback) {
-    db.list(queryString, (err, result) => {
+  list(queryString, callback) {
+    db.list(queryString, (err, results) => {
       if (err) {
         console.log(`[error] db.list: ${err}`)
-        callback(null);
+        callback(err, null);
       } else {
-        callback(result);
+        callback(null, results);
       }
     });
   },
@@ -142,6 +142,7 @@ module.exports = {
   },
 
   getDocsFromViewWithQuery(designname, viewname, queryString, callback) {
+    console.log(queryString);
     db.view(designname, viewname, queryString, (err, resultKeys) => {
       if (err) {
         console.log(`[error] getDocsFromViewWithQuery: ${err}`);
@@ -150,19 +151,21 @@ module.exports = {
       }
 
       keysArr = [];
+      console.log(resultKeys);
 
       for (var i = 0; i < resultKeys.rows.length; i++) {
         keysArr.push(resultKeys.rows[i].id);
       }
 
-      var queryString = {
+      var queryStr = {
         "keys": keysArr
       }
 
-      db.fetch(queryString, (errFetch, resultDocs) => {
+      console.log(queryStr);
+      db.fetch(queryStr, (errFetch, resultDocs) => {
         if (errFetch) console.log(`[error] queryProcessInfoWithDate: errFetch`);
 
-        //console.log(docResults.rows);
+        console.log(resultDocs.rows);
         callback(errFetch, resultDocs.rows);
       })
     })
