@@ -1,5 +1,4 @@
-var nano      = require('nano')('http://localhost:5984');
-var db        = nano.db.use('nokdondb');
+var db        = require('../models/pigs')
 var fs        = require('fs');
 
 var pigsDocStr = fs.readFileSync('pigsDoc.json');  
