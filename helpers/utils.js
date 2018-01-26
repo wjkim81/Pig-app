@@ -152,8 +152,8 @@ var self = module.exports = {
 
     pig.butchertyInfo.abattStartNo = ekapeJsonPig.abattStartNo;
     pig.butchertyInfo.abattEndNo = ekapeJsonPig.abattEndNo;
-    pig.butchertyInfo.judgeBreedCd = ekapeJsonPig.judgeBreedCd;
-    pig.butchertyInfo.judgeBreedNm = ekapeJsonPig.judgeBreedNm;
+    pig.lsTypeCd = ekapeJsonPig.judgeBreedCd;
+    pig.lsTypeNm = ekapeJsonPig.judgeBreedNm;
     pig.butchertyInfo.auctYmd = ekapeJsonPig.auctYmd;
     pig.butchertyInfo.costAmt = ekapeJsonPig.costAmt;
     pig.butchertyInfo.belly = ekapeJsonPig.belly;

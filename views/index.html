@@ -190,8 +190,46 @@
             <th>개체번호</th>
             <th>출하농장</th>
             <th>도축일자</th>
-            <th>개체등급</th>
-            <th>도체중</th>
+            <th>일차등급</th>
+            <th>최종등급</th>
+            <th>도체중(kg)</th>
+
+            <th>신청자사업자번호</th>
+            <th>신청자명</th>
+            <th>작업장(도축장)코드</th>
+            <th>작업장주소</th>
+            <th>작업장명</th>
+            <th>확인서발급일자</th>
+            <th>확인서발급번호</th>
+            <th>도축구분코드</th>
+            <th>도축구분</th>
+            <th>돼지품종코드</th>
+            <th>돼지품종</th>
+            
+            <th>판정일자</th>
+            <th>검사통과</th>
+            <th>등급판정구분코드</th>
+            <th>등급판정구분</th>
+            <th>도체구분(탕박:Y,박피:N)</th>
+
+            <th>도체구분(탕박,박피)</th>
+            <th>등지방두께(mm)</th>
+            
+            <th>경락일자</th>
+            <th>경락단가(원/kg)</th>
+
+            <th>비육상태(Y,1,2)</th>
+            <th>삼겹살상태(Y,1,2)</th>
+            <th>지방부착상태</th>
+            <th>지방침착도</th>
+            <th>육색</th>
+
+            <th>육조직감</th>
+            <th>지방색</th>
+            <th>지방질</th>
+            <th>결함항목번호</th>
+            <th>결함하향</th>
+            <th>등외번호</th>
           </tr>
           
           <tr ng-repeat="pig in pigsInfo">
@@ -200,7 +238,46 @@
             <td>{{ pig.doc.farmInfo.farmerNm }}</td>
             <td>{{ pig.doc.butcheryInfo.butcheryYmd }}</td>
             <td>{{ pig.doc.butcheryInfo.firstGradeNm }}</td>
+            <td>{{ pig.doc.butcheryInfo.gradeNm }}</td>
             <td>{{ pig.doc.butcheryInfo.butcheryWeight }}</td>
+
+            <td>{{ pig.doc.butcheryInfo.corpNo }}</td>
+            <td>{{ pig.doc.butcheryInfo.corpNm }}</td>
+            <td>{{ pig.doc.butcheryInfo.butcheryCode }}</td>
+            <td>{{ pig.doc.butcheryInfo.butcheryPlaceAddr }}</td>
+            <td>{{ pig.doc.butcheryInfo.butcheryPlaceNm }}</td>
+            <td>{{ pig.doc.butcheryInfo.issueYmd }}</td>
+            <td>{{ pig.doc.butcheryInfo.issueNo }}</td>
+            <td>{{ pig.doc.butcheryInfo.butcheryUseCd }}</td>
+            <td>{{ pig.doc.butcheryInfo.butcheryUseNm }}</td>
+            <td>{{ pig.doc.lsTypeCd }}</td>
+            <td>{{ pig.doc.lsTypeNm }}</td>
+            
+            <td>{{ pig.doc.butcheryInfo.judgeYmd }}</td>
+            <td>{{ pig.doc.butcheryInfo.inspectPassYn }}</td>
+            <td>{{ pig.doc.butcheryInfo.inspectCode }}</td>
+            <td>{{ pig.doc.butcheryInfo.inspectMethod }}</td>
+            <td>{{ pig.doc.butcheryInfo.skinYn }}</td>
+
+            <td>{{ pig.doc.butcheryInfo.butcheryShape }}</td>
+            <td>{{ pig.doc.butcheryInfo.backFatThickness }}</td>
+            
+            <td>{{ pig.doc.butcheryInfo.auctYmd }}</td>
+            <td>{{ pig.doc.butcheryInfo.costAmt }}</td>
+
+            <td>{{ pig.doc.butcheryInfo.fatup }}</td>
+            <td>{{ pig.doc.butcheryInfo.belly }}</td>
+            <td>{{ pig.doc.butcheryInfo.fatstick }}</td>
+            <td>{{ pig.doc.butcheryInfo.insfat }}</td>
+            <td>{{ pig.doc.butcheryInfo.yuksak }}</td>
+
+            <td>{{ pig.doc.butcheryInfo.tissue }}</td>
+            <td>{{ pig.doc.butcheryInfo.fatsak }}</td>
+            <td>{{ pig.doc.butcheryInfo.fatqual }}</td>
+            <td>{{ pig.doc.butcheryInfo.defectCode }}</td>
+            <td>{{ pig.doc.butcheryInfo.defect }}</td>
+            <td>{{ pig.doc.butcheryInfo.offgradeNo }}</td>
+
           </tr>
         </table>
       </div>

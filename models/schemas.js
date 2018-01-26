@@ -40,8 +40,7 @@ class ButcheryInfo {
     this.fatup = null;
 	  //"processPlaceNm": null,
 
-		this.abattStartNo = null;
-		this.abattEndNo = null;
+
 		this.judgeBreedCd = null;
 		this.judgeBreedNm = null;
 

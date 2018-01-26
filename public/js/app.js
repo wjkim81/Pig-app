@@ -83,7 +83,7 @@ app.controller('appController', function($scope, appFactory) {
     //console.log(issueYmd);
     appFactory.queryPigsWithDate(queryDate, function(data) {
       //console.log('queryPigsWithDate')
-      console.log(data);
+      //console.log(data);
       $scope.pigsInfo = data;
     });
   }
