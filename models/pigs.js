@@ -270,14 +270,14 @@ module.exports = {
   queryLotNoWithDate(pigLotNoYmd, callback) {
     //console.log(`pigLotNoYmd: ${pigLotNoYmd}`)
     var queryString = {
-      "key": pigLotNoYmd._id,
+      "key": pigLotNoYmd,
       "reduce": false
     };
 
     //console.log(createdDate);
     //console.log(queryString);
     db.runViewWithQuery('pigsDoc', 'pigLotNo-by-lotNoYmd-view', queryString, (err, pigLotNoKeys) => {
-      console.log(pigLotNoKeys);
+      //console.log(pigLotNoKeys);
       if (err) {
         console.log('[error] queryLotNoWithDate');
         callback(err, null);
