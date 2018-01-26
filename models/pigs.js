@@ -62,7 +62,12 @@ module.exports = {
         }
         //console.log('viewResult: ');
         //console.log(viewResult);
-        var seriesNo = viewResult.rows[0].value;
+        var seriesNo;
+        if (viewResults.rows.length === 0) {
+          seriesNo = 0;
+        } else {
+          seriesNo = viewResult.rows[0].value;
+        }
         //console.log('seriesNo: ' + seriesNo)
 
         let today = utils.getTodayYYMMDD();
