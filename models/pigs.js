@@ -63,7 +63,7 @@ module.exports = {
         //console.log('viewResult: ');
         //console.log(viewResult);
         var seriesNo;
-        if (viewResults.rows.length === 0) {
+        if (viewResult.rows.length === 0) {
           seriesNo = 0;
         } else {
           seriesNo = viewResult.rows[0].value;
