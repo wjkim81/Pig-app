@@ -180,7 +180,7 @@
           <label>날짜별 입고된 처리 현황 조회</label><br>
           <h5 style="color:red;margin-bottom:2%" id="errorPigDate">Error: 날짜를 다시 입력해 주세요</h5>
         
-          날짜 입력: <input id="queryLotNoWithDateIn" class="form-control" type="text" placeholder="Ex: 20171227" ng-model="queryButcheryYmdIn">
+          날짜 입력: <input id="queryLotNoWithDateIn" class="form-control" type="date" placeholder="Ex: 20171227" ng-model="queryButcheryYmdIn">
           <input id="queryPigsWithDate" type="submit" value="조회" class="btn btn-primary" ng-click="queryPigsWithDate()">
         </div>
 
@@ -220,7 +220,7 @@
           <label>묶음번호 조회</label><br>
           <h5 style="color:red;margin-bottom:2%" id="errorLotNoDate">Error: 날짜를 다시 입력해 주세요</h5>
         
-          날짜 입력: <input id="queryLotNoWithDateIn" class="form-control" type="text" placeholder="Ex: 20171227" ng-model="lotNoDateIn">
+          날짜 입력: <input id="queryLotNoWithDateIn" class="form-control" type="date" placeholder="Ex: 20171227" ng-model="lotNoDateIn">
           <input id="queryLotNoWithDate" type="submit" value="조회" class="btn btn-primary" ng-click="queryLotNoWithDate()">
         </div>
 
@@ -233,7 +233,7 @@
           <tr ng-repeat="lotNo in allLotNos">
             <td>{{ lotNo.id }}</td>
             <td>{{ lotNo.doc.pigLotNoYmd }}</td>
-            <td>{{ lotNo.doc.traceNoArr }}</td>
+            <td>{{ lotNo.doc.traceNoPigNoArr }}</td>
           </tr>
         </table>
       </div>
@@ -253,7 +253,7 @@
           <label>유통번호 조회</label><br>
           <h5 style="color:red;margin-bottom:2%" id="errorProcessDate">Error: 날짜를 다시 입력해 주세요.</h5>
         
-          날짜 입력: <input id="queryProcessInfoWithDate" class="form-control" type="text" placeholder="Ex: 20171227" ng-model="processDateIn">
+          날짜 입력: <input id="queryProcessInfoWithDate" class="form-control" type="date" placeholder="Ex: 20171227" ng-model="processDateIn">
           <input id="queryProcessInfoWithDate" type="submit" value="조회" class="btn btn-primary" ng-click="queryProcessInfoWithDate()">
         </div>
 
@@ -295,7 +295,7 @@
           <label>박스 묶음 날짜별 조회</label>
           <h5 style="color:green;margin-bottom:2%" id="errorBoxDate">Error: 날짜를 다시 입력해 주세요.</h5>
 
-          날짜 입력: <input id="queryBoxwithDate" class="form-control" type="text" placeholder="Ex: 20171227" ng-model="boxDateIn">
+          날짜 입력: <input id="queryBoxwithDate" class="form-control" type="date" placeholder="Ex: 20171227" ng-model="boxDateIn">
           <input id="queryBoxwithDate" type="submit" value="조회" class="btn btn-primary" ng-click="queryBoxwithDate()">
         </div>
 
@@ -338,8 +338,8 @@
           <label>날짜별 유통 현황 정리</label><br>
           <h5 style="color:red;margin-bottom:2%" id="errorSummaryInfo">Error: 날짜를 다시 입력해 주세요</h5>
         
-          시작 날짜: <input id="queryProcessSummary" class="form-control" type="text" placeholder="Ex: 20171220" ng-model="summaryStartDateIn">
-          완료 날짜: <input id="queryProcessSummary" class="form-control" type="text" placeholder="Ex: 20171230" ng-model="summaryEndDateIn">
+          시작 날짜: <input id="queryProcessSummary" class="form-control" type="date" placeholder="Ex: 20171220" ng-model="summaryStartDateIn">
+          완료 날짜: <input id="queryProcessSummary" class="form-control" type="date" placeholder="Ex: 20171230" ng-model="summaryEndDateIn">
           <input id="queryProcessSummary" type="submit" value="조회" class="btn btn-primary" ng-click="queryProcessSummary()">
         </div>
 
@@ -362,7 +362,7 @@
             <td>{{ processSummary.value[0] }}</td>
             <td>{{ processSummary.value[1] }}</td>
             <td>{{ processSummary.value[2] }}</td>
-            <td>{{ processSummary.value[2] / processSummary.value[1] * 100 }}</td>
+            <td>{{ processSummary.value[2] / processSummary.value[1]}}</td>
             <td>{{ processSummary.value[3] }}</td>
             <td>{{ processSummary.value[4] }}</td>
           </tr>

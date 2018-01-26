@@ -142,7 +142,7 @@ module.exports = {
   },
 
   getDocsFromViewWithQuery(designname, viewname, queryString, callback) {
-    console.log(queryString);
+    //console.log(queryString);
     db.view(designname, viewname, queryString, (err, resultKeys) => {
       if (err) {
         console.log(`[error] getDocsFromViewWithQuery: ${err}`);
@@ -151,7 +151,7 @@ module.exports = {
       }
 
       keysArr = [];
-      console.log(resultKeys);
+      //console.log(resultKeys);
 
       for (var i = 0; i < resultKeys.rows.length; i++) {
         keysArr.push(resultKeys.rows[i].id);
@@ -161,11 +161,11 @@ module.exports = {
         "keys": keysArr
       }
 
-      console.log(queryStr);
+      //console.log(queryStr);
       db.fetch(queryStr, (errFetch, resultDocs) => {
         if (errFetch) console.log(`[error] queryProcessInfoWithDate: errFetch`);
 
-        console.log(resultDocs.rows);
+        //console.log(resultDocs.rows);
         callback(errFetch, resultDocs.rows);
       })
     })

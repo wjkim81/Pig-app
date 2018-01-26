@@ -149,6 +149,24 @@ var self = module.exports = {
     //console.log(pig);
 
     //pig._id = pig.butcheryInfo.butcheryYmd + pig.traceNo + pig.pigNo;
+
+    pig.butchertyInfo.abattStartNo = ekapeJsonPig.abattStartNo;
+    pig.butchertyInfo.abattEndNo = ekapeJsonPig.abattEndNo;
+    pig.butchertyInfo.judgeBreedCd = ekapeJsonPig.judgeBreedCd;
+    pig.butchertyInfo.judgeBreedNm = ekapeJsonPig.judgeBreedNm;
+    pig.butchertyInfo.auctYmd = ekapeJsonPig.auctYmd;
+    pig.butchertyInfo.costAmt = ekapeJsonPig.costAmt;
+    pig.butchertyInfo.belly = ekapeJsonPig.belly;
+    pig.butchertyInfo.fatstick = ekapeJsonPig.fatstick;
+    pig.butchertyInfo.insfat = ekapeJsonPig.insfat;
+    pig.butchertyInfo.yuksak = ekapeJsonPig.yuksak;
+    pig.butchertyInfo.tissue = ekapeJsonPig.tissue;
+    pig.butchertyInfo.fatsak = ekapeJsonPig.fatsak;
+    pig.butchertyInfo.fatqual = ekapeJsonPig.fatqual;
+    pig.butchertyInfo.defectCode = ekapeJsonPig.defectCode;
+    pig.butchertyInfo.defect = ekapeJsonPig.defect;
+    pig.butchertyInfo.offgradeNo = ekapeJsonPig.offgradeNo;
+
     return pig;
   },
 

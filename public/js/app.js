@@ -6,7 +6,7 @@
 // SPDX-License-Identifier: Apache-2.0
 'use strict';
 
-var converDateToYYYYMMDD = function(date) {
+var convertDateToYYYYMMDD = function(date) {
   var todayYYYY = date.getFullYear();
   var todayMM = (date.getMonth() + 1).toString();
   var todayMM = todayMM.padStart(2, '0');
@@ -43,7 +43,7 @@ app.controller('appController', function($scope, appFactory) {
       return;
     }
 
-    var issueYmd = converDateToYYYYMMDD($scope.issueYmd);
+    var issueYmd = convertDateToYYYYMMDD($scope.issueYmd);
     //console.log(issueYmd);
 
     $("#successDownload").hide();
@@ -78,8 +78,9 @@ app.controller('appController', function($scope, appFactory) {
       return;
     }
 
-    var queryDate = $scope.queryButcheryYmdIn;
+    var queryDate = convertDateToYYYYMMDD($scope.queryButcheryYmdIn);
 
+    //console.log(issueYmd);
     appFactory.queryPigsWithDate(queryDate, function(data) {
       //console.log('queryPigsWithDate')
       console.log(data);
@@ -118,13 +119,21 @@ app.controller('appController', function($scope, appFactory) {
 
 
     appFactory.createLotNo(traceNos, function(data){
-      $scope.newLotNo = data;
-
+      
+      if (data.error) {
+        $scope.newLotNo = data.error;
+        $("#successCreateLotNo").show();
+      } else {
+        $scope.newLotNo = data.newLotNo;
+         $("#successCreateLotNo").show();
+      }
+      /*
       if ($scope.newLotNo != "error") {
         $("#successCreateLotNo").show();
       } else {
         $("#successCreateLotNo").hide();
       }
+      */
     });
   }
 
@@ -134,7 +143,7 @@ app.controller('appController', function($scope, appFactory) {
       alert('날짜 값을 제대로 입력해 주시기 바랍니다.')
       return;
     }
-    var lotNoDateIn = $scope.lotNoDateIn;
+    var lotNoDateIn = convertDateToYYYYMMDD($scope.lotNoDateIn);
     //console.log(lotNoDate);
     
     appFactory.queryLotNoWithDate(lotNoDateIn, function(data) {
@@ -200,7 +209,7 @@ app.controller('appController', function($scope, appFactory) {
       alert('날짜 값을 제대로 입력해 주시기 바랍니다.')
       return;
     }
-    var boxDate = $scope.boxDateIn;
+    var boxDate = convertDateToYYYYMMDD($scope.boxDateIn);
 
     //console.log(boxDate);
     appFactory.queryBoxwithDate(boxDate, function(data) {
@@ -215,7 +224,8 @@ app.controller('appController', function($scope, appFactory) {
       alert('날짜 값을 제대로 입력해 주시기 바랍니다.')
       return;
     }
-    var processDate = $scope.processDateIn;
+    var processDate = convertDateToYYYYMMDD($scope.processDateIn);
+    console.log(processDate);
 
     appFactory.queryProcessInfo(processDate, function(data) {
       $scope.allProcessInfo = data;
@@ -256,7 +266,7 @@ app.controller('appController', function($scope, appFactory) {
       alert('날짜 값을 제대로 입력해 주시기 바랍니다.')
       return;
     }
-    var dateRangeIn = $scope.summaryStartDateIn + '-' + $scope.summaryEndDateIn;
+    var dateRangeIn = convertDateToYYYYMMDD($scope.summaryStartDateIn) + '-' + convertDateToYYYYMMDD($scope.summaryEndDateIn);
 
     console.log(dateRangeIn);
     appFactory.queryProcessSummary(dateRangeIn, function(data) {
@@ -269,6 +279,28 @@ app.controller('appController', function($scope, appFactory) {
         $("#errorSummaryInfo").hide();
       }
     });
+  }
+
+
+
+
+
+
+
+  $scope.loadProducts = function() {
+    appFactory.loadProducts(function(data) {
+      //console.log(data);
+      $scope.allProducts = data.productCode;
+      //console.log($scope.allProducts[0]);
+    });
+  }
+
+  $scope.loadCustomers = function() {
+    appFactory.loadCustomers(function(data) {
+      //console.log(data);
+      $scope.allCustomers = data.customers;
+      //console.log($scope.allCustomers[0]);
+    })
   }
 });
 
@@ -349,6 +381,25 @@ app.factory('appFactory', function($http) {
     $http.get('/query_process_summary/'+dateRange).success(function(output) {
       callback(output);
     })
+  }
+
+
+
+
+
+
+
+
+  factory.loadProducts = function(callback) {
+    $http.get('/load_product_code/').success(function(output) {
+      callback(output);
+    });
+  }
+
+  factory.loadCustomers = function(callback) {
+    $http.get('/load_customers/').success(function(output) {
+      callback(output);
+    });
   }
 
   return factory;

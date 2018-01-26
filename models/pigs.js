@@ -46,132 +46,181 @@ module.exports = {
    * TraceNoArr: TraceNo(14) + PigNo(4)
    */
   createLotNo(traceNoArr, corpNo, callback) {
-    let today = utils.getTodayYYMMDD();
-
-    //var corpNo = '1234';
-
-    var startKey = 'L1' + today + corpNo + '000';
-    var endKey = 'L1' + today + corpNo + '999';
+    let lotNoYmd = utils.getTodayYYYYMMDD();
+    //console.log(lotNoYmd);
 
     var queryString = {
-      startkey: startKey,
-      endkey: endKey,
-      include_docs: true,
-      limit: 1000
-    };
+      "key": lotNoYmd
+    }
+
+    var createNewPigLotNo = function(done) {
+      db.runViewWithQuery('pigsDoc', 'pigLotNo-by-lotNoYmd-view', queryString, (err, viewResult) => {
+        
+        //console.log(viewResult);
+        if (err) {
+          console.log(`[error] ${err}`)
+        }
+        //console.log('viewResult: ');
+        //console.log(viewResult);
+        var seriesNo = viewResult.rows[0].value;
+        //console.log('seriesNo: ' + seriesNo)
+
+        let today = utils.getTodayYYMMDD();
+        var newLotNo = 'L1' + today + corpNo + pad(3, seriesNo.toString(), '0');
+
+        //console.log(newLotNo);
+        var newPigLotNo = new PigLotNo(newLotNo);
+        newPigLotNo.pigLotNoYmd = utils.getTodayYYYYMMDD();
+        done(newPigLotNo);
+      });
+    }
 
     // Retrieve all lotNo with current day 
     /**
      * [ErrorCheck] 만약 우리가 이미 가공한 도체번호를 다시 묶음번호에 넣을려고 할 때는 어떻게 해야 하나..
      */
-    db.list(queryString, (err, result) => {
-      //console.log(result)
-      var seriesNo = result.rows.length;
-      var newLotNo = 'L1' + today + corpNo + pad(3, seriesNo.toString(), '0');
 
-      var newPigLotNo = new PigLotNo(newLotNo);
-      //newPigLotNo.traceNoArr = [];
-      newPigLotNo.pigLotNoYmd = utils.getTodayYYYYMMDD();
-      
-      //console.log('seriesNo: ' + seriesNo)
-      //console.log(result);
+    var infoForNewPigLotNo = {
+      "totalWeight": 0,
+      "referenceKeys": [],
+      "traceNoPigNoArr": []
+    }
 
-      // Updating pig data accrodingly with pigLotNo
-      var updatePigs = function(done) {
-        //console.log('updatePigs');
-        var traceNoEl, traceNo, pigNo;
+    // Updating pig data accrodingly with pigLotNo
+    var updatePigs = function(newPigLotNoIn, done) {
+      //console.log('updatePigs');
+      //console.log(newPigLotNoIn);
+      var traceNoEl, traceNo, pigNo;
 
-        for (var i = 0; i < traceNoArr.length; i++) {
+      var traceNoPigNoArr = [];
+      for (var i = 0; i < traceNoArr.length; i++) {
         /**
          * [ErrorCheck] traceNo이 이미 있을 때는 넣지 말아야 한다.
          */
-          newPigLotNo.traceNoArr.push(traceNoArr[i]);
+        infoForNewPigLotNo.traceNoPigNoArr.push(traceNoArr[i]);
 
-          traceNoEl = traceNoArr[i].split('-');
-          traceNo = traceNoEl[0];
-          pigNo = traceNoEl[1];
-          queryString = {
-            "key": [traceNo, pigNo]
-          };
-          //console.log(traceNoEl, traceNo, pigNo);
+        traceNoEl = traceNoArr[i].split('-');
+        traceNoPigNoArr.push(traceNoEl);
+      }
+      
+      queryString = {
+        "keys": traceNoPigNoArr
+      };
+      //console.log(queryString);
+      //console.log(traceNoEl, traceNo, pigNo);
+      
+      db.getDocsFromViewWithQuery('pigsDoc', 'pigs-by-unprocessed-traceNo-pigNo-view', queryString, (errView, result) => {
+        if (errView) {
+          console.log(`[error] ${errView}`);
+          done(errView, null);
+          return;
+        }
+
+        //console.log(result);
+        if (result.length !== traceNoArr.length) {
+          //console.log('Some pig or pigs are already processed into pigLotNo');
+          done('Some pig or pigs are already processed into pigLotNo', null);
+          return;
+        }
+          
         
-          db.getDocsFromViewWithQuery('pigsDoc', 'pigs-by-traceNo-pigNo-view', queryString, (errView, result) => {
-            if (errView) {
-              console.log(`[error] ${errView}`);
-              //done(errView, null);
-              //return;
+        for (var i = 0; i < result.length; i++) {
+          console.log(result[i].doc);
+          if (!result[i].doc.processed) {
+            result[i].doc.processed = true;
+          } else {
+            console.log(`${result[i].key} was already processed`);
+            done(`${result[i].key} was already processed`, null);
+            return;
+          }
+
+          let newHistory = [result[i].key, newPigLotNoIn._id];
+          if (result[i].doc.processHistory.indexOf(newHistory) === -1)
+            result[i].doc.processHistory.push(newHistory);
+
+          
+          db.update(result[i].doc, result[i].key, (errUpdate, updateResult) => {
+            if (errUpdate) {
+              console.log(`[error] db.update ${errUpdate}`);
+              done(errUpdate, null);
+              return;
             }
+          });
           
 
-            if (result[0].doc) {
-              if (!result[0].doc.processed) {
-                result[0].doc.processed = true;
-              
-                console.log(`result[0].doc.butcheryInfo.butcheryWeight`)
-                newPigLotNo.lotNoTotalWeight += result[0].doc.butcheryInfo.butcheryWeight;
-
-                newHistory = [result[0].key, newPigLotNo._id];
-                if (result[0].doc.processHistory.indexOf(newHistory) === -1)
-                  result[0].doc.processHistory.push([result[0].key, newPigLotNo._id]);
-
-                      
-                db.update(result[0].doc, result[0].key, (errUpdate, updateResult) => {
-                  if (errUpdate) console.log(`[error] db.update ${errUpdate}`);
-                });
-                console.log(`push: ${result[0].key}`);
-                newPigLotNo.referenceKey.push = result[0].key;
-
-              } else {
-                console.log(`${result[0].key} was already processed`);
-                // Handle pig was already precessed!!           
-              }
-            }
-          
-          });
+          //console.log(`push: ${result[i].key}`);
+          newPigLotNoIn.referenceKeys.push(result[i].key);
+          newPigLotNoIn.lotNoTotalWeight += result[i].doc.butcheryInfo.butcheryWeight;
         }
-        done(null, result);
-      }
-
-      var insertNewPigLotNo = function(done) {
-        setTimeout(function() {
-          console.log('3000ms')
-          console.log('lotNoTotalWeight: ');
-          console.log(newPigLotNo.lotNoTotalWeight);
-          db.insert(newPigLotNo, newLotNo, (err, insesrtResult) => {
-            console.log(`[insert] ${newPigLotNo._id}`);
-            done(err, newLotNo);
-          });
-        }, 3000);
-
-        // Updating pigLotNo
-        //newPigLotNo.lotNoTotalWeight = lotNoTatalWeight;
-      }
-
-      tasks = [
-        (callback) => {
-          updatePigs(callback);
-        }, 
-        (callback) => {
-          insertNewPigLotNo(callback);
-        }];
-
-
-      async.series(tasks, (asyncErr, asyncResult) => {
-        /**
-         *  ErrorCheck: check if asyncErr[0] or asyncError[1]
-         */
-        if (asyncErr) {
-          //console.log('done');
-          console.log('asyncErr');
-          console.log(asyncErr);
-        }
-        //console.log('asyncResult');
-        //console.log(asyncResult[1]);
-        callback(null, asyncResult[1]);
-        //callback(asyncErr, asyncResult);
+        
+        newPigLotNoIn.traceNoPigNoArr = traceNoArr;
+        //console.log(newPigLotNoIn);
+        done(null, newPigLotNoIn);
       });
+    }
 
+    var insertNewPigLotNo = function(pigLotNoIn, done) {
+      db.insert(pigLotNoIn, pigLotNoIn._id, (insertErr, insesrtResult) => {
+        if (insertErr) console.log(`[error] ${insertErr}`)
+
+        console.log(`[insert] ${pigLotNoIn._id}`);
+        done(null, pigLotNoIn._id);
+      });
+    }
+
+    /*
+    tasks = [
+      (callback) => {
+        updatePigs((newPigLotNo) => {
+          callback(newPigLotNo)
+        });
+      },
+      (newPigLotNo, callback) => {
+        insertNewPigLotNo(newPigLotNo, (err2, newPigLotNoOut) => {
+          callback(newPigLotNoOut);
+        });
+      },
+      (pigLotNo, callback) => {
+        insertNewPigLotNo(pigLotNo, (err3, newLotNo) => {
+          console.log(newLotNo);
+        });
+      }
+    ];
+    async.waterfall(tasks, (asyncErr, asyncResult) => {
+      
+      // ErrorCheck: check if asyncErr[0] or asyncError[1]
+
+      if (asyncErr) {
+        //console.log('done');
+        console.log('asyncErr');
+        console.log(asyncErr);
+      }
+      //console.log('asyncResult');
+      //console.log(asyncResult[1]);
+      callback(null, asyncResult);
+      //callback(asyncErr, asyncResult);
     });
+    */
+    
+    createNewPigLotNo((newPigLotNo) => {
+      //console.log(newPigLotNo);
+      updatePigs(newPigLotNo, (uErr, pigLotNo) => {
+        //console.log('Inserting pigLotNo: ');
+        //console.log(pigLotNo);
+        if (uErr) {
+          //console.log(`[error] ${uErr}`);
+          callback(uErr, null);
+          return;
+        } else {
+          //console.log('coming here?')
+          insertNewPigLotNo(pigLotNo, (iErr, newLotNo) => {
+            //console.log(newLotNo);
+            callback(null, newLotNo);
+          });
+        }
+      });
+    })
+    
   },
 
   upateLotNo(lotNo, pigsArr, callback) {
@@ -214,14 +263,16 @@ module.exports = {
   },
 
   queryLotNoWithDate(pigLotNoYmd, callback) {
-    console.log(`pigLotNoYmd: ${pigLotNoYmd}`)
+    //console.log(`pigLotNoYmd: ${pigLotNoYmd}`)
     var queryString = {
-      "key": pigLotNoYmd
+      "key": pigLotNoYmd._id,
+      "reduce": false
     };
 
     //console.log(createdDate);
     //console.log(queryString);
     db.runViewWithQuery('pigsDoc', 'pigLotNo-by-lotNoYmd-view', queryString, (err, pigLotNoKeys) => {
+      console.log(pigLotNoKeys);
       if (err) {
         console.log('[error] queryLotNoWithDate');
         callback(err, null);
@@ -277,8 +328,8 @@ module.exports = {
         "keys": [lotNo]
       }
       db.runFetch(queryString, (err, docResults) => {
-        console.log(docResults);
-        console.log(docResults.rows[0].doc);
+        //console.log(docResults);
+        //console.log(docResults.rows[0].doc);
         processInfo.lotNoTotalWeight = docResults.rows[0].doc.lotNoTotalWeight;
         db.insert(processInfo, processNo, (err, body) => {
           //console.log(body);
@@ -532,5 +583,20 @@ module.exports = {
         callback(null, viewResults);
       }
     })
+  },
+
+  loadProducts(callback) {
+    db.get('product_code', (err, results) => {
+      //console.log(results.productCode);
+      callback(results);
+    });
+  },
+
+  loadCustomers(callback) {
+    db.get('customers', (err, results) => {
+      //console.log(results.productCode);
+      callback(results);
+    });
   }
+
 }

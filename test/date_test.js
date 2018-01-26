@@ -28,9 +28,15 @@ db.view('testDoc', 'date-view', null, (err, docs) => {
 
   var results = docs.rows;
   results.forEach((elem, idx, arr) => {
-    console.log(elem.key);
+    console.log(`elem.key: ${elem.key}`);
     var createdDate = new Date(elem.key);
-    console.log(createdDate);  
+    console.log(`createdDate: ${createdDate}`);  
   })
   //console.log(docs);
 })
+
+var dateStr1 = '2018-01-25';
+
+var date1 = new Date(dateStr1);
+console.log(date1);
+console.log(`date1: ${date1}`);

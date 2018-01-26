@@ -39,6 +39,30 @@ class ButcheryInfo {
 	  this.backFatThickness = null;
     this.fatup = null;
 	  //"processPlaceNm": null,
+
+		this.abattStartNo = null;
+		this.abattEndNo = null;
+		this.judgeBreedCd = null;
+		this.judgeBreedNm = null;
+
+		this.auctYmd = null;
+		this.costAmt = null;
+
+		this.belly = null;
+		this.fatstick = null;
+		this.insfat = null;
+		this.yuksak = null;
+		this.tissue = null;
+		this.fatsak = null;
+		this.fatqual = null;
+		this.defectCode = null;
+		this.defect = null;
+		this.offgradeNo = null;
+
+
+
+
+
 	}
 }
 
@@ -151,8 +175,8 @@ class PigLotNo {
 		this.type = "pigLotNo";
 		this.realKey = null;
 		this.pigLotNoYmd = null;
-		this.referenceKey = [];
-		this.traceNoArr = [];
+		this.referenceKeys = [];
+		this.traceNoPigNoArr = [];
 		this.labels = []
 		this.boxReference = null;
 		this.lotNoTotalWeight = 0.0;

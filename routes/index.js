@@ -6,6 +6,8 @@
 const nunjucks         = require('nunjucks')
 var obj                = require('./controllers.js');
 
+var db                 = require('../models/pigs')
+
 var apps = require('./app');
 
 //var app = require('./app');
@@ -97,12 +99,20 @@ app.get('/admin', sl.requireAuth, (req, res) => {
   console.log('res');
   console.log(res);
   */
-  res.render('index.html', { "test": "test" });
+  res.render('index.html', { test: "test" });
 });
 
-app.get('/login', (req, res) => {
-  res.render('login.html', { "test": "test_login" });
+app.get('/products', (req, res) => {
+  res.render('products.html', { test: "test_product" });
+});
+
+app.get('/customers', (req,res) => {
+  res.render('customers.html', { test: "test_customer" });
 })
+
+app.get('/login', (req, res) => {
+  res.render('login.html', { test: "test_login" });
+});
 
 // Router for angular
 
@@ -118,4 +128,13 @@ app.get('/query_box_with_date/:box_date', obj.query_box_with_date);
 app.get('/update_process_info/:process_info_in', obj.update_process_info);
 app.get('/query_process_summary/:date_range', obj.query_process_summary);
 
+app.get('/load_product_code/', obj.load_product_code);
+app.get('/load_customers/', obj.load_customers);
+/*
+app.get('/products', (req, res) => {
+  db.loadProducts((products) => {
+    res.render('products.html', JSON.stringify(products));
+  })
+});
+*/
 module.exports = app;

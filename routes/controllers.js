@@ -58,6 +58,7 @@ return {
     console.log(`Getting pigs from database issued on date ${queryYmd}`);
     
     db.queryPigsWithDate(queryYmd, (err, pigsArr) => {
+
       if (!err) {
         //console.log(pigsArr);
         res.send(pigsArr);
@@ -76,12 +77,17 @@ return {
 
     //traceNoArr: [traceNo(14)-pigNo(4), ... ]
     db.createLotNo(traceNoArr, '1234', (err, newLotNo) => {
+      //console.log('controller');
+      //console.log(err, newLotNo);
+      res.setHeader('Content-Type', 'application/json');
+      res.send(JSON.stringify({ "error": err, "newLotNo": newLotNo }));
+      /*
       if (!err)
         res.send(newLotNo);
       else
         res.send('error');
+      */
     });
-    
   },
 
   query_lot_no_with_date: function(req, res) {
@@ -181,6 +187,25 @@ return {
         res.send(result)
       else
         res.send('error');
+    });
+  },
+
+
+
+
+
+  load_product_code: function(req, res) {
+    console.log("Loading all product codes");
+    db.loadProducts((products) => {
+      res.send(products);
+    })
+  },
+
+  load_customers: function(req, res) {
+    console.log("Loading all customers");
+    db.loadCustomers((customers) => {
+      //console.log(customers);
+      res.send(customers);
     });
   }
 }
