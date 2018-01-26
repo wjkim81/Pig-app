@@ -305,6 +305,7 @@ module.exports = {
   },
 
   createNewProcessNo(lotNo, callback) {
+    // [ErrorCheck] 없는 lotNo를 입력했으면 error 출력
     var queryString = {
       "key": lotNo
     };
