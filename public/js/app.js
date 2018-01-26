@@ -159,8 +159,8 @@ app.controller('appController', function($scope, appFactory) {
 
   $scope.createNewProcess = function() {
 
-    if (!$scope.lotNoIn) {
-      alert('묶음번호를 입력해 주시기 바랍니다.')
+    if (!$scope.lotNoIn || !$scope.lotNoIn.length !== 16) {
+      alert('묶음번호를 제대로 입력해 주시기 바랍니다.')
       return;
     }
 
