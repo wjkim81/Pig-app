@@ -142,8 +142,8 @@ class Pig {
 	  this.sexCd = null;
 	  this.sexNm = null;
     
-	  this.farmInfo = new FarmInfo;
-	  this.butcheryInfo = new ButcheryInfo,
+	  this.farmInfo = new FarmInfo();
+	  this.butcheryInfo = new ButcheryInfo();
 
     this.processed = false;
 	  this.processInfo = [];

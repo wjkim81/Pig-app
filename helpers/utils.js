@@ -105,7 +105,7 @@ var self = module.exports = {
     //console.log(`pigId: ${pigId}`);
     var pig = new Pig(pigId);
     
-    //key = 
+    //console.log(pig);
     
     pig.traceNo = ekapeJsonPig.pigNo;
     pig.pigNo = ekapeJsonPig.butcheryNo;
@@ -150,22 +150,20 @@ var self = module.exports = {
 
     //pig._id = pig.butcheryInfo.butcheryYmd + pig.traceNo + pig.pigNo;
 
-    pig.butchertyInfo.abattStartNo = ekapeJsonPig.abattStartNo;
-    pig.butchertyInfo.abattEndNo = ekapeJsonPig.abattEndNo;
-    pig.lsTypeCd = ekapeJsonPig.judgeBreedCd;
-    pig.lsTypeNm = ekapeJsonPig.judgeBreedNm;
-    pig.butchertyInfo.auctYmd = ekapeJsonPig.auctYmd;
-    pig.butchertyInfo.costAmt = ekapeJsonPig.costAmt;
-    pig.butchertyInfo.belly = ekapeJsonPig.belly;
-    pig.butchertyInfo.fatstick = ekapeJsonPig.fatstick;
-    pig.butchertyInfo.insfat = ekapeJsonPig.insfat;
-    pig.butchertyInfo.yuksak = ekapeJsonPig.yuksak;
-    pig.butchertyInfo.tissue = ekapeJsonPig.tissue;
-    pig.butchertyInfo.fatsak = ekapeJsonPig.fatsak;
-    pig.butchertyInfo.fatqual = ekapeJsonPig.fatqual;
-    pig.butchertyInfo.defectCode = ekapeJsonPig.defectCode;
-    pig.butchertyInfo.defect = ekapeJsonPig.defect;
-    pig.butchertyInfo.offgradeNo = ekapeJsonPig.offgradeNo;
+    if (ekapeJsonPig.judgeBreedCd) pig.lsTypeCd = ekapeJsonPig.judgeBreedCd;
+    if (ekapeJsonPig.judgeBreedNm) pig.lsTypeNm = ekapeJsonPig.judgeBreedNm;
+    if (ekapeJsonPig.auctYmd) pig.butcheryInfo.auctYmd = ekapeJsonPig.auctYmd;
+    if (ekapeJsonPig.costAmt) pig.butcheryInfo.costAmt = ekapeJsonPig.costAmt;
+    if (ekapeJsonPig.belly) pig.butcheryInfo.belly = ekapeJsonPig.belly;
+    if (ekapeJsonPig.fatstick) pig.butcheryInfo.fatstick = ekapeJsonPig.fatstick;
+    if (ekapeJsonPig.insfat) pig.butcheryInfo.insfat = ekapeJsonPig.insfat;
+    if (ekapeJsonPig.yuksak) pig.butcheryInfo.yuksak = ekapeJsonPig.yuksak;
+    if (ekapeJsonPig.tissue) pig.butcheryInfo.tissue = ekapeJsonPig.tissue;
+    if (ekapeJsonPig.fatsak) pig.butcheryInfo.fatsak = ekapeJsonPig.fatsak;
+    if (ekapeJsonPig.fatqual) pig.butcheryInfo.fatqual = ekapeJsonPig.fatqual;
+    if (ekapeJsonPig.defectCode) pig.butcheryInfo.defectCode = ekapeJsonPig.defectCode;
+    if (ekapeJsonPig.defect) pig.butcheryInfo.defect = ekapeJsonPig.defect;
+    if (ekapeJsonPig.offgradeNo) pig.butcheryInfo.offgradeNo = ekapeJsonPig.offgradeNo;
 
     return pig;
   },
