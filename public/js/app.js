@@ -159,7 +159,7 @@ app.controller('appController', function($scope, appFactory) {
 
   $scope.createNewProcess = function() {
 
-    if (!$scope.lotNoIn || !$scope.lotNoIn.length !== 15) {
+    if (!$scope.lotNoIn || $scope.lotNoIn.length !== 15) {
       alert('묶음번호를 제대로 입력해 주시기 바랍니다.')
       return;
     }
