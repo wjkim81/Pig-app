@@ -1,4 +1,5 @@
-import superlogin from 'superlogin-client';
+
+/*import superlogin from 'superlogin-client';
 
 
 var config = {
@@ -31,9 +32,8 @@ var config = {
   timeout: 0
 };
 
-
 superlogin.configure(config);
-
+*/
 /*
 document.getElementById('getFile').onclick = function() {
   document.getElementById('csvFile').click();
@@ -43,3 +43,42 @@ $('input[type=file]').change(function (e) {
   $('#customfileupload').html($(this).val());
 });
 */
+
+//var xhr = new XMLHttpRequest();
+
+//httpChannel.setRequestHeader("X-Hello", "World", false);
+var {Cc, Ci} = require("chrome");
+
+var httpRequestObserver =
+{
+  observe: function(subject, topic, data)
+  {
+    if (topic == "http-on-modify-request") {
+      var httpChannel = subject.QueryInterface(Ci.nsIHttpChannel);
+      httpChannel.setRequestHeader("X-Hello", "World", false);
+    }
+  },
+
+  get observerService() {
+    return Cc["@mozilla.org/observer-service;1"]
+                     .getService(Ci.nsIObserverService);
+  },
+
+  register: function()
+  {
+    this.observerService.addObserver(this, "http-on-modify-request", false);
+  },
+
+  unregister: function()
+  {
+    this.observerService.removeObserver(this, "http-on-modify-request");
+  }
+};
+
+$(document).ready(function() {
+  httpRequestObserver.register();
+});
+
+$(window).unload(function() {
+  httpRequestObserver.removeObserver();
+});

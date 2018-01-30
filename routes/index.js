@@ -43,15 +43,28 @@ nunjucks.configure('views', {
  * 
  */
 app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header('Access-Control-Allow-Methods', 'DELETE, PUT');
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  //res.header("Access-Control-Allow-Origin", "*");
+  //res.header('Access-Control-Allow-Methods', 'DELETE, PUT');
+  //res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  //console.log('req.query');
+  //console.log(req.query);
+  console.log('req.headers');
+  console.log(req.headers);
+  console.log('superlogin.passport: ');
+  console.log(sl.passport);
+  //console.log('req');
+  //console.log(req)
+  //console.log('req.isAuthenticated()');
+  //console.log(req.isAuthenticated);
+  //console.log('req.session');
+  //console.log(req.session);
   next();
 });
 
 app.use('/admin', (req, res, next) => {
-  console.log('superlogin: ');
-  console.log(sl.passport);
+  
+  //console.log('superlogin: ');
+  //console.log(sl.passport.Passport);
   //if (sl.passport.authen)
   //if (sl.requireAuth) {
   //  res.redirect('login');
@@ -82,7 +95,7 @@ app.use('/admin', (req, res, next) => {
   console.log('res');
   console.log(res);
   */
-//    next();
+  next();
 //  }
 });
 
@@ -91,7 +104,9 @@ app.get('/', (req, res) => {
 });
 
 app.get('/admin', sl.requireAuth, (req, res) => {
-  //console.log(profile)
+//app.get('/admin', (req, res) => {
+  //console.log('inside admin page');
+  //console.log(sl);
   /*
   console.log(superlogin);
   console.log('req');
@@ -113,6 +128,11 @@ app.get('/customers', (req,res) => {
 app.get('/login', (req, res) => {
   res.render('login.html', { test: "test_login" });
 });
+
+app.post('/auth/login',
+  sl.passport.authenticate('local', { successRedirect: '/',
+                                      failureRedirect: '/login' })
+);
 
 // Router for angular
 
