@@ -47,38 +47,36 @@ $('input[type=file]').change(function (e) {
 //var xhr = new XMLHttpRequest();
 
 //httpChannel.setRequestHeader("X-Hello", "World", false);
-var {Cc, Ci} = require("chrome");
+/*
+(function(send) {
+  XMLHttpRequest.prototype.send = function(data) {
+  // in this case I'm injecting an access token (eg. accessToken) in the request headers before it gets sent
+    if('Hello') this.setRequestHeader('x-access-token', 'Hello');
+      send.call(this, data);
+  };
+})(XMLHttpRequest.prototype.send);
+*/
 
-var httpRequestObserver =
-{
-  observe: function(subject, topic, data)
-  {
-    if (topic == "http-on-modify-request") {
-      var httpChannel = subject.QueryInterface(Ci.nsIHttpChannel);
-      httpChannel.setRequestHeader("X-Hello", "World", false);
-    }
-  },
 
-  get observerService() {
-    return Cc["@mozilla.org/observer-service;1"]
-                     .getService(Ci.nsIObserverService);
-  },
+var invocation = new XMLHttpRequest();
+var url = window.location.href;
+//var url = 'http://localhost:3000/';
+console.log(url);
 
-  register: function()
-  {
-    this.observerService.addObserver(this, "http-on-modify-request", false);
-  },
+var session = JSON.parse(localStorage.getItem('superlogin.session'));
+console.log(session);
+console.log(session.token);
+console.log(session.password);
 
-  unregister: function()
-  {
-    this.observerService.removeObserver(this, "http-on-modify-request");
+var token = `Bearer ${session.token}:${session.password}`
+console.log(token);
+
+function authorizeWithToken(){
+  if(invocation && session) {
+    invocation.open('GET', url, true);
+    invocation.setRequestHeader('Authorization', token);
+    //invocation.onreadystatechange = handler;
+    invocation.send(); 
   }
-};
-
-$(document).ready(function() {
-  httpRequestObserver.register();
-});
-
-$(window).unload(function() {
-  httpRequestObserver.removeObserver();
-});
+}
+authorizeWithToken();

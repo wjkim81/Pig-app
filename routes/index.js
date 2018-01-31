@@ -50,8 +50,8 @@ app.use(function(req, res, next) {
   //console.log(req.query);
   console.log('req.headers');
   console.log(req.headers);
-  console.log('superlogin.passport: ');
-  console.log(sl.passport);
+  //console.log('superlogin.passport: ');
+  //console.log(sl.passport);
   //console.log('req');
   //console.log(req)
   //console.log('req.isAuthenticated()');
@@ -129,10 +129,16 @@ app.get('/login', (req, res) => {
   res.render('login.html', { test: "test_login" });
 });
 
+/*
 app.post('/auth/login',
   sl.passport.authenticate('local', { successRedirect: '/',
                                       failureRedirect: '/login' })
 );
+
+app.post('/auth/login', (req, res) => {
+  res.redirect('/');
+});
+*/
 
 // Router for angular
 

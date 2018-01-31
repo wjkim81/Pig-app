@@ -84,8 +84,32 @@ app.controller('appController', function($scope, appFactory) {
     appFactory.queryPigsWithDate(queryDate, function(data) {
       //console.log('queryPigsWithDate')
       //console.log(data);
+      //for (var i = 0; i < data.length; i++) {
+      //  data[i].checkNo = data[i].doc.traceNo + '-' + data[i].doc.pigNo;
+      //}
       $scope.pigsInfo = data;
     });
+  }
+
+  $scope.getCheckedPigs = function() {
+    var checkedPigs = [];
+
+    //console.log($scope.pigsInfo.length);
+    for (var i = 0; i < $scope.pigsInfo.length; i++) {
+      //console.log(`pigsInfo[${i}].checked: ${$scope.pigsInfo[i].checked}`);
+      if ($scope.pigsInfo[i].checked) {
+        checkedPigs.push($scope.pigsInfo[i].doc.traceNo + '-' + $scope.pigsInfo[i].doc.pigNo);
+        //checkedPigs.push($scope.pigsInfo[i]);
+      }
+    }
+
+    checkedPigs.forEach((obj, idx, arr) => {
+      console.log(obj);
+    });
+    //$scope.pigsInfo.checked
+    //angular.forEach($scope.pig, function(appObj, idx, arr) {
+    //  console.log(appObj.checkNo);
+    //});
   }
 
   $scope.createLotNo = function() {

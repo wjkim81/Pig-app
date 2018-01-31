@@ -186,6 +186,7 @@
 
         <table id="pigsInfo" class="table" align="center">
           <tr>
+            <th>체크</th>
             <th>이력번호</th>
             <th>개체번호</th>
             <th>출하농장</th>
@@ -232,7 +233,9 @@
             <th>등외번호</th>
           </tr>
           
+          <form>
           <tr ng-repeat="pig in pigsInfo">
+            <td><input type="checkbox" name="traceNoPigNo" value="check" ng-model="pig.checked"></td>
             <td>{{ pig.doc.traceNo }}</td>
             <td>{{ pig.doc.pigNo }}</td>
             <td>{{ pig.doc.farmInfo.farmerNm }}</td>
@@ -277,9 +280,10 @@
             <td>{{ pig.doc.butcheryInfo.defectCode }}</td>
             <td>{{ pig.doc.butcheryInfo.defect }}</td>
             <td>{{ pig.doc.butcheryInfo.offgradeNo }}</td>
-
           </tr>
+          </form>
         </table>
+        <input id="getCheckedPigs" type="submit" value="조회" class="btn btn-primary" ng-click="getCheckedPigs()">
       </div>
 
       <div class="outer-div">
