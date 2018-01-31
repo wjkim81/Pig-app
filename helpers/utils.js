@@ -26,6 +26,7 @@ var self = module.exports = {
       let xmldata = '';
       let pigsJsArr = [];
 
+      res.setEncoding('utf8');
       res.on('data', (chunk) => {
         xmldata += chunk;
       });
