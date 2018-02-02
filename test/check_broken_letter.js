@@ -1,3 +1,4 @@
+'use strict';
 var db         = require('../models/db')
 var fs         = require('fs');
 

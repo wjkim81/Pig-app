@@ -1,8 +1,9 @@
+'use strict';
 var db            = require('../models/pigs')
 var schedule      = require('node-schedule');
 var utils         = require('./utils')
  
-module.exports = scheduleLoadPigs = schedule.scheduleJob('00 00 20 * * *', function(){
+var scheduleLoadPigs = module.exports = schedule.scheduleJob('00 00 20 * * *', function(){
   var date = new Date();
   console.log('------------------------')
   console.log(date);
@@ -25,5 +26,6 @@ module.exports = scheduleLoadPigs = schedule.scheduleJob('00 00 20 * * *', funct
     } else {
       console.log(`[error] ${error} at ${date}`);
     }
+    console.log('------------------------')
   });
 });

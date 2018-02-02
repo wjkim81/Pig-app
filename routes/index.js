@@ -8,7 +8,7 @@ var obj                = require('./controllers.js');
 
 var db                 = require('../models/pigs')
 
-var apps = require('./app');
+var apps               = require('./app');
 
 //var app = require('./app');
 //var superlogin = require('.app');
@@ -42,14 +42,30 @@ nunjucks.configure('views', {
  * Never define actions here
  * 
  */
-app.use(function(req, res, next) {
+/*
+app.use('/', (req, res, next) => {
   //res.header("Access-Control-Allow-Origin", "*");
   //res.header('Access-Control-Allow-Methods', 'DELETE, PUT');
   //res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   //console.log('req.query');
   //console.log(req.query);
+  console.log('req.originalUrl');
+  console.log(req.originalUrl);
+  console.log('req.baseUrl');
+  console.log(req.baseUrl);
   console.log('req.headers');
   console.log(req.headers);
+  console.log('req.header.authorization');
+  console.log(req.header.authorization);
+
+  next();
+});
+*/
+app.get('/dashboard', function(req, res, next) {
+  if (req.header.authorization) {
+    console.log('req.header.authorization');
+    console.log(req.header.authorization);
+  }
   //console.log('superlogin.passport: ');
   //console.log(sl.passport);
   //console.log('req');
@@ -58,52 +74,29 @@ app.use(function(req, res, next) {
   //console.log(req.isAuthenticated);
   //console.log('req.session');
   //console.log(req.session);
-  next();
+  res.redirect('/login');
+  //res.render('login.html', { test: "test_login" });
+  //next();
 });
 
-app.use('/admin', (req, res, next) => {
-  
-  //console.log('superlogin: ');
-  //console.log(sl.passport.Passport);
-  //if (sl.passport.authen)
-  //if (sl.requireAuth) {
-  //  res.redirect('login');
-  //} else {
-  //console.log(req.user);
-  //if (superlogin.authenticated()) {
-  //  console.log('authenticated')
-  //}
-  /*
-  http.get('http://localhost:3000/session', (httpres) => {
-    console.log(httpres);
-  })
-  */
-  //console.log(valid)
-  /*
-  profile.get(req.user._id)
-    .then(function(userProfile) {
-      res.status(200).json(userProfile);
-    }, function(err) {
-      return next(err);
-    });
-    */
-  //console.log(profile)
-  /*
-  console.log(superlogin);
-  console.log('req');
-  console.log(req);
-  console.log('res');
-  console.log(res);
-  */
-  next();
-//  }
-});
 
 app.get('/', (req, res) => {
-  res.render('index.html', { "test": "test"});
+  res.redirect('/login')
+  //res.render('index.html', { "test": "test"});
 });
 
-app.get('/admin', sl.requireAuth, (req, res) => {
+app.get('/login', (req, res) => {
+  res.render('login.html', { test: "test_login" });
+});
+
+app.get('/admin', (req, res) => {
+  //console.log('sl.requireAuth');
+  //console.log(sl.requireAuth);
+  //if (sl.requireAuth) {
+  //  res.redirect('/');
+  //} else {
+  //  res.redirect('/login');
+  //}
 //app.get('/admin', (req, res) => {
   //console.log('inside admin page');
   //console.log(sl);
@@ -114,7 +107,7 @@ app.get('/admin', sl.requireAuth, (req, res) => {
   console.log('res');
   console.log(res);
   */
-  res.render('index.html', { test: "test" });
+  //res.render('index.html', { test: "test" });
 });
 
 app.get('/products', (req, res) => {
@@ -125,23 +118,10 @@ app.get('/customers', (req,res) => {
   res.render('customers.html', { test: "test_customer" });
 })
 
-app.get('/login', (req, res) => {
-  res.render('login.html', { test: "test_login" });
-});
 
-/*
-app.post('/auth/login',
-  sl.passport.authenticate('local', { successRedirect: '/',
-                                      failureRedirect: '/login' })
-);
 
-app.post('/auth/login', (req, res) => {
-  res.redirect('/');
-});
-*/
 
 // Router for angular
-
 app.get('/download_butcheryinfo_from_ekape/:issue_ymd', obj.download_butcheryinfo_from_ekape);
 app.get('/get_summary_pigs_by_date/', obj.get_summary_pigs_by_date);
 app.get('/query_pigs_with_date/:query_ymd', obj.query_pigs_with_date);

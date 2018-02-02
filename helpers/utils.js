@@ -1,3 +1,4 @@
+'use strict';
 var path          = require('path');
 var http          = require('http');
 var parseString   = require('xml2js').parseString;

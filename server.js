@@ -37,7 +37,7 @@ http.createServer(app).listen(port, '0.0.0.0', function() {
   console.log("Live on port: " + port);
 });
 */
-scheduleLoadPigs;
+schedule.scheduleLoadPigs;
 
 //console.log('app.js')
 app.listen(port, '0.0.0.0', function() {
