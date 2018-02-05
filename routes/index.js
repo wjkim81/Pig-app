@@ -62,10 +62,16 @@ app.use('/', (req, res, next) => {
 });
 */
 app.get('/dashboard', function(req, res, next) {
-  if (req.header.authorization) {
+  console.log('req.headers');
+  console.log(req.headers);
+  /*
+  if (!req.header.authorization) {
+    res.redirect('/login');
     console.log('req.header.authorization');
     console.log(req.header.authorization);
+    return;
   }
+  */
   //console.log('superlogin.passport: ');
   //console.log(sl.passport);
   //console.log('req');
@@ -74,8 +80,8 @@ app.get('/dashboard', function(req, res, next) {
   //console.log(req.isAuthenticated);
   //console.log('req.session');
   //console.log(req.session);
-  res.redirect('/login');
-  //res.render('login.html', { test: "test_login" });
+  //res.redirect('/login');
+  res.render('index.html', { test: "test" });
   //next();
 });
 

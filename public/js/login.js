@@ -53,7 +53,7 @@ $(document).ready(function() {
       url: url,
       contentType: "application/json",
       data: JSON.stringify(credentials),
-      success: function(data){
+      success: function(data) {
         session = data;
         localStorage.setItem('superlogin.session', JSON.stringify(session));
         //console.log(session);
@@ -74,34 +74,6 @@ $(document).ready(function() {
     });
     
   }
-
-  /*
-  function alertContents() {
-    if (httpRequest.readyState === 4) {
-      //alert('Starting');
-      if (httpRequest.status === 200) {
-
-        var session = httpRequest.responseText;
-        localStorage.setItem('superlogin.session', session);
-
-        console.log(session);
-        console.log(`token: ${token}`);
-        console.log(`password: ${password}`);
-
-        var bearer = `bearer ${token}:${password}`;
-
-        //httpRequest.onreadystatechange = null;
-        //httpRequest.open("get", '/dashboard', true);
-        //httpRequest.setRequestHeader("Authorization", bearer);
-
-      } else {
-        alert('Confirm your username and password');
-        //console.log('asdjkfljds')
-        //window.location.href = "/login"
-      }
-    }
-  }
-  */
 });
 
 // localStorage detection
@@ -110,33 +82,34 @@ function supportsLocalStorage() {
 }
 
 function moveToDashboard() {
-  //session = JSON.parse(localStorage.getItem('superlogin.session')
   if (session) {
+    
+    console.log(session);
+    console.log(`token: ${session.token}`);
+    console.log(`password: ${session.password}`);
+    var token = `Bearer ${session.token}:${session.password}`;
+
+    console.log(token);
     console.log('moveToDashboard');
+
+    $.ajax({
+      async: true,
+      type: 'GET',
+      url: '/dashboard',
+      //contentType: "application/json",
+      headers: {"Authorization": token},
+      //success: function(data) {
+        //window.location = "/dashboard"
+      //},
+      error: function(xhr, type, exception) { 
+        // if ajax fails display error alert 
+        console.log(`[${type}] ${exception}, token is wrong `);
+        //alert(`[${type}] ${exception}, Confirm your username and password`);
+        window.location.href = "/login"
+      }
+    });
+    
   } else {
     console.log("Let's stay here")
   }
-    
-  /*
-  $.ajax({
-    async: true,
-    type: 'POST',
-    url: url,
-    contentType: "application/json",
-    data: JSON.stringify(credentials),
-    success: function(data){
-      var session = data;
-      localStorage.setItem('superlogin.session', session);
-      console.log(session);
-      console.log(`token: ${session.token}`);
-      console.log(`password: ${session.password}`);
-    },
-    error: function(xhr, type, exception) { 
-      // if ajax fails display error alert 
-      console.log(`[${type}] ${exception}, Confirm your username and password`);
-      alert(`[${type}] ${exception}, Confirm your username and password`);
-      window.location.href = "/login"
-    }
-  });
-  */
 }

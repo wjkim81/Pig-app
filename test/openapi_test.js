@@ -1,11 +1,11 @@
 
 http = require('http');
 parseString = require('xml2js').parseString;
-
-
+var nano      = require('nano')('http://localhost:5984');
+var db        = nano.db.use('nokdondb');
 
 //module.export = openapi = function(butcheryYmd) {
-var butcheryYmd = '20180105';
+var issueYmd = '20180105';
 
   //var xhr = new XMLHttpRequest();
 var baseUrl = 'http://openapi.ekape.or.kr/rest/user/grade/confirminfo/pig/ownerlist';
@@ -13,7 +13,7 @@ var baseUrl = 'http://openapi.ekape.or.kr/rest/user/grade/confirminfo/pig/ownerl
 var apiKey = 'HpbHwExDWDaHWHg02BYslcfcWD6TSQ02FvrYEj3owuCWt0ijSLUeBthHqLsYMdR9f5Sq';
 var farmUniqueNo = '600741';
 //console.log(apiKey);
-var url = baseUrl + '?apiKey=' + apiKey + '&issueYmd=' + butcheryYmd + '&farmUniqueNo=' + farmUniqueNo;
+var url = baseUrl + '?apiKey=' + apiKey + '&issueYmd=' + issueYmd;
 
 console.log(url);
 
@@ -30,10 +30,19 @@ http.get(url, (res) => {
     xmldata += chunk;
   });
   res.on('end', () => {
-    console.log(xmldata);
-    console.log('Parsed json')
+    //console.log(xmldata);
+    //console.log('Parsed json')
     parseString(xmldata, parseOption, (err, jsData) => {
-      console.log(JSON.stringify(jsData, null, 2));
+      //console.log(JSON.stringify(jsData, null, 2));
+      var docs = jsData.pigVoes.pigVo;
+      console.log(docs);
+      db.bulk({"docs": docs}, (err, result) => {
+        if (err) {
+          console.log(`[error] odb.bulk: ${err}`);
+        }
+
+        console.log(result);
+      });
     })
   })
 

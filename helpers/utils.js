@@ -99,7 +99,7 @@ var self = module.exports = {
    * @param {json obejct} ekapeJsonPig 
    */
   convertFromEkape(ekapeJsonPig) {
-    date = new Date();
+    var date = new Date();
     //console.log(date.getFullYear())
     //dateYear = date.getFullYear();
     //var pig = models.schemas.pig;
